@@ -10,11 +10,11 @@ class MarketplaceRepository implements MarketplaceRepositoryInterface {
         this.api = api;
     }
 
-    findManyBy(provider: Provider): Promise<any> {
+    findManyByProvider(provider: Provider): Promise<[]> {
         return fetch(
             this.api.listByProvider.replace('%id%', String(provider.id))).then(r => {
             if (!r.ok) {
-                throw Error(r.statusText);
+                return JSON.parse('[]');
             }
             return r;
         }).then(r => r.json());

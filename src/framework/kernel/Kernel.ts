@@ -19,10 +19,6 @@ abstract class Kernel implements KernelInterface {
     }
 
     public shutDown(): void {
-        if (false === this.booted) {
-            return;
-        }
-
         this.booted = false;
         this._container = undefined;
     }

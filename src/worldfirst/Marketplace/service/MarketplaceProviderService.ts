@@ -14,7 +14,7 @@ class MarketplaceProviderService implements MarketplaceProviderServiceInterface 
         try {
             return this.repository.findOneByName(name);
         } catch (Error) {
-            throw MarketplaceProviderServiceException.notFoundForName(name);
+            throw MarketplaceProviderServiceException.notFoundWithName(name);
         }
     }
 }

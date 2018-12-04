@@ -4,7 +4,6 @@ import DataTable from '../../../components/DataTable/index';
 import MarketplaceServiceInterface from "../../../worldfirst/Marketplace/service/MarketplaceServiceInterface";
 import MarketplaceProviderServiceInterface
     from "../../../worldfirst/Marketplace/service/MarketplaceProviderServiceInterface";
-import Provider from "../../../worldfirst/Marketplace/entity/Provider";
 
 interface PropsInterface {
     marketplaceService: MarketplaceServiceInterface,
@@ -18,9 +17,8 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
     }
 
     componentDidMount() {
-        this.props.marketplaceService.getMarketplacesByProvider(
-            this.props.providerService.getProviderByName(
-                this.props.match.params.providerName)).then((r: Provider) => {
+        const provider = this.props.providerService.getProviderByName(this.props.match.params.providerName);
+        this.props.marketplaceService.getMarketplacesByProvider(provider).then(r => {
             this.setState({
                 data: r,
             });
