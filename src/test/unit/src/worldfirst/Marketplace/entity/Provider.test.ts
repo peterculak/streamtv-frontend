@@ -1,4 +1,5 @@
 import Provider from "../../../../../../worldfirst/Marketplace/entity/Provider";
+import InvalidArgumentException from "../../../../../../worldfirst/Marketplace/Exception/InvalidArgumentException";
 
 describe('entity Provider', () => {
     const objectLiteral = {
@@ -23,13 +24,13 @@ describe('entity Provider', () => {
 
     it('throws exception when name is empty during instantiation', () => {
         objectLiteral.name = '';
-        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(Error);
+        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(InvalidArgumentException);
     });
 
     it('throws exception when id is not natural number', () => {
         objectLiteral.id = 0;
-        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(Error);
+        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(InvalidArgumentException);
         objectLiteral.id = -1;
-        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(Error);
+        expect(() => Provider.fromObjectLiteral(objectLiteral)).toThrow(InvalidArgumentException);
     });
 });

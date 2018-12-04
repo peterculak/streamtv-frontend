@@ -8,7 +8,6 @@ describe('AppKernel', () => {
     beforeEach(() => {
         document.body.innerHTML = '<div id="test-app-root"></div>';
         root = document.getElementById('test-app-root')!;
-        console.log(root.innerHTML);
     });
 
     it('it can be constructed without crashing', () => {

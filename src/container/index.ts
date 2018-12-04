@@ -25,7 +25,7 @@ class Container implements ContainerInterface {
         return this._config;
     }
 
-    get(id: string): Object {
+    get(id: string): any {
         if (!this.has(id)) {
             throw NotFoundException.withId(id);
         }
@@ -34,7 +34,7 @@ class Container implements ContainerInterface {
     }
 
     has(id: string): boolean {
-        return typeof this.services[id] !== undefined;
+        return this.services[id] !== undefined;
     }
 }
 

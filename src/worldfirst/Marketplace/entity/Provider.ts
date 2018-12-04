@@ -1,4 +1,5 @@
 import ProviderObjectLiteral from "../DataStructures/Provider";
+import InvalidArgumentException from "../Exception/InvalidArgumentException";
 
 class Provider {
     private readonly id_: number;
@@ -18,11 +19,11 @@ class Provider {
 
     private constructor(data: ProviderObjectLiteral) {
         if (data.id <=0) {
-            throw new Error('Id must be greater than 0');
+            throw new InvalidArgumentException('Id must be greater than 0');
         }
 
         if (!data.name) {
-            throw new Error('Name can not be empty');
+            throw new InvalidArgumentException('Name can not be empty');
         }
 
         this.id_ = data.id;

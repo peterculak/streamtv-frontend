@@ -9,8 +9,8 @@ class MarketplaceService implements MarketplaceServiceInterface {
     this.repository = repository;
   }
 
-  getMarketplacesByProvider(provider: Provider): Promise<any> {
-    return this.repository.findManyBy(provider);
+  getMarketplacesByProvider(provider: Provider): Promise<[]> {
+    return this.repository.findManyByProvider(provider);
   }
 }
 

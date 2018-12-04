@@ -32,6 +32,6 @@ class Main extends React.Component<MainPropsInterface, any> {
             </main>
         );
     }
-};
+}
 
 export default Main;

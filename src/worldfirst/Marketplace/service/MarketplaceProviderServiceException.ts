@@ -1,7 +1,7 @@
-import DomainException from "../DomainException";
+import DomainException from "../Exception/DomainException";
 
 class MarketplaceProviderServiceException extends DomainException {
-    static notFoundForName(name: string) {
+    static notFoundWithName(name: string) {
         return new this(`Marketplace not found for name: '${name}'`);
     }
 }

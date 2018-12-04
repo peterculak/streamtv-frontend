@@ -1,6 +1,7 @@
 import Provider from "../entity/Provider";
 import ProviderObjectLiteral from "../DataStructures/Provider";
 import MarketplaceProviderRepositoryInterface from "./MarketplaceProviderRepositoryInterface";
+import MarketplaceRepositoryException from "./MarketplaceRepositoryException";
 
 class MarketplaceProviderRepository implements MarketplaceProviderRepositoryInterface {
 
@@ -14,7 +15,7 @@ class MarketplaceProviderRepository implements MarketplaceProviderRepositoryInte
         });
 
         if (!providerData) {
-            throw new Error(`No provider found for '${name}'`);
+            throw MarketplaceRepositoryException.notFoundWithName(name);
         }
 
         return Provider.fromObjectLiteral(providerData);
