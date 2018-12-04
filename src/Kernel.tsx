@@ -19,8 +19,7 @@ class ReactAppKernel extends Kernel {
 
     run(): void {
         this.boot();
-        console.log(this.root);
-        // render(<App container={this.container}/>, this.root);
+        render(<App container={this.container}/>, this.root);
     }
 
     protected initializeContainer(): void {
