@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import MarketplaceController from '../app/controller/Marketplace/index';
 import ContainerInterface from "../framework/container/ContainerInterface";
+import Error404 from '../app/controller/Error/Error404';
 
 interface MainPropsInterface {
     container: ContainerInterface,
@@ -20,7 +21,7 @@ class Main extends React.Component<MainPropsInterface, any> {
         return (
             <main>
                 <Switch>
-                    <Route path='/'
+                    <Route exact path='/'
                            render={(props) => <MarketplaceController
                                providerName='amazon'
                                marketplaceService={this.container.get('marketplace.service')}
@@ -29,6 +30,8 @@ class Main extends React.Component<MainPropsInterface, any> {
                                {...props}
                            />}
                     />
+                    <Route
+                        component={Error404}/>
                 </Switch>
             </main>
         );

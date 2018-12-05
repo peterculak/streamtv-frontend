@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Header from '../vendor/components/Header/index';
+import Header from './Header/index';
 import Sidebar from '../vendor/components/SideNav/index';
 import ContainerInterface from '../framework/container/ContainerInterface';
 import Main from './Main';

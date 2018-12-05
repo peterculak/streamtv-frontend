@@ -5,7 +5,7 @@ const config = {
   api: {
     scheme: scheme,
     host: host,
-    listByProvider: scheme + '://' + host + '/v1/marketplaces/provider/%id%',
+    listByProvider: scheme + '://' + host + '/v1/provider/%id%/provider',
   },
 };
 
