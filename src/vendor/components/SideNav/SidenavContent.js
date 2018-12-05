@@ -84,7 +84,7 @@ class SidenavContent extends Component {
 
             <li className="nav-header">Marketplaces</li>
             <li className="menu no-arrow">
-              <NavLink to="/marketplaces/amazon">
+              <NavLink to="/">
                 <i className="zmdi zmdi-view-dashboard zmdi-hc-fw"/>
                 <span className="nav-text">Amazon</span>
               </NavLink>
