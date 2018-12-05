@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Header from '../components/Header/index';
-import Main from '../containers/Main';
-import Sidebar from './SideNav/index';
+import Header from '../vendor/components/Header/index';
+import Sidebar from '../vendor/components/SideNav/index';
 import ContainerInterface from '../framework/container/ContainerInterface';
+import Main from './Main';
 
 interface LayoutPropsInterface {
     container: ContainerInterface

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {NavLink, withRouter} from 'react-router-dom';
-import CustomScrollbars from '../../util/CustomScrollbars';
+import CustomScrollbars from '../CustomScrollbars/index';
 
 class SidenavContent extends Component {
   componentDidMount() {

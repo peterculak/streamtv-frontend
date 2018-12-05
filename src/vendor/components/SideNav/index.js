@@ -7,6 +7,7 @@ class SideNav extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', () => {
+      // @todo: fix this
       // this.props.updateWindowWidth(window.innerWidth);
     });
   }

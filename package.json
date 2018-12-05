@@ -12,7 +12,6 @@
     "@types/react-custom-scrollbars": "^4.0.5",
     "@types/react-dom": "16.0.11",
     "@types/react-router-dom": "^4.3.1",
-    "node-sass": "^4.10.0",
     "react": "^16.6.3",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.6.3",
@@ -37,6 +36,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "node-sass": "^4.10.0",
     "jest-fetch-mock": "^2.0.1"
   }
 }

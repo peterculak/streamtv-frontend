@@ -2,11 +2,10 @@ import * as React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import Layout from './Layout';
-// import 'react-big-calendar/lib/less/styles.less';
-import '../styles/bootstrap.scss';
-import '../styles/app.scss';
-import defaultTheme from './themes/defaultTheme';
+import '../vendor/styles/bootstrap.scss';
+import '../vendor/styles/app.scss';
 import ContainerInterface from "../framework/container/ContainerInterface";
+import defaultTheme from './themes/defaultTheme';
 
 interface LayoutPropsInterface {
     container: ContainerInterface
