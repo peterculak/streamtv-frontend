@@ -8,6 +8,7 @@ import MarketplaceProviderServiceInterface
 interface PropsInterface {
     marketplaceService: MarketplaceServiceInterface,
     providerService: MarketplaceProviderServiceInterface,
+    providerName: string,
     match: any,
 }
 
@@ -17,7 +18,7 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
     }
 
     componentDidMount() {
-        const provider = this.props.providerService.getProviderByName(this.props.match.params.providerName);
+        const provider = this.props.providerService.getProviderByName(this.props.providerName);
         this.props.marketplaceService.getMarketplacesByProvider(provider).then(r => {
             this.setState({
                 data: r,

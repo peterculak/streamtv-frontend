@@ -45,6 +45,7 @@ it('MarketplaceController', () => {
 
     ReactDOM.render(
         <MarketplaceController
+            providerName='amazon'
             match={match}
             marketplaceService={marketplaceServiceMock}
             providerService={container.get('marketplace.provider.service')}/>, document.createElement('div'));

@@ -20,8 +20,9 @@ class Main extends React.Component<MainPropsInterface, any> {
         return (
             <main>
                 <Switch>
-                    <Route path='/marketplaces/:providerName'
+                    <Route path='/'
                            render={(props) => <MarketplaceController
+                               providerName='amazon'
                                marketplaceService={this.container.get('marketplace.service')}
                                providerService={this.container.get(
                                    'marketplace.provider.service')}

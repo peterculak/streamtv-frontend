@@ -6,7 +6,7 @@ const Error404 = () => (
         <div className="page-error-content">
             <div className="error-code mb-4 animated zoomInDown">404</div>
             <h2 className="text-center fw-regular title bounceIn animation-delay-10 animated">
-              extraPages.404Msg
+              Page not found.
             </h2>
             <form className="mb-4" role="search">
                 <div className="search-bar shadow flipInX animation-delay-16 animated">
@@ -19,7 +19,7 @@ const Error404 = () => (
                 </div>
             </form>
             <p className="text-center zoomIn animation-delay-20 animated">
-                <Link className="btn btn-primary" to="/">extraPages.goHome</Link>
+                <Link className="btn btn-primary" to="/">Home</Link>
             </p>
         </div>
     </div>
