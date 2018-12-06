@@ -3,9 +3,7 @@ function isScalar(mixedVar: any): boolean {
 }
 
 function ucWords(value: string): string {
-    return value.toLowerCase().replace(/\b[a-z]/g, function (letter: string) {
-        return letter.toUpperCase();
-    });
+    return value.toLowerCase().replace(/\b[a-z]/g, (letter: string) => letter.toUpperCase());
 }
 
 export {isScalar, ucWords};

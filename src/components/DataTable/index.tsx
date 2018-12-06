@@ -25,7 +25,7 @@ class DataTable extends React.Component<DataTableProps, any> {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {this.props.data.map((row: any) => <TableRow key={String(row.id)}>
+                    {this.props.data.map((row: any, index: number) => <TableRow key={String(index)}>
                         {this.columnNames.map(columnName => <TableCell key={columnName}>
                             {this.value(row[columnName])}</TableCell>)}
                     </TableRow>)}

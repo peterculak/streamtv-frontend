@@ -4,8 +4,8 @@ import GenericObject from "../framework/GenericObject";
 import MarketplaceService from "../worldfirst/Marketplace/service/MarketplaceService";
 import MarketplaceProviderService from "../worldfirst/Marketplace/service/MarketplaceProviderService";
 import MarketplaceProviderRepository from "../worldfirst/Marketplace/repository/MarketplaceProviderRepository";
-import MarketplaceRepository from "../worldfirst/Marketplace/repository/MarketplaceRepository";
-// import MarketplaceRepository from "../repository/MarketplaceRepository";
+// import MarketplaceRepository from "../worldfirst/Marketplace/repository/MarketplaceRepository";
+import MarketplaceRepository from "../repository/MarketplaceRepository";
 
 class Container implements ContainerInterface {
     private readonly _config: GenericObject;
@@ -15,7 +15,7 @@ class Container implements ContainerInterface {
         this._config = config;
 
         this.services['marketplace.service'] = new MarketplaceService(
-            new MarketplaceRepository(this._config.marketplace.api)
+            new MarketplaceRepository()
         );
         this.services['marketplace.provider.service'] = new MarketplaceProviderService(
             new MarketplaceProviderRepository()

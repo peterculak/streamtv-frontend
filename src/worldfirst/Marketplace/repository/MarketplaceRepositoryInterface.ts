@@ -1,5 +1,5 @@
 import Provider from "../entity/Provider";
 
 export default interface MarketplaceRepositoryInterface {
-    findManyByProvider(provider: Provider): any;
+    findManyByProvider(provider: Provider): Promise<[]>;
 }
