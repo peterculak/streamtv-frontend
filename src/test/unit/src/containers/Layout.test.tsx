@@ -1,11 +1,11 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import App from '../../../../containers/App';
+import Layout from '../../../../containers/Layout';
 import Container from '../../../../container/index';
 
 jest.mock('../../../../container/index');
 
-describe('Application container', () => {
+describe('Layout container', () => {
     let container: Container;
     beforeEach(() => {
         Container.mockClear();
@@ -13,6 +13,6 @@ describe('Application container', () => {
     });
 
     it('renders without crashing', () => {
-        shallow(<App container={container}/>);
+        shallow(<Layout container={container}/>);
     });
 });
