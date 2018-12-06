@@ -64,7 +64,13 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
                         </div>
                     </Paper>)
                     :
-                    (<CircularProgress/>)
+                    (
+                        <div className="d-flex justify-content-center">
+                            <div className="loader">
+                                <CircularProgress/>
+                            </div>
+                        </div>
+                    )
 
                 }
             </div>
