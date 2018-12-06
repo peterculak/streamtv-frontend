@@ -1,36 +1,79 @@
 import * as React from 'react';
 import {Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core';
-import {isScalar} from '../../helpers/functions';
+import {withStyles, createStyles, Theme} from '@material-ui/core/styles';
+import {isScalar, ucWords} from '../../helpers/functions';
 
+// @todo pass styles through props and use props interface
 interface DataTableProps {
-  data: Array<any>;
+    data: Array<any>;
+    styles: {
+        table: any,
+        row: any,
+    }
 }
 
-export default function DataTable(props: DataTableProps) {
-  const headers: Array<string> = [];
+const styles = (theme: Theme) => createStyles({
+    table: {
+        minWidth: 700,
+    },
+    row: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
+});
 
-  for (let i in props.data[0]) {
-    if (isScalar(props.data[0][i])) {
-      headers.push(i);
+const CustomTableCell = withStyles(theme => ({
+    head: {
+        backgroundColor: theme.palette.primary.light,
+        color: theme.palette.common.white,
+        fontSize: 14,
+        fontWeight: 'normal',
+    },
+}))(TableCell);
+
+// type ClassNames = { classes: { table: any, row: any } };
+
+class DataTable extends React.Component<any, any> {
+    private headers: Array<string> = [];
+
+    render() {
+        for (let i in this.props.data[0]) {
+            if (isScalar(this.props.data[0][i])) {
+                this.headers.push(String(i));
+            }
+        }
+        return (
+            <Table className={this.props.classes.table}>
+                <TableHead>
+                    <TableRow>
+                        {this.headers.map(
+                            header => <CustomTableCell key={header}>{this.tableCellHeader(header)}</CustomTableCell>)}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {this.props.data.map((row: any) => <TableRow className={this.props.classes.row}
+                                                                 key={String(row.id)}
+                    >
+                        {this.headers.map(header => <TableCell key={header}>
+                            {this.tableCellValue(row[header])}</TableCell>)}
+                    </TableRow>)}
+                </TableBody>
+            </Table>
+        );
     }
-  }
 
-  return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            {headers.map(
-                header => <TableCell key={header}>{header}</TableCell>)}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.data.map(row => <TableRow
-              key={String(row.id)}
-          >
-            {headers.map(header => <TableCell key={header}>
-              {String(row[header])}</TableCell>)}
-          </TableRow>)}
-        </TableBody>
-      </Table>
-  );
-};
+    private tableCellHeader(value: string): string {
+        return ucWords(value.replace(/_/g, ' '));
+    }
+
+    private tableCellValue(value: any): string {
+        if (undefined === value || null === value) {
+            return '';
+        }
+
+        return String(value);
+    }
+}
+
+export default withStyles(styles)(DataTable);

@@ -4,7 +4,7 @@ import pink from '@material-ui/core/colors/pink';
 const worldFirst = {
     palette: {
         primary: {
-            light: indigo[300],
+            light: '#673ab7',
             main: '#5600bb',
             dark: indigo[700],
             contrastText: '#fff'
