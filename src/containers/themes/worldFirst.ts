@@ -1,17 +1,17 @@
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
-export default {
+const worldFirst = {
     palette: {
         primary: {
             light: indigo[300],
-            main: indigo[500],
+            main: '#5600bb',
             dark: indigo[700],
             contrastText: '#fff'
         },
         secondary: {
             light: pink[300],
-            main: pink['A200'],
+            main: '#6b01f4',
             dark: pink[700],
             contrastText: '#fff'
         }
@@ -26,3 +26,5 @@ export default {
         },
     },
 };
+
+export default worldFirst;
