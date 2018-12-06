@@ -1,5 +1,6 @@
 import * as React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress/index';
+import Paper from '@material-ui/core/Paper/index';
 import DataTable from '../../../components/DataTable/index';
 import MarketplaceServiceInterface from "../../../worldfirst/Marketplace/service/MarketplaceServiceInterface";
 import MarketplaceProviderServiceInterface
@@ -31,11 +32,13 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
             <div className="app-wrapper">
 
                 <div className="d-flex justify-content-center">
-                    <h1>Marketplaces</h1>
+                    <h1>Amazon Marketplaces</h1>
                 </div>
 
                 {this.state && this.state.data.length ?
-                    (<DataTable data={this.state.data}></DataTable>)
+                    (<Paper>
+                        <div className="table-responsive-material"><DataTable data={this.state.data}></DataTable></div>
+                    </Paper>)
                     :
                     (<CircularProgress/>)
 

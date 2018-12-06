@@ -22,7 +22,11 @@ describe('MarketplaceService', () => {
 
     it('getMarketplacesByProvider returns promise', () => {
         const service = new MarketplaceService(
-            new MarketplaceRepository({listByProvider: 'http://absolute-url.com/provider/%d%'})
+            new MarketplaceRepository({
+                scheme: 'http',
+                host: '0.0.0.0',
+                version: 'v1',
+            })
         );
         const provider = mockProvider.fromObjectLiteral({id: 1, name: 'Amazon'});
         const marketplaces = service.getMarketplacesByProvider(provider);

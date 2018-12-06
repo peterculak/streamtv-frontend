@@ -33,9 +33,11 @@ it('MarketplaceController', () => {
     const config = {
         marketplace: {
             api: {
-                listByProvider: ''
-            }
-        }
+                scheme: 'http',
+                host: '0.0.0.0',
+                version: 'v1',
+            },
+        },
     };
     const container = new Container(config);
     const match = {'params': {'providerName': 'Amazon'}};

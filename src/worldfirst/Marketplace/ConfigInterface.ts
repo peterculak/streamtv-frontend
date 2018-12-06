@@ -3,6 +3,6 @@ export default interface MarketplaceConfigInterface {
         protocol: string,
         host: string,
         schema: string,
-        listByProvider: string;
+        version: string;
     }
 }
