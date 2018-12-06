@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MarketplaceController from '../../../../../../app/controller/Marketplace/index';
 import Container from '../../../../../../container/index';
-
+import {createMuiTheme} from '@material-ui/core/styles';
+import worldFirst from '../../../../../../containers/themes/worldFirst';
 import MarketplaceService from '../../../../../../worldfirst/Marketplace/service/MarketplaceService';
 
 jest.mock("../../../../../../worldfirst/Marketplace/service/MarketplaceService", () => {
@@ -16,7 +17,6 @@ jest.mock("../../../../../../worldfirst/Marketplace/service/MarketplaceService",
         };
     });
 });
-
 import MarketplaceRepository from '../../../../../../worldfirst/Marketplace/repository/MarketplaceRepository';
 
 jest.mock("../../../../../../worldfirst/Marketplace/repository/MarketplaceRepository", () => {
@@ -44,11 +44,15 @@ it('MarketplaceController', () => {
     const marketplaceServiceMock = new MarketplaceService(
         new MarketplaceRepository(config.marketplace.api)
     );
-
+    const theme = createMuiTheme(worldFirst);
     ReactDOM.render(
         <MarketplaceController
             providerName='amazon'
             match={match}
             marketplaceService={marketplaceServiceMock}
-            providerService={container.get('marketplace.provider.service')}/>, document.createElement('div'));
+            providerService={container.get('marketplace.provider.service')}
+            theme={theme}
+        />,
+        document.createElement('div')
+    );
 });

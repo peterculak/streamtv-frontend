@@ -3,9 +3,11 @@ import {Switch, Route} from 'react-router-dom';
 import MarketplaceController from '../app/controller/Marketplace/index';
 import ContainerInterface from "../framework/container/ContainerInterface";
 import Error404 from '../app/controller/Error/Error404';
+import {Theme} from '@material-ui/core/styles';
 
 interface MainPropsInterface {
     container: ContainerInterface,
+    theme: Theme,
 }
 
 class Main extends React.Component<MainPropsInterface, any> {
@@ -22,11 +24,12 @@ class Main extends React.Component<MainPropsInterface, any> {
             <main>
                 <Switch>
                     <Route exact path='/'
-                           render={(props) => <MarketplaceController
+                           render={(props: any) => <MarketplaceController
                                providerName='amazon'
                                marketplaceService={this.container.get('marketplace.service')}
                                providerService={this.container.get(
                                    'marketplace.provider.service')}
+                               theme={this.props.theme}
                                {...props}
                            />}
                     />

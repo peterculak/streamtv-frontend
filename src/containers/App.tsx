@@ -21,7 +21,7 @@ class App extends React.Component<LayoutPropsInterface, any> {
         return (
             <BrowserRouter>
                 <MuiThemeProvider theme={applyTheme}>
-                    <Layout {...this.props} />
+                    <Layout theme={applyTheme} {...this.props} />
                 </MuiThemeProvider>
             </BrowserRouter>
         );

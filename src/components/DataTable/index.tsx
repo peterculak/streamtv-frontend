@@ -1,73 +1,59 @@
 import * as React from 'react';
 import {Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core';
-import {withStyles, createStyles, Theme} from '@material-ui/core/styles';
 import {isScalar, ucWords} from '../../helpers/functions';
+import {createStyled} from "../functions";
+import StyledTableCell from './StyledTableCell';
 
-// @todo pass styles through props and use props interface
 interface DataTableProps {
     data: Array<any>;
-    styles: {
-        table: any,
-        row: any,
-    }
 }
 
-const styles = (theme: Theme) => createStyles({
-    table: {
-        minWidth: 700,
-    },
-    row: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.background.default,
-        },
-    },
-});
+class DataTable extends React.Component<DataTableProps & { classes?: any, styles?: any }, any> {
+    private columnNames: Array<string> = [];
 
-const CustomTableCell = withStyles(theme => ({
-    head: {
-        backgroundColor: theme.palette.primary.light,
-        color: theme.palette.common.white,
-        fontSize: 14,
-        fontWeight: 'normal',
-    },
-}))(TableCell);
-
-// type ClassNames = { classes: { table: any, row: any } };
-
-class DataTable extends React.Component<any, any> {
-    private headers: Array<string> = [];
+    constructor(props: any) {
+        super(props);
+        this.columnNames = this.extractColumnNamesFromData(this.props.data);
+    }
 
     render() {
-        for (let i in this.props.data[0]) {
-            if (isScalar(this.props.data[0][i])) {
-                this.headers.push(String(i));
-            }
-        }
         return (
-            <Table className={this.props.classes.table}>
+            <Table className={this.props.classes && this.props.classes.table ? this.props.classes.table : ''}>
                 <TableHead>
                     <TableRow>
-                        {this.headers.map(
-                            header => <CustomTableCell key={header}>{this.tableCellHeader(header)}</CustomTableCell>)}
+                        {this.columnNames.map(
+                            columnName => <StyledTableCell styles={this.props.styles ? this.props.styles.headerCell : ''}
+                                                           key={columnName}>{this.label(columnName)}</StyledTableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {this.props.data.map((row: any) => <TableRow className={this.props.classes.row}
-                                                                 key={String(row.id)}
+                    {this.props.data.map((row: any) => <TableRow
+                        className={this.props.classes && this.props.classes.row ? this.props.classes.row : ''}
+                        key={String(row.id)}
                     >
-                        {this.headers.map(header => <TableCell key={header}>
-                            {this.tableCellValue(row[header])}</TableCell>)}
+                        {this.columnNames.map(columnName => <TableCell key={columnName}>
+                            {this.value(row[columnName])}</TableCell>)}
                     </TableRow>)}
                 </TableBody>
             </Table>
         );
     }
 
-    private tableCellHeader(value: string): string {
+    private extractColumnNamesFromData(data: Array<any>): Array<string> {
+        let columnNames: Array<string> = [];
+        for (let i in data[0]) {
+            if (isScalar(data[0][i])) {
+                columnNames.push(String(i));
+            }
+        }
+        return columnNames;
+    }
+
+    private label(value: string): string {
         return ucWords(value.replace(/_/g, ' '));
     }
 
-    private tableCellValue(value: any): string {
+    private value(value: any): string {
         if (undefined === value || null === value) {
             return '';
         }
@@ -76,4 +62,15 @@ class DataTable extends React.Component<any, any> {
     }
 }
 
-export default withStyles(styles)(DataTable);
+function RenderProps(parentProps: DataTableProps & { styles?: any }) {
+    if (undefined !== parentProps.styles) {
+        const Styled = createStyled(parentProps.styles);
+        return (
+            <Styled>{(props: any) => <DataTable {...parentProps} {...props}></DataTable>}</Styled>
+        );
+    }
+
+    return (<DataTable {...parentProps}></DataTable>);
+}
+
+export default RenderProps;

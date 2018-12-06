@@ -3,9 +3,11 @@ import Header from './Header/index';
 import Sidebar from '../vendor/components/SideNav/index';
 import ContainerInterface from '../framework/container/ContainerInterface';
 import Main from './Main';
+import {Theme} from '@material-ui/core/styles';
 
 interface LayoutPropsInterface {
-    container: ContainerInterface
+    container: ContainerInterface,
+    theme: Theme,
 }
 
 class Layout extends React.Component<LayoutPropsInterface, any> {
@@ -24,7 +26,7 @@ class Layout extends React.Component<LayoutPropsInterface, any> {
 
                     <main className="app-main-content-wrapper">
                         <div className="app-main-content">
-                            <Main container={this.props.container}/>
+                            <Main container={this.props.container} {...this.props}/>
                         </div>
                         {/*<Footer/>*/}
                     </main>
