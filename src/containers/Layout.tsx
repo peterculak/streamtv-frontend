@@ -3,11 +3,9 @@ import Header from './Header/index';
 import Sidebar from '../vendor/components/SideNav/index';
 import ContainerInterface from '../framework/container/ContainerInterface';
 import Main from './Main';
-import {Theme} from '@material-ui/core/styles';
 
 interface LayoutPropsInterface {
     container: ContainerInterface,
-    theme: Theme,
 }
 
 class Layout extends React.Component<LayoutPropsInterface, any> {

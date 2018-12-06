@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {BrowserRouter} from 'react-router-dom';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {MuiThemeProvider} from '@material-ui/core/styles';
 import Layout from './Layout';
 import '../vendor/styles/bootstrap.scss';
 import '../vendor/styles/app.scss';
@@ -17,11 +17,10 @@ class App extends React.Component<LayoutPropsInterface, any> {
     }
 
     render() {
-        const applyTheme = createMuiTheme(worldFirst);
         return (
             <BrowserRouter>
-                <MuiThemeProvider theme={applyTheme}>
-                    <Layout theme={applyTheme} {...this.props} />
+                <MuiThemeProvider theme={worldFirst}>
+                    <Layout {...this.props} />
                 </MuiThemeProvider>
             </BrowserRouter>
         );

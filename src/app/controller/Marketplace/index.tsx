@@ -5,39 +5,17 @@ import DataTable from '../../../components/DataTable/index';
 import MarketplaceServiceInterface from "../../../worldfirst/Marketplace/service/MarketplaceServiceInterface";
 import MarketplaceProviderServiceInterface
     from "../../../worldfirst/Marketplace/service/MarketplaceProviderServiceInterface";
-import {Theme} from '@material-ui/core/styles';
 
 interface PropsInterface {
     marketplaceService: MarketplaceServiceInterface,
     providerService: MarketplaceProviderServiceInterface,
     providerName: string,
     match: any,
-    theme: Theme,
 }
 
 class MarketplaceController extends React.Component<PropsInterface, any> {
-    private readonly styles: Object = {};
-
     constructor(props: PropsInterface, context: any) {
         super(props, context);
-        this.styles = {
-            headerCell: {
-                head: {
-                    backgroundColor: this.props.theme.palette.primary.light,
-                    color: this.props.theme.palette.common.white,
-                    fontSize: 14,
-                    fontWeight: 'normal',
-                }
-            },
-            table: {
-                minWidth: 700,
-            },
-            row: {
-                '&:nth-of-type(odd)': {
-                    backgroundColor: this.props.theme.palette.background.default,
-                },
-            },
-        };
     }
 
     componentDidMount() {
@@ -60,7 +38,7 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
                 {this.state && this.state.data.length ?
                     (<Paper>
                         <div className="table-responsive-material">
-                            <DataTable styles={this.styles} data={this.state.data}></DataTable>
+                            <DataTable data={this.state.data}></DataTable>
                         </div>
                     </Paper>)
                     :

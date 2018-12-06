@@ -1,7 +1,8 @@
+import {createMuiTheme} from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
-const worldFirst = {
+const theme = createMuiTheme({
     palette: {
         primary: {
             light: '#673ab7',
@@ -16,15 +17,35 @@ const worldFirst = {
             contrastText: '#fff'
         }
     },
-    status: {
-        danger: 'orange',
-    },
     typography: {
+        useNextVariants: true,
         button: {
             fontWeight: 400,
             textAlign: 'capitalize'
         },
     },
-};
+});
 
+const worldFirst = createMuiTheme({
+        overrides: {
+            MuiTableRow: {
+                root: {
+                    '&:nth-of-type(even)': {
+                        backgroundColor: theme.palette.background.default,
+                    },
+                },
+                head: {
+                    backgroundColor: theme.palette.primary.light,
+                }
+            },
+            MuiTableCell: {
+                head: {
+                    color: theme.palette.primary.contrastText,
+                    fontSize: 14,
+                    fontWeight: "normal"
+                }
+            }
+        }
+    })
+;
 export default worldFirst;
