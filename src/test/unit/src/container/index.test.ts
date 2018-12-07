@@ -1,6 +1,5 @@
 import Container from '../../../../container/index';
-import MarketplaceService from "../../../../worldfirst/Marketplace/service/MarketplaceService";
-import MarketplaceProviderService from "../../../../worldfirst/Marketplace/service/MarketplaceProviderService";
+import ProviderService from "../../../../worldfirst/Marketplace/service/ProviderService";
 import NotFoundException from "../../../../container/NotFoundException";
 
 describe('DI Container', () => {
@@ -23,22 +22,13 @@ describe('DI Container', () => {
         expect(container.config).toEqual(config);
     });
 
-    it('has marketplace.service', () => {
-        expect(container.has('marketplace.service')).toEqual(true);
+    it('has provider.service', () => {
+        expect(container.has('provider.service')).toEqual(true);
     });
 
-    it('get marketplace.service returns service instance', () => {
-        const service = container.get('marketplace.service');
-        expect(service instanceof MarketplaceService).toEqual(true);
-    });
-
-    it('has marketplace.provider.service', () => {
-        expect(container.has('marketplace.provider.service')).toEqual(true);
-    });
-
-    it('get marketplace.provider.service returns instance of service', () => {
-        const service = container.get('marketplace.provider.service');
-        expect(service instanceof MarketplaceProviderService).toEqual(true);
+    it('get provider.service returns service instance', () => {
+        const service = container.get('provider.service');
+        expect(service instanceof ProviderService).toEqual(true);
     });
 
     it('has returns false when doesn\'t have service', () => {

@@ -24,9 +24,7 @@ class Main extends React.Component<MainPropsInterface, any> {
                     <Route exact path='/'
                            render={(props: any) => <MarketplaceController
                                providerName='amazon'
-                               marketplaceService={this.container.get('marketplace.service')}
-                               providerService={this.container.get(
-                                   'marketplace.provider.service')}
+                               providerService={this.container.get('provider.service')}
                                {...props}
                            />}
                     />

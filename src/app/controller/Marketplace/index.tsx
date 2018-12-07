@@ -2,13 +2,10 @@ import * as React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress/index';
 import Paper from '@material-ui/core/Paper/index';
 import DataTable from '../../../components/DataTable/index';
-import MarketplaceServiceInterface from "../../../worldfirst/Marketplace/service/MarketplaceServiceInterface";
-import MarketplaceProviderServiceInterface
-    from "../../../worldfirst/Marketplace/service/MarketplaceProviderServiceInterface";
+import ProviderServiceInterface from "../../../worldfirst/Marketplace/service/ProviderServiceInterface";
 
 interface PropsInterface {
-    marketplaceService: MarketplaceServiceInterface,
-    providerService: MarketplaceProviderServiceInterface,
+    providerService: ProviderServiceInterface,
     providerName: string,
     match: any,
 }
@@ -20,7 +17,7 @@ class MarketplaceController extends React.Component<PropsInterface, any> {
 
     componentDidMount() {
         const provider = this.props.providerService.getProviderByName(this.props.providerName);
-        this.props.marketplaceService.getMarketplacesByProvider(provider).then(r => {
+        this.props.providerService.getMarketplacesByProvider(provider).then(r => {
             this.setState({
                 data: r,
             });

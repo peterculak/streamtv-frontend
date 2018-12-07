@@ -1,25 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MarketplaceController from '../../../../../../app/controller/Marketplace/index';
-import Container from '../../../../../../container/index';
-import {createMuiTheme} from '@material-ui/core/styles';
-import worldFirst from '../../../../../../containers/themes/worldFirst';
-import MarketplaceService from '../../../../../../worldfirst/Marketplace/service/MarketplaceService';
+import ProviderService from '../../../../../../worldfirst/Marketplace/service/ProviderService';
+import ProviderRepository from '../../../../../../worldfirst/Marketplace/repository/ProviderRepository';
+import mockProvider from "../../../../../../worldfirst/Marketplace/entity/Provider";
 
-jest.mock("../../../../../../worldfirst/Marketplace/service/MarketplaceService", () => {
+jest.mock("../../../../../../worldfirst/Marketplace/service/ProviderService", () => {
     return jest.fn().mockImplementation(() => {
         return {
             getMarketplacesByProvider() {
                 return new Promise(function (resolve, reject) {
                     resolve([{id: 1}]);
                 });
+            },
+            getProviderByName(): mockProvider {
+                return mockProvider.fromObjectLiteral({id: 1, name: 'Amazon'});
             }
         };
     });
 });
-import MarketplaceRepository from '../../../../../../worldfirst/Marketplace/repository/MarketplaceRepository';
 
-jest.mock("../../../../../../worldfirst/Marketplace/repository/MarketplaceRepository", () => {
+jest.mock("../../../../../../worldfirst/Marketplace/repository/ProviderRepository", () => {
     return jest.fn().mockImplementation(() => {
         return {
             findManyByProvider() {
@@ -39,19 +40,15 @@ it('MarketplaceController', () => {
             },
         },
     };
-    const container = new Container(config);
     const match = {'params': {'providerName': 'Amazon'}};
-    const marketplaceServiceMock = new MarketplaceService(
-        new MarketplaceRepository(config.marketplace.api)
+    const providerServiceMock = new ProviderService(
+        new ProviderRepository(config.marketplace.api)
     );
-    const theme = createMuiTheme(worldFirst);
     ReactDOM.render(
         <MarketplaceController
             providerName='amazon'
+            providerService={providerServiceMock}
             match={match}
-            marketplaceService={marketplaceServiceMock}
-            providerService={container.get('marketplace.provider.service')}
-            theme={theme}
         />,
         document.createElement('div')
     );
