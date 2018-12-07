@@ -1,7 +1,21 @@
 import ProviderRepositoryInterface from "../worldfirst/Marketplace/repository/ProviderRepositoryInterface";
 import Provider from "../worldfirst/Marketplace/entity/Provider";
 
+type config = {
+    scheme: string,
+    host: string,
+    version: string
+};
+
 class ProviderRepository implements ProviderRepositoryInterface {
+    private readonly api: config;
+    private baseUrl: string;
+
+    constructor(api: config) {
+        this.api = api;
+        this.baseUrl = `${this.api.scheme}://${this.api.host}/${this.api.version}`;
+    }
+
     findOneByName(name: string): Provider {
         return Provider.fromObjectLiteral({id: 1, name: 'Amazon'});
     }

@@ -28,6 +28,17 @@ const theme = createMuiTheme({
 
 const worldFirst = createMuiTheme({
         overrides: {
+            MuiTableCell: {
+                root: {
+                    marginTop: theme.spacing.unit * 3,
+                    overflowX: 'auto',
+                },
+                head: {
+                    color: theme.palette.primary.contrastText,
+                    fontSize: 14,
+                    fontWeight: 'normal'
+                }
+            },
             MuiTableRow: {
                 root: {
                     '&:nth-of-type(even)': {
@@ -38,13 +49,6 @@ const worldFirst = createMuiTheme({
                     backgroundColor: theme.palette.primary.light,
                 }
             },
-            MuiTableCell: {
-                head: {
-                    color: theme.palette.primary.contrastText,
-                    fontSize: 14,
-                    fontWeight: "normal"
-                }
-            }
         }
     })
 ;
