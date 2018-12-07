@@ -1,12 +1,17 @@
 import * as React from 'react';
-import Header from './Header/index';
-import Sidebar from '../vendor/components/SideNav/index';
+import {withStyles, Theme} from '@material-ui/core/styles';
 import ContainerInterface from '../framework/container/ContainerInterface';
 import Main from './Main';
+import ResponsiveDrawer from "./ResponsiveDrawer";
 
 interface LayoutPropsInterface {
     container: ContainerInterface,
+    classes: {toolbar: string}
 }
+
+const styles = (theme: Theme) => ({
+    toolbar: theme.mixins.toolbar,
+});
 
 class Layout extends React.Component<LayoutPropsInterface, any> {
     constructor(props: LayoutPropsInterface) {
@@ -14,19 +19,22 @@ class Layout extends React.Component<LayoutPropsInterface, any> {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (<div className="app-main">
             <div className="app-container fixed-drawer">
-                <Sidebar/>
+
+                <ResponsiveDrawer />
+
                 <div className="app-main-container">
-                    <div className="app-header">
-                        <Header/>
-                    </div>
 
                     <main className="app-main-content-wrapper">
+
+                        <div className={classes.toolbar} />
+
                         <div className="app-main-content">
                             <Main container={this.props.container} {...this.props}/>
                         </div>
-                        {/*<Footer/>*/}
                     </main>
                 </div>
             </div>
@@ -34,4 +42,4 @@ class Layout extends React.Component<LayoutPropsInterface, any> {
     }
 }
 
-export default Layout;
+export default withStyles(styles, {withTheme: true})(Layout);

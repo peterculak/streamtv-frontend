@@ -2,8 +2,8 @@ import NotFoundException from "./NotFoundException";
 import ContainerInterface from "../framework/container/ContainerInterface";
 import GenericObject from "../framework/GenericObject";
 import ProviderService from "../worldfirst/Marketplace/service/ProviderService";
-import ProviderRepository from "../worldfirst/Marketplace/repository/ProviderRepository";
-// import ProviderRepository from "../repository/ProviderRepository";
+// import ProviderRepository from "../worldfirst/Marketplace/repository/ProviderRepository";
+import ProviderRepository from "../repository/ProviderRepository";
 
 class Container implements ContainerInterface {
     private readonly _config: GenericObject;
