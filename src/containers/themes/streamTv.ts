@@ -54,6 +54,6 @@ const overrides = {
     }
 };
 
-const worldFirstTheme = createMuiTheme(Object.assign(baseSettings, overrides));
+const streamTvTheme = createMuiTheme(Object.assign(baseSettings, overrides));
 
-export default worldFirstTheme;
+export default streamTvTheme;

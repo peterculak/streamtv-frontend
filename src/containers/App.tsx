@@ -5,7 +5,7 @@ import Layout from './Layout';
 import '../vendor/styles/bootstrap.scss';
 import '../vendor/styles/app.scss';
 import ContainerInterface from "../framework/container/ContainerInterface";
-import worldFirst from './themes/worldFirst';
+import streamTv from './themes/streamTv';
 
 interface LayoutPropsInterface {
     container: ContainerInterface
@@ -19,7 +19,7 @@ class App extends React.Component<LayoutPropsInterface, any> {
     render() {
         return (
             <BrowserRouter>
-                <MuiThemeProvider theme={worldFirst}>
+                <MuiThemeProvider theme={streamTv}>
                     <Layout {...this.props} />
                 </MuiThemeProvider>
             </BrowserRouter>

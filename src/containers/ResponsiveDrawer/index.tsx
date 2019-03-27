@@ -91,7 +91,7 @@ class ResponsiveDrawer extends React.Component<any, any> {
                             <MenuIcon/>
                         </IconButton>
                         <Link className="app-logo mr-2 d-none d-sm-block" to="/">
-                            <img src={logo} alt="WorldFirst" title="WorldFirst"/>
+                            <img src={logo} alt="StreamTv" title="StreamTv"/>
                         </Link>
                     </Toolbar>
                 </AppBar>

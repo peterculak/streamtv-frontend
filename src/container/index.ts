@@ -1,9 +1,6 @@
 import NotFoundException from "./NotFoundException";
 import ContainerInterface from "../framework/container/ContainerInterface";
 import GenericObject from "../framework/GenericObject";
-import ProviderService from "../worldfirst/Marketplace/service/ProviderService";
-// import ProviderRepository from "../worldfirst/Marketplace/repository/ProviderRepository";
-import ProviderRepository from "../repository/ProviderRepository";
 
 class Container implements ContainerInterface {
     private readonly _config: GenericObject;
@@ -12,9 +9,7 @@ class Container implements ContainerInterface {
     constructor(config: GenericObject) {
         this._config = config;
 
-        this.services['provider.service'] = new ProviderService(
-            new ProviderRepository(this._config.marketplace.api)
-        );
+        //this.services['provider.service'] =
     }
 
     get config(): GenericObject {

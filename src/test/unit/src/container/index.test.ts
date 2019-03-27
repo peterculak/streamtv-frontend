@@ -1,14 +1,9 @@
 import Container from '../../../../container/index';
-import ProviderService from "../../../../worldfirst/Marketplace/service/ProviderService";
 import NotFoundException from "../../../../container/NotFoundException";
 
 describe('DI Container', () => {
     let container: Container;
-    const config = {
-        marketplace: {
-            api: {}
-        }
-    };
+    const config = {};
 
     beforeEach(() => {
         container = new Container(config);
@@ -20,15 +15,6 @@ describe('DI Container', () => {
 
     it('get config returns config', () => {
         expect(container.config).toEqual(config);
-    });
-
-    it('has provider.service', () => {
-        expect(container.has('provider.service')).toEqual(true);
-    });
-
-    it('get provider.service returns service instance', () => {
-        const service = container.get('provider.service');
-        expect(service instanceof ProviderService).toEqual(true);
     });
 
     it('has returns false when doesn\'t have service', () => {
