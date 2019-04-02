@@ -1,6 +1,5 @@
 import ReactAppKernel from '../../../Kernel';
 import Kernel from '../../../framework/kernel/Kernel';
-import Container from '../../../container';
 
 describe('AppKernel', () => {
     let root: HTMLElement;
@@ -18,12 +17,6 @@ describe('AppKernel', () => {
     it('attachTo returns instance of AppKernel', () => {
         const kernel = ReactAppKernel.attachTo(root);
         expect(kernel instanceof ReactAppKernel).toEqual(true);
-    });
-
-    it('boot builds DI container', () => {
-        const kernel = new ReactAppKernel(root);
-        kernel.boot();
-        expect(kernel.container instanceof Container).toEqual(true);
     });
 
     it('shutDown clears container', () => {
