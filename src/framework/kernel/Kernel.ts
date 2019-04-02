@@ -1,12 +1,12 @@
 import KernelInterface from "./KernelInterface";
-import ContainerInterface from "../container/ContainerInterface";
+import {Container} from "inversify";
 
 abstract class Kernel implements KernelInterface {
     protected booted: boolean = false;
-    protected _container!: ContainerInterface | undefined;
+    protected _container!: Container | undefined;
     protected config: Object = {};
 
-    get container(): ContainerInterface {
+    get container(): any {
         return this._container!;
     }
 

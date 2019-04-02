@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "allowJs": true,
-    "skipLibCheck": true, // false causes this error Type error: Duplicate identifier 'LibraryManagedAttributes'.  TS2300 (possibly typescript bug)
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -13,7 +13,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "lib": ["dom", "es6"]
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src"

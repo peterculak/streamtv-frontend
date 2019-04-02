@@ -14,7 +14,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import {Link} from 'react-router-dom';
 import {withStyles, Theme} from '@material-ui/core/styles';
-import logo from './logo-horizontal.svg';
 
 const drawerWidth = 240;
 const styles = (theme: Theme) => ({
@@ -91,7 +90,7 @@ class ResponsiveDrawer extends React.Component<any, any> {
                             <MenuIcon/>
                         </IconButton>
                         <Link className="app-logo mr-2 d-none d-sm-block" to="/">
-                            <img src={logo} alt="StreamTv" title="StreamTv"/>
+                            STREAMTV
                         </Link>
                     </Toolbar>
                 </AppBar>
