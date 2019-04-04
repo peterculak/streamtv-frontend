@@ -3,6 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress/index';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
+import {ChannelInterface} from "../../../entities/ChannelInterface";
 
 interface PropsInterface {
     channelService: ChannelServiceInterface,
@@ -18,9 +19,9 @@ class ChannelsController extends React.Component<PropsInterface, any> {
     }
 
     componentDidMount() {
-        this.channelService.findAll().then((r: any) => {
+        this.channelService.findAll().then((channels: Array<ChannelInterface>) => {
             this.setState({
-                channels: r,
+                channels: channels,
             });
         });
     }

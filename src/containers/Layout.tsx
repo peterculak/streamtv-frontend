@@ -1,17 +1,19 @@
 import * as React from 'react';
 import {withStyles, Theme} from '@material-ui/core/styles';
 import Main from './Main';
+import {Container} from "inversify";
 
-interface LayoutPropsInterface {
+interface PropsInterface {
     classes: {toolbar: string},
+    container: Container,
 }
 
 const styles = (theme: Theme) => ({
     toolbar: theme.mixins.toolbar,
 });
 
-class Layout extends React.Component<LayoutPropsInterface, any> {
-    constructor(props: LayoutPropsInterface) {
+class Layout extends React.Component<PropsInterface, any> {
+    constructor(props: PropsInterface) {
         super(props);
     }
 
@@ -25,7 +27,7 @@ class Layout extends React.Component<LayoutPropsInterface, any> {
                     <main className="app-main-content-wrapper">
 
                         <div className="app-main-content">
-                            <Main {...this.props}/>
+                            <Main container={this.props.container} {...this.props}/>
                         </div>
                     </main>
                 </div>

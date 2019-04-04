@@ -1,28 +1,31 @@
 import * as React from 'react';
 import {Switch, Route} from 'react-router-dom';
+import {Container} from "inversify";
 import Error404 from '../app/controller/Error/Error404';
 import ChannelsController from "../app/controller/Channels";
 import ProgramController from "../app/controller/Programs";
 import CONSTANTS from "../app/config/constants";
 import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
-import {container} from "../app/config/ioc_config";
 
-class Main extends React.Component<any, any> {
+interface PropsInterface {
+    container: Container
+}
+class Main extends React.Component<PropsInterface, any> {
     render() {
         return (
             <main>
                 <Switch>
                     <Route exact path='/'
                            render={(props: any) => <ChannelsController
-                               channelService={container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
+                               channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
                                {...props}
                            />}
                     />
                     <Route exact path='/:channelId'
                            render={(props: any) => <ProgramController
-                               channelService={container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
-                               programService={container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
+                               channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
+                               programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
                                {...props}
                            />}
                     />

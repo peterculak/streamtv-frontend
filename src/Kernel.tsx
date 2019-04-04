@@ -3,9 +3,7 @@ import {render} from 'react-dom';
 import Kernel from './framework/kernel/Kernel';
 import config from './app/config/index';
 import App from './containers/App';
-// import {container} from "./app/config/ioc_config";
-// import CONSTANTS from "./app/config/constants";
-// import ChannelServiceInterface from "./service/ChannelServiceInterface";
+import {container} from "./app/config/ioc_config";
 
 class ReactAppKernel extends Kernel {
     protected readonly root: HTMLElement;
@@ -21,11 +19,11 @@ class ReactAppKernel extends Kernel {
 
     run(): void {
         this.boot();
-        render(<App />, this.root);
+        render(<App container={this._container}/>, this.root);
     }
 
     protected initializeContainer(): void {
-        // this._container = container;
+        this._container = container;
     }
 
     protected loadConfig(): void {
