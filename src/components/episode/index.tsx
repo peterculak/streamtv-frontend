@@ -19,9 +19,9 @@ const styles = {
 };
 
 function Episode(props: any) {
-    const {classes, episode} = props;
+    const {classes, episode, itemClick, showDescription} = props;
     return (
-        <Card className={classes.card}>
+        <Card className={classes.card} onClick={itemClick} square elevation={1}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
@@ -33,7 +33,7 @@ function Episode(props: any) {
                         {episode.name}
                     </Typography>
 
-                    <Typography component="p" dangerouslySetInnerHTML={{__html: episode.description}} />
+                    {showDescription ? (<Typography component="p" dangerouslySetInnerHTML={{__html: episode.description}} />) : ('')}
 
                     <Grid container
                           direction="row"

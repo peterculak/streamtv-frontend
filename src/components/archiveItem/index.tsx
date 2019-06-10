@@ -16,11 +16,11 @@ const styles = {
     },
 };
 
-function ArchiveItem(props: any) {
+function ArchiveItem(props: {classes: any, archiveItem: {img: string, title: string}, itemClick: any}) {
     const {classes, archiveItem, itemClick} = props;
 
     return (
-        <Card className={classes.card} onClick={itemClick}>
+        <Card className={classes.card} onClick={itemClick} square elevation={1}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}

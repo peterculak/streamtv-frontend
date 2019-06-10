@@ -16,6 +16,8 @@ interface PropsInterface {
     channelService: ChannelServiceInterface,
     programService: ProgramServiceInterface,
     match: any,
+    history: any,
+    location: any,
     classes: any,
 }
 
@@ -51,7 +53,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
     constructor(props: PropsInterface) {
         super(props);
         this.state = {
-            selectedSeasonNumber: 0
+            selectedSeasonIndex: 0
         };
     }
 
@@ -73,7 +75,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, history, match } = this.props;
 
         const handleChange = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
             this.setState({selectedSeasonIndex: parseInt(event.target.value)});
@@ -84,7 +86,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
 
                 {this.state && this.state.archive ?
                     (<div>
-                        <Paper className={classes.mainFeaturedPost} style={{ minHeight: '360px', backgroundImage: `url(${this.state.archive.thumbnailUrl.replace('100x75n', '1920x')})`}}>
+                        <Paper square className={classes.mainFeaturedPost} style={{ minHeight: '360px', backgroundImage: `url(${this.state.archive.thumbnailUrl.replace('100x75n', '1920x')})`}}>
                             {/* Increase the priority of the hero background image */}
                             {
                                 <img
@@ -126,7 +128,12 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
                         <Grid container spacing={3}>
                             {this.state.archive.seasons[this.state.selectedSeasonIndex].episodes.map(
                                 (episode: any, index: number) => <Grid key={index+episode.name} item xs={12} sm={6} md={4} lg={3}>
-                                    <Paper ><Episode
+                                    <Paper square><Episode
+                                        itemClick={() => history.push(`/${match.params.channelId}/${match.params.slug}/episode/${episode.episodeNumber}`, {
+                                            archive: this.state.archive,
+                                            episode: episode,
+                                            selectedSeasonIndex: this.state.selectedSeasonIndex
+                                        } as any)}
                                         key={index+episode.name} episode={episode}/></Paper>
                                 </Grid>)}
                         </Grid>

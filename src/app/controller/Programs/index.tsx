@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Paper from '@material-ui/core/Paper/index';
 import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../../../service/ProgramServiceInterface";
 import {ChannelInterface} from "../../../entities/ChannelInterface";
@@ -43,13 +42,13 @@ class ProgramsController extends React.Component<PropsInterface, any> {
                         <div>
                             <Grid container alignItems="stretch" spacing={4}>
                                 {this.state.archive.map(
-                                    (archiveItem: any) => <Grid key={archiveItem.title} item xs={6} sm={3}><Paper>
+                                    (archiveItem: any) => <Grid key={archiveItem.title} item xs={6} sm={3}>
                                         <ArchiveItem
                                             itemClick={function () {
                                                 history.push(`/joj.sk/${archiveItem.slug}`);
                                             }}
                                         key={archiveItem.title} archiveItem={archiveItem}/>
-                                    </Paper></Grid>)}
+                                    </Grid>)}
 
                             </Grid>
                         </div>)
