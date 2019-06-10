@@ -8,7 +8,7 @@ class ChannelService implements ChannelServiceInterface {
     private readonly channels: Array<ChannelInterface>;
 
     constructor() {
-        this.channels = [new Channel('joj', 'Joj'), new Channel('markiza', 'Markiza')];
+        this.channels = [new Channel('joj.sk', 'Joj'), new Channel('markiza.sk', 'Markiza')];
     }
 
     findAll(): Promise<Array<ChannelInterface>> {

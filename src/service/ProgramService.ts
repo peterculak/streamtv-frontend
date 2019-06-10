@@ -1,13 +1,24 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
 import ProgramServiceInterface from "./ProgramServiceInterface";
+import * as joj from "../data/joj.sk/archive.json";
 
 @injectable()
 class ProgramService implements ProgramServiceInterface {
-    findAll(channelId: string): Promise<Array<any>> {
+    findAll(channelId: string): Promise<Array<{}>> {
+        let data: Array<{}> = [];
+        if (channelId === 'joj.sk') {
+            data = (<any>joj).default;
+        }
         return new Promise(function(resolve){
-            resolve([]);
+            resolve(data);
         });
+    }
+
+    findOne(channel: string, slug: string): Promise<Array<any>> {
+        return fetch(`/data/${channel}/${slug}.json`)
+            .then((r: Response) => r.text())
+            .then((str: string) => JSON.parse(str));
     }
 }
 

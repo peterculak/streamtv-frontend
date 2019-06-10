@@ -7,6 +7,7 @@ import ProgramController from "../app/controller/Programs";
 import CONSTANTS from "../app/config/constants";
 import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
+import ProgramDetailController from "../app/controller/ProgramDetail";
 
 interface PropsInterface {
     container: Container
@@ -24,6 +25,13 @@ class Main extends React.Component<PropsInterface, any> {
                     />
                     <Route exact path='/:channelId'
                            render={(props: any) => <ProgramController
+                               channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
+                               programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
+                               {...props}
+                           />}
+                    />
+                    <Route exact path='/:channelId/:slug'
+                           render={(props: any) => <ProgramDetailController
                                channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
                                programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
                                {...props}

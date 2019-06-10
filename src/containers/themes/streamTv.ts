@@ -32,7 +32,6 @@ const overrides = {
     overrides: {
         MuiTableCell: {
             root: {
-                marginTop: theme.spacing.unit * 3,
                 overflowX: 'auto',
             },
             head: {
