@@ -104,9 +104,6 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
                                         </Typography>
                                         <Typography variant="h5" color="inherit" paragraph dangerouslySetInnerHTML={{__html: this.state.archive.description}}>
                                         </Typography>
-                                        {/*<Link variant="subtitle1" href="#">*/}
-                                        {/*    Continue reading…*/}
-                                        {/*</Link>*/}
                                     </div>
                                 </Grid>
                             </Grid>
@@ -127,7 +124,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
 
                         <Grid container spacing={3}>
                             {this.state.archive.seasons[this.state.selectedSeasonIndex].episodes.map(
-                                (episode: any, index: number) => <Grid key={index+episode.name} item xs={12} sm={6} md={4} lg={3}>
+                                (episode: any, index: number) => <Grid key={index+episode.name} item xs={12} sm={6} md={4}>
                                     <Paper square><Episode
                                         itemClick={() => history.push(`/${match.params.channelId}/${match.params.slug}/episode/${episode.episodeNumber}`, {
                                             archive: this.state.archive,

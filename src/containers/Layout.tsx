@@ -4,12 +4,17 @@ import Main from './Main';
 import {Container} from "inversify";
 
 interface PropsInterface {
-    classes: {toolbar: string},
+    classes: any,
     container: Container,
 }
 
 const styles = (theme: Theme) => ({
     toolbar: theme.mixins.toolbar,
+    app: {
+        [theme.breakpoints.up('md')]: {
+            padding: '16px'
+        },
+    }
 });
 
 class Layout extends React.Component<PropsInterface, any> {
@@ -19,7 +24,8 @@ class Layout extends React.Component<PropsInterface, any> {
 
     render() {
         const { classes } = this.props;
-        return (<div className="app-main">
+
+        return (<div className={classes.app}>
             <div className="app-container">
 
                 <div className="app-main-container">

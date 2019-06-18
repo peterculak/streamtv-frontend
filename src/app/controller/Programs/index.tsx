@@ -30,22 +30,18 @@ class ProgramsController extends React.Component<PropsInterface, any> {
     }
 
     render() {
-        const {history} = this.props;
+        const {history, match} = this.props;
         return (
             <div className="app-wrapper">
-
-                <div className="d-flex justify-content-center">
-                    <h1>{this.state && this.state.channel ? this.state.channel.name : ''}</h1>
-                </div>
                 {this.state && this.state.archive && this.state.archive.length ?
                     (
                         <div>
-                            <Grid container alignItems="stretch" spacing={4}>
+                            <Grid container spacing={2}>
                                 {this.state.archive.map(
-                                    (archiveItem: any) => <Grid key={archiveItem.title} item xs={6} sm={3}>
+                                    (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
                                         <ArchiveItem
                                             itemClick={function () {
-                                                history.push(`/joj.sk/${archiveItem.slug}`);
+                                                history.push(`/${match.params.channelId}/${archiveItem.slug}`);
                                             }}
                                         key={archiveItem.title} archiveItem={archiveItem}/>
                                     </Grid>)}

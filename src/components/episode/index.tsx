@@ -14,18 +14,18 @@ const styles = {
         // maxWidth: 345,
     },
     media: {
-        height: 140,
+        height: 220,
     },
 };
 
 function Episode(props: any) {
     const {classes, episode, itemClick, showDescription} = props;
     return (
-        <Card className={classes.card} onClick={itemClick} square elevation={1}>
+        <Card className={classes.card} onClick={itemClick} square elevation={0}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={episode.image.replace('400x300', '640x480')}
+                    image={episode.image.replace('r400x300', '')}
                     title={episode.name}
                 />
                 <CardContent>

@@ -8,11 +8,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const styles = {
-    card: {
-        maxWidth: 345,
-    },
     media: {
-        height: 140,
+        height: 240,
     },
 };
 
@@ -20,7 +17,7 @@ function ArchiveItem(props: {classes: any, archiveItem: {img: string, title: str
     const {classes, archiveItem, itemClick} = props;
 
     return (
-        <Card className={classes.card} onClick={itemClick} square elevation={1}>
+        <Card className={classes.card} onClick={itemClick} square elevation={0}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
@@ -31,9 +28,6 @@ function ArchiveItem(props: {classes: any, archiveItem: {img: string, title: str
                         <Typography gutterBottom variant="h5" component="h2">
                             {archiveItem.title}
                         </Typography>
-                        {/*<Typography variant="body2" color="textSecondary" component="p">*/}
-                        {/*    {archiveItem.description}*/}
-                        {/*</Typography>*/}
                     </CardContent>
                 </CardActionArea>
         </Card>

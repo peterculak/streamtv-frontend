@@ -1,18 +1,19 @@
 import {createMuiTheme} from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
+import red from '@material-ui/core/colors/red';
 
 const baseSettings = {
     palette: {
         primary: {
-            light: '#673ab7',
-            main: '#5600bb',
+            light: red[500],
+            main: red[800],
             dark: indigo[700],
             contrastText: '#fff'
         },
         secondary: {
             light: pink[300],
-            main: '#6b01f4',
+            main: red[800],
             dark: pink[700],
             contrastText: '#fff'
         },
@@ -50,6 +51,14 @@ const overrides = {
                 backgroundColor: theme.palette.primary.light,
             }
         },
+        // MuiCardContent: {
+        //     root: {
+        //         padding: 8,//padding: '0 8px 0 8px',
+        //         '&:last-child': {
+        //             paddingBottom: 0,
+        //         }
+        //     }
+        // },
     }
 };
 
