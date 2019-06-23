@@ -43,7 +43,7 @@ class ProgramsController extends React.Component<PropsInterface, any> {
                                             itemClick={function () {
                                                 history.push(`/${match.params.channelId}/${archiveItem.slug}`);
                                             }}
-                                        key={archiveItem.title} archiveItem={archiveItem}/>
+                                            key={archiveItem.title} archiveItem={archiveItem}/>
                                     </Grid>)}
 
                             </Grid>

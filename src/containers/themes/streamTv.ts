@@ -32,7 +32,6 @@ const baseSettings = {
 
 const theme = createMuiTheme({});
 
-console.log(theme);
 const overrides = {
     overrides: {
         MuiTableCell: {
@@ -67,6 +66,5 @@ const overrides = {
 };
 
 const streamTvTheme = createMuiTheme(Object.assign(baseSettings, overrides));
-// const streamTvTheme = createMuiTheme({});
 
 export default streamTvTheme;

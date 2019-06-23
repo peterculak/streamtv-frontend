@@ -32,19 +32,19 @@ class Main extends React.Component<PropsInterface, any> {
                            />}
                     />
                     <Route exact path='/:channelId/:slug'
-                           render={(props: any) => <ProgramDetailController
-                               channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
-                               programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
-                               {...props}
-                           />}
-                    />
-                    <Route exact path='/:channelId/:slug/episode/:episodeNumber'
                            render={(props: any) => <EpisodeDetailController
                                channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
                                programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
                                {...props}
                            />}
                     />
+                    {/*<Route exact path='/:channelId/:slug/episode/:episodeNumber'*/}
+                    {/*       render={(props: any) => <EpisodeDetailController*/}
+                    {/*           channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}*/}
+                    {/*           programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}*/}
+                    {/*           {...props}*/}
+                    {/*       />}*/}
+                    {/*/>*/}
                     <Route
                         component={Error404}/>
                 </Switch>
