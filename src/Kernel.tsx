@@ -4,6 +4,8 @@ import Kernel from './framework/kernel/Kernel';
 import config from './app/config/index';
 import App from './containers/App';
 import {container} from "./app/config/ioc_config";
+import { Provider } from 'react-redux'
+import store from "./store";
 
 class ReactAppKernel extends Kernel {
     protected readonly root: HTMLElement;
@@ -19,7 +21,7 @@ class ReactAppKernel extends Kernel {
 
     run(): void {
         this.boot();
-        render(<App container={this._container}/>, this.root);
+        render(<Provider store={store}><App container={this._container}/></Provider>, this.root);
     }
 
     protected initializeContainer(): void {

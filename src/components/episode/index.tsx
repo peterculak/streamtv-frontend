@@ -25,7 +25,7 @@ function Episode(props: any) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={episode.image.replace('r400x300', '')}
+                    image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, '')}
                     title={episode.name}
                 />
                 <CardContent>
@@ -33,7 +33,7 @@ function Episode(props: any) {
                         {episode.name}
                     </Typography>
 
-                    {showDescription ? (<Typography component="p" dangerouslySetInnerHTML={{__html: episode.description}} />) : ('')}
+                    {showDescription && (<Typography component="p" dangerouslySetInnerHTML={{__html: episode.description}} />)}
 
                     <Grid container
                           direction="row"

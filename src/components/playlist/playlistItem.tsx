@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import PlayArrow from '@material-ui/icons/PlayArrow';
 
 const styles = (theme: Theme) => ({
     card: {
@@ -29,22 +30,32 @@ const styles = (theme: Theme) => ({
     },
     title: {
         fontWeight: 'bold' as any,
-        marginBottom: 0,
+        fontSize: '14px',
+        lineHeight: '16px',
+        maxHeight: '32px',
+        overflow: 'hidden',
+        marginBottom: '4px',
     },
     playlistPosition: {
         position: 'absolute' as any,
         left: 0,
-        top: '45px',
+        top: '42px',
         width: '24px',
         textAlign: 'center' as any,
         fontSize: '12px',
+    },
+    playlistPositionArrow: {
+        fontSize: '16px',
+        color: theme.palette.text.hint,
+    },
+    playlistPositionNumber: {
         color: theme.palette.text.secondary,
     }
+
 });
 
-
-function RelatedEpisode(props: any) {
-    const {classes, episode, itemClick, showDescription} = props;
+function PlaylistItem(props: any) {
+    const {classes, episode, itemClick} = props;
     return (
         <Card className={classes.card} onClick={itemClick} square elevation={0}>
             <CardActionArea>
@@ -59,7 +70,17 @@ function RelatedEpisode(props: any) {
                                 className={classes.media}
                                 image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r640x480')}
                                 title={episode.title}
-                            />
+                            >
+                                {props.playlistPosition ? (
+                                    <Box className={classes.playlistPosition}>
+                                        {props.isPlaying ? (
+                                            <PlayArrow className={classes.playlistPositionArrow}/>
+                                            ) : (
+                                            <Box className={classes.playlistPositionNumber}>{props.playlistPosition}</Box>
+                                        )}
+                                    </Box>
+                                ) : ''}
+                            </CardMedia>
                         </Box>
                     </Grid>
 
@@ -86,7 +107,6 @@ function RelatedEpisode(props: any) {
                                     </Grid>
                                 </Grid>
                             </Grid>
-
                         </CardContent>
                     </Grid>
                 </Grid>
@@ -95,8 +115,8 @@ function RelatedEpisode(props: any) {
     );
 }
 
-RelatedEpisode.propTypes = {
+PlaylistItem.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RelatedEpisode);
+export default withStyles(styles)(PlaylistItem);

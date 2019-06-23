@@ -7,16 +7,19 @@ const baseSettings = {
     palette: {
         primary: {
             light: red[500],
-            main: red[800],
+            main: '#065fd4',
             dark: indigo[700],
-            contrastText: '#fff'
+            contrastText: '#065fd4'
         },
         secondary: {
-            light: pink[300],
-            main: red[800],
+            light: '#eeeeee',
+            main: '#eeeeee',
             dark: pink[700],
             contrastText: '#fff'
         },
+        background: {
+            default: '#fff'
+        }
     },
     typography: {
         useNextVariants: true,
@@ -27,8 +30,9 @@ const baseSettings = {
     },
 };
 
-const theme = createMuiTheme(baseSettings);
+const theme = createMuiTheme({});
 
+console.log(theme);
 const overrides = {
     overrides: {
         MuiTableCell: {
@@ -63,5 +67,6 @@ const overrides = {
 };
 
 const streamTvTheme = createMuiTheme(Object.assign(baseSettings, overrides));
+// const streamTvTheme = createMuiTheme({});
 
 export default streamTvTheme;

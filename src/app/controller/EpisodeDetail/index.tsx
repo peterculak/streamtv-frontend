@@ -1,193 +1,297 @@
-import * as React from 'react';
-import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
-import ProgramServiceInterface from "../../../service/ProgramServiceInterface";
+import React, {useState, useEffect} from 'react';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
 import Player from "../../../components/player";
-import Box from '@material-ui/core/Box';
+import RelatedEpisode from "../../../components/episode/related";
+import PlaylistItemTemplate from "../../../components/playlist/playlistItem";
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import RelatedEpisode from "../../../components/episode/related";
-import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
-
-interface PropsInterface {
-    channelService: ChannelServiceInterface,
-    programService: ProgramServiceInterface,
-    match: any,
-    location: any,
-    history: any,
-    classes: any,
-}
+import PlaylistItem from "../../../service/player/PlaylistItem";
+import Playlist from "../../../service/player/Playlist";
+import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
+import {useSelector, useDispatch} from 'react-redux';
+import * as ACTIONS from "../../../actions/player";
+import TextField from '@material-ui/core/TextField';
+import SortByAlpha from '@material-ui/icons/SortByAlpha';
+import Shuffle from '@material-ui/icons/Shuffle';
+import Repeat from '@material-ui/icons/Repeat';
+import List from '@material-ui/icons/List';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Menu from '@material-ui/core/Menu';
 
 const styles = (theme: Theme) => ({
     rhc: {
         padding: '8px',
+        width: '100%',
         [theme.breakpoints.up('sm')]: {
             padding: '16px'
         },
         [theme.breakpoints.up('md')]: {
-            padding: '8px 8px 0 16px'
+            padding: '0 8px 0 16px'
         },
+    },
+    playlist: {
+        height: '600px',
+        maxHeight: '600px',
+    },
+    playlistItems: {
+        height: '600px',
+        overflowY: 'auto' as any,
+        padding: '8px 8px 8px 0',
+        backgroundColor: 'rgba(238, 238, 238, 0.6)',
+    },
+    firstButton: {
+        marginLeft: '-12px',
     }
 });
 
-class EpisodeDetailController extends React.Component<PropsInterface, any> {
-    constructor(props: PropsInterface) {
-        super(props);
+function EpisodeDetailController(props: any) {
+    const {player} = useSelector((state: any) => ({
+        player: state.player,
+    }));
+    const dispatch = useDispatch();
+    const {classes, location} = props;
+    const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(location.state.selectedSeasonIndex);
+    const archive = location.state.archive;
+    const episode = location.state.episode;
 
-        this.state = {
-            selectedSeasonIndex: 0,
-            selectedVideoIndex: 0,
-            autoplay: 1,
-        };
-    }
+    useEffect(() => {
+        if (archive) {
+            dispatch(ACTIONS.loadPlaylist(createPlaylistForSeason(archive.seasons[selectedSeasonIndex])));
+        }
+    }, [archive]);
 
-    componentDidMount() {
-        this.setState({
-            episode: this.props.location.state.episode,
-            nextEpisode: this.props.location.state.archive.seasons[this.props.location.state.selectedSeasonIndex].episodes[1],
-            archive: this.props.location.state.archive,
-            selectedSeasonIndex: this.props.location.state.selectedSeasonIndex,
+    useEffect(() => {
+        if (episode && player.isLoaded()) {
+            dispatch(ACTIONS.playPlaylistItem(createPlaylistItem(episode)));
+        }
+    }, [archive]);
+
+    function createPlaylistForSeason(selectedSeason: any): Playlist {
+        const playlist = new Playlist([]);
+        selectedSeason.episodes.forEach((item: any) => {
+            const playlistItem = createPlaylistItem(item);
+            playlistItem.sortPosition = item.episodeNumber;
+            playlist.add(playlistItem);
         });
+        playlist.sortAsc();
+
+        return playlist;
     }
 
-    componentWillReceiveProps(nextProps: PropsInterface) {
-        this.setState({
-            episode: nextProps.location.state.episode,
-        });
+    function createPlaylistItem(item: any): PlaylistItem {
+        return new PlaylistItem(
+            item.name,
+            item.thumbnailUrl,
+            item.mp4,
+            parseInt(item.timeRequired.replace(/PT|S/g, '')),
+            `Episode: ${item.episodeNumber}`,
+            {episodeNumber: item.episodeNumber}
+        )
     }
 
-    render() {
-        const {classes, history, match} = this.props;
+    const handlePlaylistChange = (event: any) => {
+        setSelectedSeasonIndex(parseInt(event.target.value));
+        dispatch(ACTIONS.loadPlaylistAndStartPlaying(createPlaylistForSeason(archive.seasons[parseInt(event.target.value)])));
+        handleMenuClose();
+    };
 
-        const handleChange = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
-            this.setState({selectedSeasonIndex: parseInt(event.target.value)});
-        };
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-        const handleAutoplayChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
-            this.setState({autoplay: event.target.checked});
-        };
+    function handleOpenMenuClick(event: React.MouseEvent<HTMLButtonElement>) {
+        setAnchorEl(event.currentTarget);
+    }
 
-        const spacing = 3;
+    function handleMenuClose() {
+        setAnchorEl(null);
+    }
 
-        return (
-            <div className="app-wrapper">
+    return (
+        <div className="app-wrapper">
 
-                {/*<Grid container*/}
-                {/*      direction="row"*/}
-                {/*      alignItems="flex-start">*/}
-                {/*    <Box mb={1}>top row</Box>*/}
-                {/*</Grid>*/}
+            {/*<Grid container direction="row" alignItems="flex-start"><Box mb={1}>top row</Box></Grid>*/}
 
-                <Grid container spacing={0}
-                      direction="row"
-                      justify="space-between"
-                      alignItems="flex-start">
+            <Grid container spacing={0}
+                  direction="row"
+                  justify="space-between"
+                  alignItems="flex-start">
 
-                    <Grid item sm={12} md={8}>
-                        <Paper elevation={0} className={classes.paper}>
-                            <Player video={this.state.episode}/>
-                        </Paper>
-                    </Grid>
-
-
-                    {this.state.archive ? (
-                        <Grid item sm={12} md={4}
-                              container
-                              direction="row"
-                        >
-                            <Paper elevation={0} className={classes.rhc}>
-
-                                <Grid item xs={12}
-                                  container
-                                      justify="flex-end"
-                                  direction="row"
-                            >
-                                    {this.state.archive.seasons.length > 0 ? (
-                                        <Grid item xs={6}>
-                                            <Box mb={1}>
-                                                <FormControl>
-                                                    <Select
-                                                        value={this.state.selectedSeasonIndex}
-                                                        onChange={handleChange}
-                                                        name='selectedSeasonNumber'
-                                                    >
-                                                        {this.state.archive.seasons.map((season: any, index: number) =>
-                                                            <MenuItem
-                                                                key={index + season.seasonNumber}
-                                                                value={index}>{season.name}</MenuItem>)}
-                                                    </Select>
-                                                </FormControl>
-                                            </Box>
-                                        </Grid>
-                                    ) : ''}
-
-
-                                <Grid item xs={6}>
-                                    <Box mb={1} textAlign="right">
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                labelPlacement="start"
-                                                control={
-                                                    <Switch
-                                                        checked={this.state.autoplay}
-                                                        onChange={handleAutoplayChange()}
-                                                        value="checkedB"
-                                                        color="primary"
-                                                    />
-                                                }
-                                                label="autoplay"
-                                            />
-                                        </FormGroup>
-                                    </Box>
-                                </Grid>
-                            </Grid>
-
-                            <Grid item xs={12}
-                                  container
-                                  direction="row"
-                            >
-
-                                <Grid item xs={12}>
-                                    <Box mb={1}/>
-                                    <RelatedEpisode
-                                        key='nextEpisode' episode={this.state.nextEpisode}
-                                        itemClick={() => history.push(`/${match.params.channelId}/${match.params.slug}/episode/${this.state.nextEpisode.episodeNumber}`, {
-                                            archive: this.state.archive,
-                                            episode: this.state.nextEpisode,
-                                            selectedSeasonIndex: this.state.selectedSeasonIndex
-                                        } as any)}
-                                    ></RelatedEpisode>
-                                    <Box mb={2} mt={2}>
-                                        <Divider variant="fullWidth"/>
-                                    </Box>
-                                </Grid>
-
-                                {this.state.archive.seasons[this.state.selectedSeasonIndex].episodes.map(
-                                    (episode: any, index: number) =>
-                                        <Grid key={index + episode.name} item xs={12}><Box mb={1}><RelatedEpisode
-                                            key={index + episode.name} episode={episode}
-                                            itemClick={() => history.push(`/${match.params.channelId}/${match.params.slug}/episode/${episode.episodeNumber}`, {
-                                                archive: this.state.archive,
-                                                episode: episode,
-                                                selectedSeasonIndex: this.state.selectedSeasonIndex
-                                            } as any)}
-                                        /></Box></Grid>
-                                )}
-
-                            </Grid>
-                            </Paper>
-                        </Grid>) : ''}
+                <Grid item sm={12} md={8}>
+                    <Paper elevation={0} className={classes.paper}>
+                        <Player/>
+                    </Paper>
                 </Grid>
 
-            </div>
-        );
-    }
+                {archive && player && (
+                    <Grid item sm={12} md={4}
+                          container
+                          direction="row"
+                          className={classes.playlist}
+                    >
+                        <Box className={classes.rhc}>
+
+                            {/*<Grid item xs={12}*/}
+                            {/*      container*/}
+                            {/*      justify="flex-end"*/}
+                            {/*      direction="row"*/}
+                            {/*>*/}
+                            {/*    <Grid item xs={4}>*/}
+                            {/*        <Box mt="5px" textAlign="right">*/}
+                            {/*            <FormGroup>*/}
+                            {/*                <FormControlLabel*/}
+                            {/*                    labelPlacement="start"*/}
+                            {/*                    control={*/}
+                            {/*                        <Switch*/}
+                            {/*                            checked={player.autoplay}*/}
+                            {/*                            onChange={handleAutoplayChange()}*/}
+                            {/*                            value="checkedB"*/}
+                            {/*                            color="primary"*/}
+                            {/*                        />*/}
+                            {/*                    }*/}
+                            {/*                    label="autoplay"*/}
+                            {/*                />*/}
+                            {/*            </FormGroup>*/}
+                            {/*        </Box>*/}
+                            {/*    </Grid>*/}
+
+                            {/*</Grid>*/}
+
+                            <Box bgcolor="secondary.main" pt={2} pb={0} pl={3} pr={1}>
+                                {player.current() && (
+                                    <Grid
+                                        container
+                                        direction="row"
+                                    >
+                                        <Typography variant="subtitle1" component="h3">
+                                            {archive.name}
+                                        </Typography>
+
+                                    </Grid>
+                                )}
+
+                                {player.current() && (
+                                    <Grid
+                                        container
+                                        direction="row"
+                                    >
+                                        <Box ml="1px">
+                                            <Typography color="textSecondary" variant="caption" display="block"
+                                                        gutterBottom>
+                                                {archive.seasons.length > 1 ? (archive.seasons[selectedSeasonIndex].name + ' - ') : ''}
+                                                {player.currentlyPlayingItemOrder} / {player.playlistItemsCount}
+                                            </Typography>
+                                        </Box>
+                                    </Grid>
+                                )}
+
+                                <Grid item xs={12}
+                                      container
+                                      direction="row"
+                                      justify="space-between"
+                                >
+                                    {/*<Grid item xs={4}>*/}
+                                    {/*    <Box mt="6px">*/}
+                                    {/*        {archive.seasons.length > 1 ? (*/}
+                                    {/*            <FormControl>*/}
+                                    {/*                <Select*/}
+                                    {/*                    value={selectedSeasonIndex}*/}
+                                    {/*                    onChange={handlePlaylistChange}*/}
+                                    {/*                    name='selectedSeasonNumber'*/}
+                                    {/*                >*/}
+                                    {/*                    {archive.seasons.map((season: any, index: number) =>*/}
+                                    {/*                        <MenuItem*/}
+                                    {/*                            key={index + season.seasonNumber}*/}
+                                    {/*                            value={index}>{season.name}</MenuItem>)}*/}
+                                    {/*                </Select>*/}
+                                    {/*            </FormControl>*/}
+                                    {/*        ) : ''}*/}
+                                    {/*    </Box>*/}
+                                    {/*</Grid>*/}
+
+                                    <Grid item className={classes.firstButton}>
+                                        <IconButton
+                                            disabled={archive.seasons.length < 2}
+                                            onClick={handleOpenMenuClick}
+                                            title="Select season">
+                                            <List/>
+                                        </IconButton>
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            keepMounted
+                                            open={Boolean(anchorEl)}
+                                            onClose={handleMenuClose}
+                                        >
+                                            {archive.seasons.map((season: any, index: number) =>
+                                                <MenuItem
+                                                    disabled={index === selectedSeasonIndex}
+                                                    onClick={handlePlaylistChange}
+                                                    key={index + season.seasonNumber}
+                                                    value={index}>{season.name}</MenuItem>)}
+                                        </Menu>
+                                    </Grid>
+                                    <Grid item>
+                                        <IconButton
+                                            title="Loop playlist"
+                                            color={player.isLoopEnabled() ? 'primary' : 'default'}
+                                            onClick={() => dispatch(player.isLoopEnabled() ? ACTIONS.disableLoop() : ACTIONS.enableLoop())}
+                                        >
+                                            <Repeat/>
+                                        </IconButton>
+
+                                        <IconButton
+                                            title="Shuffle playlist"
+                                            color={player.isShuffleEnabled() ? 'primary' : 'default'}
+                                            onClick={() => dispatch(player.isShuffleEnabled() ? ACTIONS.disableShuffle() : ACTIONS.enableShuffle())}
+                                        >
+                                            <Shuffle/>
+                                        </IconButton>
+
+                                        <IconButton
+                                            title="Sort by episode number"
+                                            color={player.getPlaylistSortOrder() === 'desc' ? 'primary' : 'default'}
+                                            onClick={() => dispatch(ACTIONS.reversePlaylistSort())}
+                                            disabled={!player.playlist.size()}>
+                                            <SortByAlpha/>
+                                        </IconButton>
+                                    </Grid>
+
+                                </Grid>
+                            </Box>
+
+                            <Box className={classes.playlistItems}>
+                                <Grid item xs={12}
+                                      container
+                                      direction="row"
+                                >
+                                    {player.isLoaded() && player.playlistItems.map(
+                                        (playlistItem: any, index: number) =>
+                                            <Grid key={index + playlistItem.title} item xs={12}>
+                                                <Box mb={1}>
+                                                    <PlaylistItemTemplate
+                                                        isPlaying={player.currentlyPlayingItemOrder === index+1}
+                                                        playlistPosition={index+1}
+                                                        key={index + playlistItem.title}
+                                                        episode={playlistItem}
+                                                        itemClick={() => dispatch(ACTIONS.playPlaylistItem(playlistItem))}
+                                                    />
+                                                </Box>
+                                            </Grid>
+                                    )}
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Grid>)}
+            </Grid>
+
+        </div>
+    );
 }
 
 export default withStyles(styles, {withTheme: true})(EpisodeDetailController);

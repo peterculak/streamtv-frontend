@@ -21,7 +21,7 @@ function ArchiveItem(props: {classes: any, archiveItem: {img: string, title: str
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={archiveItem.img.replace('100x100', '345x140')}
+                        image={archiveItem.img.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r600x400')}
                         title={archiveItem.title}
                     />
                     <CardContent>

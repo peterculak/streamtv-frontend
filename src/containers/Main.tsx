@@ -4,7 +4,7 @@ import {Container} from "inversify";
 import Error404 from '../app/controller/Error/Error404';
 import ChannelsController from "../app/controller/Channels";
 import ProgramController from "../app/controller/Programs";
-import CONSTANTS from "../app/config/constants";
+import CONSTANTS from "../app/config/constants/ioc";
 import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
 import ProgramDetailController from "../app/controller/ProgramDetail";

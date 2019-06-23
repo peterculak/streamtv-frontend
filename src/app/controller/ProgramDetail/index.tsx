@@ -109,7 +109,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
                             </Grid>
                         </Paper>
 
-                        {this.state.archive.seasons.length > 1 ? (<div><Grid container>
+                        {this.state.archive.seasons.length > 1 && (<div><Grid container>
                             <FormControl className={classes.formControl}>
                               <InputLabel htmlFor="selectedSeasonNumber">Seasons</InputLabel>
                               <Select
@@ -120,7 +120,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
                                   {this.state.archive.seasons.map((season: any, index: number) => <MenuItem key={index+season.seasonNumber} value={index}>{season.name}</MenuItem>)}
                               </Select>
                             </FormControl>
-                        </Grid><br/></div>) : ('')}
+                        </Grid><br/></div>)}
 
                         <Grid container spacing={3}>
                             {this.state.archive.seasons[this.state.selectedSeasonIndex].episodes.map(

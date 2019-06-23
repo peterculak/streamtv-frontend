@@ -11,6 +11,7 @@ interface PropsInterface {
 }
 class App extends React.Component<PropsInterface, any> {
     render() {
+
         return (
             <BrowserRouter>
                 <MuiThemeProvider theme={streamTv}>

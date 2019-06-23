@@ -49,14 +49,13 @@ class ChannelsController extends React.Component<PropsInterface, any> {
             <div className="app-wrapper" onMouseMove={this._onMouseMove.bind(this)}>
 
                 <div className="d-flex justify-content-center">
-                    {this.state ? (
+                    {this.state && (
                         <div>
                             <h2>Mouse coordinates: { this.state.x } { this.state.y }</h2>
                             <h2>{this.state.pressedKey}</h2>
                             <h3>{device.television() ? 'TV' : 'browser'}</h3>
                         </div>
-                    ) : ''}
-
+                    )}
                 </div>
 
                 {this.state && this.state.channels && this.state.channels.length ?
