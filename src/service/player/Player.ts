@@ -50,7 +50,7 @@ class Player implements PlayerInterface {
     }
 
     play(): void {
-        this.setPoster();
+        // this.setPoster();
         this.adapter.play(this.playlist.current().mp4[this._selectedQualityIndex]);
     }
 
@@ -119,7 +119,7 @@ class Player implements PlayerInterface {
     sortPlaylistAsc(): void {
         const wasPlaying = this.isPlaying();
         this.playlist.sortAsc();
-        this.setPoster();
+        // this.setPoster();
         this.adapter.setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
         if (wasPlaying) {
             this.adapter.play();
@@ -129,7 +129,7 @@ class Player implements PlayerInterface {
     sortPlaylistDesc(): void {
         const wasPlaying = this.isPlaying();
         this.playlist.sortDesc();
-        this.setPoster();
+        // this.setPoster();
         this.adapter.setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
         if (wasPlaying) {
             this.adapter.play();
