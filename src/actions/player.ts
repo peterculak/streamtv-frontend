@@ -2,6 +2,7 @@ import {
     PLAYER_CHANGE_STREAM_QUALITY_INDEX,
     PLAYER_LOAD_PLAYLIST,
     PLAYER_LOAD_PLAYLIST_AND_START_PLAYING,
+    PLAYER_PLAY,
     PLAYER_NEXT,
     PLAYER_PLAY_PLAYLIST_ITEM,
     PLAYER_PREVIOUS,
@@ -14,6 +15,10 @@ import {
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
+
+export function play() {
+    return {type: PLAYER_PLAY};
+}
 
 export function next() {
     return {type: PLAYER_NEXT};

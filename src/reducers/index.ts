@@ -17,14 +17,18 @@ import {
     PLAYER_SHUFFLE_ON,
     PLAYER_SHUFFLE_OFF,
     PLAYER_LOOP_ON,
-    PLAYER_LOOP_OFF
+    PLAYER_LOOP_OFF,
+    SELECT_PROGRAM_ARCHIVE,
 } from "../app/config/constants/action_types";
+import PlaylistFactory from "../service/player/PlaylistFactory";
 
 const initialState = {
     player: new Player(),
+    selectedProgramArchive: null,
 };
 
 function rootReducer(state = initialState, action: any) {
+    console.log(action);
     switch(action.type) {
         case PLAYER_PLAY:
             state.player.play();
@@ -89,6 +93,10 @@ function rootReducer(state = initialState, action: any) {
             return state;
         case PLAYER_LOOP_OFF:
             state.player.disableLoop();
+            return state;
+        case SELECT_PROGRAM_ARCHIVE:
+            state.player.load(PlaylistFactory.createPlaylistForProgramSeason(action.payload.seasons[0]));
+            state.selectedProgramArchive = action.payload;
             return state;
         default:
             return state;

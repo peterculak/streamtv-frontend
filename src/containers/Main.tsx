@@ -26,7 +26,6 @@ class Main extends React.Component<PropsInterface, any> {
                     />
                     <Route exact path='/:channelId'
                            render={(props: any) => <ProgramController
-                               channelService={this.props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS)}
                                programService={this.props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS)}
                                {...props}
                            />}

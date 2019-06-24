@@ -5,8 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Player from "../../../components/player";
 import PlaylistItemTemplate from "../../../components/playlist/playlistItem";
 import Paper from '@material-ui/core/Paper';
-import PlaylistItem from "../../../service/player/PlaylistItem";
-import Playlist from "../../../service/player/Playlist";
+import PlaylistFactory from "../../../service/player/PlaylistFactory";
 import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../../actions/player";
@@ -17,6 +16,7 @@ import List from '@material-ui/icons/List';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
+import * as ITEM_ACTIONS from "../../../actions/archiveItem";
 
 const styles = (theme: Theme) => ({
     rhc: {
@@ -45,58 +45,31 @@ const styles = (theme: Theme) => ({
 });
 
 function EpisodeDetailController(props: any) {
-    const {player} = useSelector((state: any) => ({
+    const {player, archive} = useSelector((state: any) => ({
         player: state.player,
+        archive: state.selectedProgramArchive
     }));
+
     const dispatch = useDispatch();
     const {classes, match} = props;
     const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
 
-    const [archive, setArchive] = useState<{ seasons: Array<any>, name: string }>({name: '', seasons: []});
-
+    //this happens when somebody loads url directly not coming from programs list view
     useEffect(() => {
-        const fetchArchiveForProgram = async () => {
-            const result = await props.programService.findOne(match.params.channelId, match.params.slug);
-            setArchive(result);
-        };
-
-        if (archive.seasons.length === 0) {
-            fetchArchiveForProgram();
+        if (!archive) {
+            props.programService.findOne(props.match.params.channelId, props.match.params.slug).then((newArchive: Array<any>) => {
+                dispatch(ITEM_ACTIONS.selectProgramArchiveItem(newArchive));
+            });
         }
-    }, [archive && archive.seasons.length]);
-
-    useEffect(() => {
-        if (archive.seasons.length) {
-            dispatch(ACTIONS.loadPlaylistAndStartPlaying(createPlaylistForSeason(archive.seasons[0])));
-        }
-    }, [archive && archive.seasons.length]);
-
-    function createPlaylistForSeason(selectedSeason: any): Playlist {
-        const playlist = new Playlist([]);
-        selectedSeason.episodes.forEach((item: any) => {
-            const playlistItem = createPlaylistItem(item);
-            playlistItem.sortPosition = item.episodeNumber;
-            playlist.add(playlistItem);
-        });
-        playlist.sortAsc();
-
-        return playlist;
-    }
-
-    function createPlaylistItem(item: any): PlaylistItem {
-        return new PlaylistItem(
-            item.name,
-            item.thumbnailUrl,
-            item.mp4,
-            parseInt(item.timeRequired.replace(/PT|S/g, '')),
-            `Episode: ${item.episodeNumber}`,
-            {episodeNumber: item.episodeNumber}
-        )
-    }
+    }, [archive]);
 
     const handlePlaylistChange = (event: any) => {
         setSelectedSeasonIndex(parseInt(event.target.value));
-        dispatch(ACTIONS.loadPlaylistAndStartPlaying(createPlaylistForSeason(archive.seasons[parseInt(event.target.value)])));
+        dispatch(
+            ACTIONS.loadPlaylistAndStartPlaying(
+                PlaylistFactory.createPlaylistForProgramSeason(archive.seasons[parseInt(event.target.value)])
+            )
+        );
         handleMenuClose();
     };
 
@@ -110,7 +83,7 @@ function EpisodeDetailController(props: any) {
         setAnchorEl(null);
     }
 
-    if (archive && archive.seasons.length) {
+    if (player && archive) {
         return (
             <div className="app-wrapper">
 
@@ -127,7 +100,7 @@ function EpisodeDetailController(props: any) {
                         </Paper>
                     </Grid>
 
-                    {archive && player && (
+                    {player && (
                         <Grid item sm={12} md={4}
                               container
                               direction="row"
