@@ -17,6 +17,7 @@ const styles = (theme: Theme) => ({
     },
     media: {
         height: 94,
+        position: 'relative' as any,
     },
     detail: {
         height: 94,
@@ -38,7 +39,7 @@ const styles = (theme: Theme) => ({
     },
     playlistPosition: {
         position: 'absolute' as any,
-        left: 0,
+        left: '-24px',
         top: '42px',
         width: '24px',
         textAlign: 'center' as any,
@@ -50,12 +51,53 @@ const styles = (theme: Theme) => ({
     },
     playlistPositionNumber: {
         color: theme.palette.text.secondary,
+    },
+    itemLength: {
+        position: 'absolute' as any,
+        bottom: 0,
+        right: 0,
+        padding: '2px 4px',
+        margin: '4px',
+        backgroundColor: 'rgba(0, 0, 0, 0.80)',
+        color: 'white',
+        borderRadius: '2px',
+        letterSpacing: '.5px',
+        fontSize: '12px',
+        fontWeight: 'bold' as any,
+        lineHeight: '12px',
     }
-
 });
 
 function PlaylistItem(props: any) {
     const {classes, episode, itemClick} = props;
+
+    const formatLength = (lengthInSeconds: number) => {
+        let hours = 0;
+        let minutes = Math.floor(lengthInSeconds / 60);
+
+        if (minutes >=60) {
+            hours = Math.floor(minutes / 60);
+            minutes = minutes - hours * 60;
+        }
+        let seconds = lengthInSeconds - (hours * 60 * 60) - (minutes * 60);
+
+        let secondsStr = String(seconds);
+        if (seconds < 10) {
+            secondsStr = '0' + secondsStr;
+        }
+
+        let minutesStr = String(minutes);
+        if (hours) {
+            if (minutes < 10) {
+                minutesStr = '0' + minutesStr;
+            }
+
+            return `${hours}:${minutesStr}:${secondsStr}`;
+        }
+
+        return `${minutesStr}:${secondsStr}`;
+    };
+
     return (
         <Card className={classes.card} onClick={itemClick} square elevation={0}>
             <CardActionArea>
@@ -80,6 +122,13 @@ function PlaylistItem(props: any) {
                                         )}
                                     </Box>
                                 ) : ''}
+
+                                    <Typography variant={'caption'} component="span">
+                                        <Box className={classes.itemLength}>
+                                            {formatLength(episode.length)}
+                                        </Box>
+                                    </Typography>
+
                             </CardMedia>
                         </Box>
                     </Grid>
