@@ -5,6 +5,8 @@ import * as joj from "../data/joj.sk/archive.json";
 
 @injectable()
 class ProgramService implements ProgramServiceInterface {
+    private basename: string = '/react-typescript';
+
     findAll(channelId: string): Promise<Array<{}>> {
         let data: Array<{}> = [];
         if (channelId === 'joj.sk') {
@@ -16,7 +18,7 @@ class ProgramService implements ProgramServiceInterface {
     }
 
     findOne(channel: string, slug: string): Promise<Array<any>> {
-        return fetch(`/data/${channel}/${slug}.json`)
+        return fetch(`${this.basename}/data/${channel}/${slug}.json`)
             .then((r: Response) => r.text())
             .then((str: string) => JSON.parse(str));
     }

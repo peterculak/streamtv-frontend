@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import * as ITEM_ACTIONS from "../../../actions/archiveItem";
+import ErrorBoundary from "../../../components/errorBoundary";
 
 const styles = (theme: Theme) => ({
     rhc: {
@@ -96,7 +97,9 @@ function EpisodeDetailController(props: any) {
 
                     <Grid item sm={12} md={8}>
                         <Paper elevation={0} className={classes.paper}>
-                            <Player/>
+                            <ErrorBoundary>
+                                <Player/>
+                            </ErrorBoundary>
                         </Paper>
                     </Grid>
 

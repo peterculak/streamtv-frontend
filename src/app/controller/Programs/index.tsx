@@ -11,27 +11,19 @@ function ProgramController(props: any) {
 
     return (
         <div className="app-wrapper">
-            {archive && archive.length ?
-                (
-                    <div>
-                        <Grid container spacing={2}>
-                            {archive.map(
-                                (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
-                                    <ArchiveItem
-                                        {...props}
-                                        programService={props.programService}
-                                        key={archiveItem.title} archiveItem={archiveItem}/>
-                                </Grid>)}
+            {archive && archive.length &&
+            (<div>
+                <Grid container spacing={2}>
+                    {archive.map(
+                        (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
+                            <ArchiveItem
+                                {...props}
+                                programService={props.programService}
+                                key={archiveItem.title} archiveItem={archiveItem}/>
+                        </Grid>)}
 
-                        </Grid>
-                    </div>)
-                :
-                (
-                    <div className="d-flex justify-content-center">
-                    </div>
-                )
-
-            }
+                </Grid>
+            </div>)}
         </div>
     );
 }
