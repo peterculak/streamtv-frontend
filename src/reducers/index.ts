@@ -28,7 +28,6 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: any) {
-    console.log(action);
     switch(action.type) {
         case PLAYER_PLAY:
             state.player.play();
