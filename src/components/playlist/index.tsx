@@ -60,12 +60,18 @@ const styles = (theme: Theme) => ({
         [theme.breakpoints.down('sm')]: {
             color: 'rgb(238, 238, 238)',
         },
-        fontWeight: 400,
-        lineHeight: '17.5px',
+        [theme.breakpoints.up('md')]: {
+            marginBottom: '4px',
+        },
+        fontWeight: 'bold' as any,
+        lineHeight: '16px',
     },
     playlistHeaderSubHead: {
         fontSize: '12px',
         lineHeight: '16.5px',
+        [theme.breakpoints.up('md')]: {
+            color: 'rgba(17, 17, 17, 0.6)',
+        },
     },
     controlBar: {
         width: '100%',
@@ -180,7 +186,6 @@ function Playlist(props: any) {
                           direction="row"
                           justify="space-between"
                     >
-
                         <Grid item className={classes.firstButton}>
                             <IconButton
                                 className={classes.playerControlsButtonCommon}
@@ -248,7 +253,6 @@ function Playlist(props: any) {
                         </Grid>
                     </Grid>
                 </div>
-
             </Box>
 
             <Box style={{height: playlistHeight}} className={classes.playlistItems}>

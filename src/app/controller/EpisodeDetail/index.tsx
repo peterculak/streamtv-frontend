@@ -7,6 +7,7 @@ import * as ITEM_ACTIONS from "../../../actions/archiveItem";
 import Player from "../../../components/player";
 import Playlist from "../../../components/playlist";
 import ErrorBoundary from "../../../components/errorBoundary";
+import Hidden from '@material-ui/core/Hidden';
 
 const styles = (theme: Theme) => ({
     rhc: {
@@ -25,7 +26,7 @@ function EpisodeDetailController(props: any) {
     }));
 
     const dispatch = useDispatch();
-    const {classes, match} = props;
+    const {classes} = props;
 
     //this happens when somebody loads url directly not coming from programs list view
     useEffect(() => {
@@ -41,28 +42,51 @@ function EpisodeDetailController(props: any) {
             <div className="app-wrapper">
 
                 {/*<Grid container direction="row" alignItems="flex-start"><Box mb={1}>top row</Box></Grid>*/}
+                <Hidden mdUp>
+                    <Grid container spacing={0}
+                          direction="row"
+                          justify="flex-start"
+                          alignItems="flex-start">
+                        <Grid container direction="column">
+                                <ErrorBoundary>
+                                    <Player/>
+                                </ErrorBoundary>
+                        </Grid>
 
-                <Grid container spacing={0}
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="flex-start">
-                    <Grid container direction="column" sm={12} md={8}>
+                        {player && (
+                            <Grid container direction="column">
+                                    <Box className={classes.rhc}>
+                                        <ErrorBoundary>
+                                            <Playlist/>
+                                        </ErrorBoundary>
+                                    </Box>
+                            </Grid>
+                        )}
+                    </Grid>
+                </Hidden>
+
+                <Hidden smDown>
+                    <Grid container spacing={0}
+                          direction="row"
+                          justify="flex-start"
+                          alignItems="flex-start">
+                        <Grid item sm={12} md={8}>
                             <ErrorBoundary>
                                 <Player/>
                             </ErrorBoundary>
-                    </Grid>
+                        </Grid>
 
-                    {player && (
-                        <Grid container direction="column" sm={12} md={4}>
+                        {player && (
+                            <Grid item sm={12} md={4}>
                                 <Box className={classes.rhc}>
                                     <ErrorBoundary>
                                         <Playlist/>
                                     </ErrorBoundary>
                                 </Box>
-                            {/*</Grid>*/}
-                        </Grid>
-                    )}
-                </Grid>
+                            </Grid>
+                        )}
+                    </Grid>
+                </Hidden>
             </div>);
     } else {
         return (<div className="app-wrapper"></div>);

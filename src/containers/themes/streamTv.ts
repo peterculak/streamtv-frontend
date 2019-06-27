@@ -54,14 +54,6 @@ const overrides = {
                 backgroundColor: theme.palette.primary.light,
             }
         },
-        // MuiCardContent: {
-        //     root: {
-        //         padding: 8,//padding: '0 8px 0 8px',
-        //         '&:last-child': {
-        //             paddingBottom: 0,
-        //         }
-        //     }
-        // },
     }
 };
 

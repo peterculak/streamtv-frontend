@@ -58,9 +58,14 @@ const styles = (theme: Theme) => ({
         lineHeight: '16px',
         maxHeight: '32px',
         overflow: 'hidden',
+        fontWeight: 'bold' as any,
+        marginBottom: '4px',
     },
     subhead: {
-        opacity: .6,
+        [theme.breakpoints.down('sm')]: {
+            opacity: .6,
+        },
+        fontSize: '13px',
     },
     playlistPosition: {
         position: 'absolute' as any,
@@ -135,7 +140,7 @@ function PlaylistItem(props: any) {
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
     return (
-        <Box className={props.isPlaying && props.playlistPosition > 1 && classes.selectedCardMarginTop} >
+        <Box className={props.isPlaying && props.playlistPosition > 1 ? classes.selectedCardMarginTop : ''} >
             <Box className={props.isPlaying ? classes.selectedCard : classes.notSelectedCard}>
                 <Card className={classes.card} onClick={itemClick} square elevation={0}>
                     <CardActionArea>
@@ -188,7 +193,7 @@ function PlaylistItem(props: any) {
                                               alignItems="flex-start"
                                         >
                                             <Grid item>
-                                                <Typography className={classes.subhead} variant={'caption'} component="p">
+                                                <Typography className={classes.subhead} variant={'subtitle2'} component="p">
                                                     {episode.subtitle}
                                                 </Typography>
                                             </Grid>
