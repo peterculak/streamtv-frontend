@@ -22,6 +22,10 @@ function Index(props: any, ref: any) {
         dispatch(ACTIONS.next());
     };
 
+    const dataLoaded = () => {
+        dispatch(ACTIONS.videoElementDataLoaded());
+    };
+
     useEffect(() => {
         if (player && player.current()) {
             document.title = player.current().subtitle;
@@ -30,7 +34,7 @@ function Index(props: any, ref: any) {
 
     useEffect(() => {
         if (playerRef) {
-            dispatch(ACTIONS.setVideoElementAndStartPlaying(playerRef.current, playNextTrigger));
+            dispatch(ACTIONS.setVideoElementAndStartPlaying(playerRef.current, playNextTrigger, dataLoaded));
         }
     }, [player]);
 

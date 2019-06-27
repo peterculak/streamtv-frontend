@@ -140,22 +140,25 @@ function Playlist(props: any) {
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
-    useEffect(() => {
-        if (player.isLoaded()) {
-            const playerHeight = parseInt(window.getComputedStyle(player.getVideoElement()).height as string);
-            const playlistHeight = window.innerHeight - playerHeight;
-            const topPadding = 16;
-            const playlistHeaderHeight = 100;
-            if (mdUp) {
-                setPlaylistHeight(window.innerHeight - 2*topPadding - playlistHeaderHeight + 'px');
-            } else {
-                setPlaylistHeight(playlistHeight + 'px');
-            }
+    function setScrollablePlaylistHeight() {
+        const videoHeight = parseInt(window.getComputedStyle(player.getVideoElement()).height as string);
+        const playlistHeight = window.innerHeight - videoHeight;
+        const topPadding = 16;
+        const playlistHeaderHeight = 100;
+        if (mdUp) {
+            setPlaylistHeight(window.innerHeight - 2*topPadding - playlistHeaderHeight + 'px');
+        } else {
+            setPlaylistHeight(playlistHeight + 'px');
         }
-    }, [player && player.isLoaded()]);
+    }
+    // useEffect(() => {
+    //     if (player.isLoaded()) {
+    //         setScrollablePlaylistHeight();
+    //     }
+    // }, [player && player.isLoaded(), player.isVideoDataLoaded]);
 
     return (
-        <div /*style={{height: playlistHeight}}*/ className={classes.playlist}>
+        <div style={{height: mdUp ? 'auto' : playlistHeight}} className={classes.playlist}>
             <Box className={classes.playlistHeader}>
                 {player.current() && (
                     <div className={classes.playlistHeaderMetaData}>
@@ -255,7 +258,7 @@ function Playlist(props: any) {
                 </div>
             </Box>
 
-            <Box style={{height: playlistHeight}} className={classes.playlistItems}>
+            <Box style={{height: mdUp ? playlistHeight : 'auto'}} className={classes.playlistItems}>
                 <Grid item xs={12}
                       container
                       direction="row"

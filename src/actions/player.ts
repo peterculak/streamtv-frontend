@@ -16,7 +16,7 @@ import {
     PLAYER_SHUFFLE_OFF,
     PLAYER_LOOP_ON,
     PLAYER_LOOP_OFF,
-    PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY
+    PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY, PLAYER_VIDEO_ELEMENT_DATA_LOADED
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
@@ -49,8 +49,8 @@ export function setAutoplayOnOff(autoplay: boolean) {
     return {type: PLAYER_SET_AUTOPLAY_ON_OFF, payload: autoplay};
 }
 
-export function setVideoElementAndStartPlaying(videoElement: HTMLVideoElement, callback?: any) {
-    return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callback: callback};
+export function setVideoElementAndStartPlaying(videoElement: HTMLVideoElement, callback?: any, dataLoadedCallback?: any) {
+    return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callback: callback, dataLoadedCallback: dataLoadedCallback};
 }
 
 export function playPlaylistItem(item: PlaylistItem) {
@@ -95,4 +95,8 @@ export function setVideoHighestQuality() {
 
 export function setVideoLowestQuality() {
     return {type: PLAYER_SET_LOWEST_QUALITY};
+}
+
+export function videoElementDataLoaded() {
+    return {type: PLAYER_VIDEO_ELEMENT_DATA_LOADED};
 }

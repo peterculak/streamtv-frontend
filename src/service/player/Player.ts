@@ -11,6 +11,7 @@ class Player implements PlayerInterface {
     private _selectedQualityIndex: number = 0;
     private shuffleEnabled: boolean = false;
     private loopEnabled: boolean = false;
+    private _isVideoDataLoaded: boolean = false;
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
@@ -28,13 +29,24 @@ class Player implements PlayerInterface {
         this._autoplay = value;
     }
 
-    setVideoElement(ref: HTMLVideoElement, callback?: any) {
+    setVideoElement(ref: HTMLVideoElement, callback?: any, dataLoadedCallback?: any ) {
         this.adapter.setVideoElement(ref);
         if (callback) {
             this.adapter.addListener('ended', () => this._autoplay && callback());//todo this is ugly
         } else {
             this.adapter.addListener('ended', () => this._autoplay && this.next());//todo this is ugly
         }
+
+        if (dataLoadedCallback) {
+            this.adapter.addListener('loadeddata', (event: any) => {
+                this._isVideoDataLoaded = true;
+                dataLoadedCallback();
+            });
+        }
+    }
+
+    get isVideoDataLoaded(): boolean {
+        return this._isVideoDataLoaded;
     }
 
     load(playlist: PlaylistInterface): void {
