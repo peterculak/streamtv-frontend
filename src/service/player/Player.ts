@@ -62,6 +62,7 @@ class Player implements PlayerInterface {
     }
 
     play(): void {
+        this._isVideoDataLoaded = false;
         // this.setPoster();
         this.adapter.play(this.playlist.current().mp4[this._selectedQualityIndex]);
     }

@@ -140,7 +140,7 @@ function Playlist(props: any) {
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
-    function setScrollablePlaylistHeight() {
+    function setHeight() {
         const videoHeight = parseInt(window.getComputedStyle(player.getVideoElement()).height as string);
         const playlistHeight = window.innerHeight - videoHeight;
         const topPadding = 16;
@@ -151,11 +151,11 @@ function Playlist(props: any) {
             setPlaylistHeight(playlistHeight + 'px');
         }
     }
-    // useEffect(() => {
-    //     if (player.isLoaded()) {
-    //         setScrollablePlaylistHeight();
-    //     }
-    // }, [player && player.isLoaded(), player.isVideoDataLoaded]);
+    useEffect(() => {
+        if (player.isLoaded()) {
+            setHeight();
+        }
+    }, [player && player.isLoaded(), player.isVideoDataLoaded]);
 
     return (
         <div style={{height: mdUp ? 'auto' : playlistHeight}} className={classes.playlist}>

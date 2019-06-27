@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import {withStyles, Theme} from '@material-ui/core/styles';
@@ -10,6 +10,9 @@ import ErrorBoundary from "../../../components/errorBoundary";
 import Hidden from '@material-ui/core/Hidden';
 
 const styles = (theme: Theme) => ({
+    videoPlayer: {
+        backgroundColor: 'black',
+    },
     rhc: {
         padding: '0',
         [theme.breakpoints.up('md')]: {
@@ -37,6 +40,17 @@ function EpisodeDetailController(props: any) {
         }
     }, [archive]);
 
+    const [videoElementHeight, setVideoElementHeight] = useState('auto');
+    useEffect(() => {
+        if (player.isVideoDataLoaded) {
+            const height = window.getComputedStyle(player.getVideoElement()).height;
+            if (height) {
+                const videoHeight = Math.ceil(parseFloat(height.replace('px', '')));
+                setVideoElementHeight(videoHeight + 'px');
+            }
+        }
+    }, [player && player.isLoaded(), player.isVideoDataLoaded]);
+
     if (player && archive) {
         return (
             <div className="app-wrapper">
@@ -47,19 +61,19 @@ function EpisodeDetailController(props: any) {
                           direction="row"
                           justify="flex-start"
                           alignItems="flex-start">
-                        <Grid container direction="column">
-                                <ErrorBoundary>
-                                    <Player/>
-                                </ErrorBoundary>
+                        <Grid container direction="column" className={classes.videoPlayer} style={{height: videoElementHeight}}>
+                            <ErrorBoundary>
+                                <Player/>
+                            </ErrorBoundary>
                         </Grid>
 
                         {player && (
                             <Grid container direction="column">
-                                    <Box className={classes.rhc}>
-                                        <ErrorBoundary>
-                                            <Playlist/>
-                                        </ErrorBoundary>
-                                    </Box>
+                                <Box className={classes.rhc}>
+                                    <ErrorBoundary>
+                                        <Playlist/>
+                                    </ErrorBoundary>
+                                </Box>
                             </Grid>
                         )}
                     </Grid>
@@ -70,7 +84,7 @@ function EpisodeDetailController(props: any) {
                           direction="row"
                           justify="flex-start"
                           alignItems="flex-start">
-                        <Grid item sm={12} md={8}>
+                        <Grid item sm={12} md={8} style={{height: videoElementHeight}}>
                             <ErrorBoundary>
                                 <Player/>
                             </ErrorBoundary>
