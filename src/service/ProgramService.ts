@@ -19,7 +19,7 @@ class ProgramService implements ProgramServiceInterface {
     }
 
     findOne(channel: string, slug: string): Promise<Array<any>> {
-        const url = this.basename ? `/${this.basename}/data/${channel}/${slug}.json` : `/data/${channel}/${slug}.json`;
+        const url = this.basename ? `${this.basename}/data/${channel}/${slug}.json` : `/data/${channel}/${slug}.json`;
         return fetch(url)
             .then((r: Response) => r.text())
             .then((str: string) => JSON.parse(str));
