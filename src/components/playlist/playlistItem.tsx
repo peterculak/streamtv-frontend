@@ -9,19 +9,43 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import PlayArrow from '@material-ui/icons/PlayArrow';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const styles = (theme: Theme) => ({
     card: {
-        // maxWidth: 345,
         backgroundColor: 'transparent',
+        [theme.breakpoints.down('sm')]: {
+            padding: '12px',
+            color: 'rgb(255, 255, 255)',
+        },
+    },
+    notSelectedCard: {
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: '-12px',
+        }
+    },
+    selectedCard: {
+        [theme.breakpoints.down('sm')]: {
+            backgroundColor: 'hsla(0,0%,53.3%,.8)',
+        },
+    },
+    selectedCardMarginTop: {
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '12px',
+        },
     },
     media: {
-        height: 94,
+        [theme.breakpoints.down('sm')]: {
+            height: '90px',
+        },
+        [theme.breakpoints.up('md')]: {
+            height: '94px',
+        },
         position: 'relative' as any,
     },
     detail: {
-        height: 94,
-        padding: 8,
+        height: '90px',
+        padding: '0 8px',
         '&:last-child': {
             paddingBottom: 0,
         }
@@ -29,13 +53,14 @@ const styles = (theme: Theme) => ({
     text: {
         height: '100%',
     },
-    title: {
-        fontWeight: 'bold' as any,
+    headline: {
         fontSize: '14px',
         lineHeight: '16px',
         maxHeight: '32px',
         overflow: 'hidden',
-        marginBottom: '4px',
+    },
+    subhead: {
+        opacity: .6,
     },
     playlistPosition: {
         position: 'absolute' as any,
@@ -44,6 +69,14 @@ const styles = (theme: Theme) => ({
         width: '24px',
         textAlign: 'center' as any,
         fontSize: '12px',
+    },
+    playlistPositionNumberWidth: {
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: '0',
+        },
+        [theme.breakpoints.up('md')]: {
+            paddingLeft: '24px',
+        },
     },
     playlistPositionArrow: {
         fontSize: '16px',
@@ -98,69 +131,76 @@ function PlaylistItem(props: any) {
         return `${minutesStr}:${secondsStr}`;
     };
 
+    const theme = useTheme();
+    const mdUp = useMediaQuery(theme.breakpoints.up('md'));
+
     return (
-        <Card className={classes.card} onClick={itemClick} square elevation={0}>
-            <CardActionArea>
-                <Grid container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="flex-start">
+        <Box className={props.isPlaying && props.playlistPosition > 1 && classes.selectedCardMarginTop} >
+            <Box className={props.isPlaying ? classes.selectedCard : classes.notSelectedCard}>
+                <Card className={classes.card} onClick={itemClick} square elevation={0}>
+                    <CardActionArea>
+                        <Grid container
+                              direction="row"
+                              justify="space-between"
+                              alignItems="flex-start">
 
-                    <Grid item xs={5} sm={3} md={5}>
-                        <Box pl="24px">
-                            <CardMedia
-                                className={classes.media}
-                                image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r640x480')}
-                                title={episode.title}
-                            >
-                                {props.playlistPosition ? (
-                                    <Box className={classes.playlistPosition}>
-                                        {props.isPlaying ? (
-                                            <PlayArrow className={classes.playlistPositionArrow}/>
-                                            ) : (
-                                            <Box className={classes.playlistPositionNumber}>{props.playlistPosition}</Box>
+                            <Grid item xs={6} sm={3} md={5}>
+                                <Box className={classes.playlistPositionNumberWidth}>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r640x480')}
+                                        title={episode.title}
+                                    >
+                                        {mdUp && props.playlistPosition && (
+                                            <Box className={classes.playlistPosition}>
+                                                {props.isPlaying ? (
+                                                    <PlayArrow className={classes.playlistPositionArrow}/>
+                                                ) : (
+                                                    <Box className={classes.playlistPositionNumber}>{props.playlistPosition}</Box>
+                                                )}
+                                            </Box>
                                         )}
-                                    </Box>
-                                ) : ''}
 
-                                    <Typography variant={'caption'} component="span">
-                                        <Box className={classes.itemLength}>
-                                            {formatLength(episode.length)}
-                                        </Box>
-                                    </Typography>
-
-                            </CardMedia>
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={7} sm={9} md={7} className={classes.media}>
-                        <CardContent className={classes.detail}>
-                            <Grid
-                                className={classes.text}
-                                container
-                                direction="column"
-                            >
-                                <Grid item>
-                                    <Typography className={classes.title} gutterBottom variant="subtitle2" component="h2">
-                                        {episode.title}
-                                    </Typography>
-                                </Grid>
-                                <Grid container
-                                      justify="space-between"
-                                      alignItems="flex-start"
-                                >
-                                    <Grid item>
-                                        <Typography variant={'caption'} component="p">
-                                            {episode.subtitle}
+                                        <Typography variant={'caption'} component="span">
+                                            <Box className={classes.itemLength}>
+                                                {formatLength(episode.length)}
+                                            </Box>
                                         </Typography>
-                                    </Grid>
-                                </Grid>
+
+                                    </CardMedia>
+                                </Box>
                             </Grid>
-                        </CardContent>
-                    </Grid>
-                </Grid>
-            </CardActionArea>
-        </Card>
+
+                            <Grid item xs={6} sm={9} md={7} className={classes.media}>
+                                <CardContent className={classes.detail}>
+                                    <Grid
+                                        className={classes.text}
+                                        container
+                                        direction="column"
+                                    >
+                                        <Grid item>
+                                            <Typography className={classes.headline} variant="subtitle2" component="h4">
+                                                {episode.title}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid container
+                                              justify="space-between"
+                                              alignItems="flex-start"
+                                        >
+                                            <Grid item>
+                                                <Typography className={classes.subhead} variant={'caption'} component="p">
+                                                    {episode.subtitle}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Grid>
+                        </Grid>
+                    </CardActionArea>
+                </Card>
+            </Box>
+        </Box>
     );
 }
 

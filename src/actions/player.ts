@@ -11,7 +11,12 @@ import {
     PLAYER_TOGGLE_PAUSE_PLAY,
     PLAYER_SORT_PLAYLIST_REVERSE_SORT,
     PLAYER_SORT_PLAYLIST_ASC,
-    PLAYER_SORT_PLAYLIST_DESC, PLAYER_SHUFFLE_ON, PLAYER_SHUFFLE_OFF, PLAYER_LOOP_ON, PLAYER_LOOP_OFF
+    PLAYER_SORT_PLAYLIST_DESC,
+    PLAYER_SHUFFLE_ON,
+    PLAYER_SHUFFLE_OFF,
+    PLAYER_LOOP_ON,
+    PLAYER_LOOP_OFF,
+    PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
@@ -42,10 +47,6 @@ export function loadPlaylistAndStartPlaying(playlist: PlaylistInterface) {
 
 export function setAutoplayOnOff(autoplay: boolean) {
     return {type: PLAYER_SET_AUTOPLAY_ON_OFF, payload: autoplay};
-}
-
-export function setStreamQuality(index: number) {
-    return {type: PLAYER_CHANGE_STREAM_QUALITY_INDEX, payload: index};
 }
 
 export function setVideoElementAndStartPlaying(videoElement: HTMLVideoElement, callback?: any) {
@@ -82,4 +83,16 @@ export function enableLoop() {
 
 export function disableLoop() {
     return {type: PLAYER_LOOP_OFF};
+}
+
+export function setStreamQuality(index: number) {
+    return {type: PLAYER_CHANGE_STREAM_QUALITY_INDEX, payload: index};
+}
+
+export function setVideoHighestQuality() {
+    return {type: PLAYER_SET_HIGHEST_QUALITY};
+}
+
+export function setVideoLowestQuality() {
+    return {type: PLAYER_SET_LOWEST_QUALITY};
 }

@@ -10,18 +10,11 @@ import ErrorBoundary from "../../../components/errorBoundary";
 
 const styles = (theme: Theme) => ({
     rhc: {
-        padding: '8px',
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            padding: '16px'
-        },
+        padding: '0',
         [theme.breakpoints.up('md')]: {
-            padding: '0 8px 0 16px'
+            padding: '0 0 0 16px',
         },
-    },
-    playlist: {
-        height: '600px',
-        maxHeight: '600px',
+        width: '100%',
     },
 });
 
@@ -51,27 +44,24 @@ function EpisodeDetailController(props: any) {
 
                 <Grid container spacing={0}
                       direction="row"
-                      justify="space-between"
+                      justify="flex-start"
                       alignItems="flex-start">
-
-                    <Grid item sm={12} md={8}>
-                        <ErrorBoundary>
-                            <Player/>
-                        </ErrorBoundary>
+                    <Grid container direction="column" sm={12} md={8}>
+                            <ErrorBoundary>
+                                <Player/>
+                            </ErrorBoundary>
                     </Grid>
 
                     {player && (
-                        <Grid item sm={12} md={4}
-                              container
-                              direction="row"
-                              className={classes.playlist}
-                        >
-                            <Box className={classes.rhc}>
-                                <ErrorBoundary>
-                                    <Playlist/>
-                                </ErrorBoundary>
-                            </Box>
-                        </Grid>)}
+                        <Grid container direction="column" sm={12} md={4}>
+                                <Box className={classes.rhc}>
+                                    <ErrorBoundary>
+                                        <Playlist/>
+                                    </ErrorBoundary>
+                                </Box>
+                            {/*</Grid>*/}
+                        </Grid>
+                    )}
                 </Grid>
             </div>);
     } else {

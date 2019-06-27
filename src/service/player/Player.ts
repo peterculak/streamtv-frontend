@@ -199,6 +199,34 @@ class Player implements PlayerInterface {
         return this.loopEnabled;
     }
 
+    hasHiqhQualityAvailable(): boolean {
+        return this.playlist.current().mp4.length > 1;
+    }
+
+    isHighQualitySelected(): boolean {
+        return this.selectedQualityIndex > 0;
+    }
+
+    availableQuality(): Array<string> {
+        return this.playlist.current().mp4.map((item: string, index: number) => this.qualityLabel(item));
+    }
+
+    setHighestQuality(): void {
+        this.selectedQualityIndex = this.current().mp4.length -1;
+    }
+
+    setLowestVideoQuality(): void {
+        this.selectedQualityIndex = 0;
+    }
+
+    getVideoElement() {
+        return this.adapter.getVideoElement();
+    }
+
+    private qualityLabel(url: string): string  {
+        const r = url.match(/-([^-]+[p]?)\.mp4/);
+        return r && r[1] !== null ? r[1] : 'undefined';
+    };
 
     private setPoster(): void {
         if (this.playlist.current().image) {

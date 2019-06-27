@@ -8,6 +8,10 @@ class DomAdapter implements AdapterInterface {
         this.htmlVideoElement = ref;
     }
 
+    getVideoElement(): HTMLVideoElement|undefined {
+        return this.htmlVideoElement;
+    }
+
     hasVideoElement(): boolean {
         return this.htmlVideoElement !== undefined;
     }

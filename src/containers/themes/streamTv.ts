@@ -66,5 +66,4 @@ const overrides = {
 };
 
 const streamTvTheme = createMuiTheme(Object.assign(baseSettings, overrides));
-
 export default streamTvTheme;

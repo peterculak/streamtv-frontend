@@ -18,7 +18,7 @@ import {
     PLAYER_SHUFFLE_OFF,
     PLAYER_LOOP_ON,
     PLAYER_LOOP_OFF,
-    SELECT_PROGRAM_ARCHIVE,
+    SELECT_PROGRAM_ARCHIVE, PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 
@@ -49,6 +49,12 @@ function rootReducer(state = initialState, action: any) {
             return state;
         case PLAYER_CHANGE_STREAM_QUALITY_INDEX:
             state.player.selectedQualityIndex = action.payload;
+            return state;
+        case PLAYER_SET_HIGHEST_QUALITY:
+            state.player.setHighestQuality();
+            return state;
+        case PLAYER_SET_LOWEST_QUALITY:
+            state.player.setLowestVideoQuality();
             return state;
         case PLAYER_PLAY_PLAYLIST_ITEM:
             state.player.playPlaylistItem(action.payload);

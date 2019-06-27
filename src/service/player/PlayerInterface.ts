@@ -41,6 +41,15 @@ interface PlayerInterface {
     enableLoop(): void;
     disableLoop(): void;
     isLoopEnabled(): boolean;
+
+    /**
+     * Returns list of available video quality eg ['low', 'hi', '4k']
+     */
+    availableQuality(): Array<string>;
+    hasHiqhQualityAvailable(): boolean;
+    isHighQualitySelected(): boolean;
+    setLowestVideoQuality(): void;
+    setHighestQuality(): void;
 }
 
 export default PlayerInterface;

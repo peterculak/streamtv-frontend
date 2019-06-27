@@ -8,12 +8,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
-import PlayArrow from '@material-ui/icons/PlayArrow';
-import Pause from '@material-ui/icons/Pause';
-import SkipNext from '@material-ui/icons/SkipNext';
-import SkipPrevious from '@material-ui/icons/SkipPrevious';
+import Hidden from '@material-ui/core/Hidden';
 
-function Index(props: any) {
+function Index(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef(null) as any;
 
@@ -50,60 +47,38 @@ function Index(props: any) {
         <React.Fragment>
             <video ref={playerRef} width="100%" height="100%" controls/>
             {player && player.current() && (
-                <Box>
-                    <Grid container spacing={2}
-                          direction="row"
-                          justify="space-between"
-                          alignItems="flex-start">
+                <Hidden smDown>
+                    <Box>
+                        <Grid container spacing={2}
+                              direction="row"
+                              justify="space-between"
+                              alignItems="flex-start">
 
-                        <Grid item>
-                            <Typography variant="h6" component="h1">{player.current().title}</Typography>
-                            <Typography variant={'caption'} component="p">{player.current().subtitle}</Typography>
-                        </Grid>
+                            <Grid item>
+                                <Typography variant="h6" component="h1">{player.current().title}</Typography>
+                                <Typography variant={'caption'} component="p">{player.current().subtitle}</Typography>
+                            </Grid>
 
-                        <Grid item>
-                            <FormControl>
-                                <Select
-                                    value={player ? player.selectedQualityIndex : 0}
-                                    onChange={changeVideoIndex}
-                                    name='selectedQualityIndex'
-                                >
-                                    {player && player.current() && player.current().mp4.map((url: any, index: number) =>
-                                        <MenuItem
-                                            key={index + url} value={index}>{qualityLabel(url)}</MenuItem>)}
-                                </Select>
-                            </FormControl>
+                            <Grid item>
+                                <FormControl>
+                                    <Select
+                                        value={player ? player.selectedQualityIndex : 0}
+                                        onChange={changeVideoIndex}
+                                        name='selectedQualityIndex'
+                                    >
+                                        {player && player.current() && player.current().mp4.map((url: any, index: number) =>
+                                            <MenuItem
+                                                key={index + url} value={index}>{qualityLabel(url)}</MenuItem>)}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    {/*<Box mt={1} mb={1}>*/}
-                    {/*    <Divider variant="fullWidth"/>*/}
-                    {/*</Box>*/}
-                </Box>
+                        <Box mt={1} mb={1}>
+                            <Divider variant="fullWidth"/>
+                        </Box>
+                    </Box>
+                </Hidden>
             )}
-
-            {/*{player && player.isLoaded() && (*/}
-            {/*    <Box>*/}
-            {/*        <button onClick={() => dispatch(ACTIONS.previous())} disabled={!player.hasPrevious()}>*/}
-            {/*            <SkipPrevious/>*/}
-            {/*        </button>*/}
-
-            {/*        <button onClick={() => dispatch(ACTIONS.toggle())}>*/}
-            {/*            {player.isPlaying() ? (<Pause/>) : (<PlayArrow/>)}*/}
-            {/*        </button>*/}
-
-            {/*        <button onClick={() => dispatch(ACTIONS.next())} disabled={!player.hasNext()}>*/}
-            {/*            <SkipNext/>*/}
-            {/*        </button>*/}
-
-            {/*        <Typography variant="caption" display="block" gutterBottom>*/}
-            {/*            autoplay: {player.autoplay ? 'true' : 'false'} <br/>*/}
-            {/*            loop: {player.isLoopEnabled() ? 'true' : 'false'} <br/>*/}
-            {/*            shuffle: {player.isShuffleEnabled() ? 'true' : 'false'} <br/>*/}
-            {/*            isPlaying: {player.isPlaying() ? 'true' : 'false'} <br/>*/}
-            {/*            currentStream: {player.currentStream()}*/}
-            {/*        </Typography>*/}
-            {/*    </Box>*/}
-            {/*)}*/}
         </React.Fragment>
     );
 }

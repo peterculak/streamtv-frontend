@@ -56,6 +56,8 @@ interface AdapterInterface {
     hasVideoElement(): boolean;
 
     addListener(eventName: string, callback: any): void;
+
+    getVideoElement(): HTMLVideoElement|undefined;
 }
 
 export default AdapterInterface;
