@@ -2,9 +2,9 @@
 import PlayerInterface from "./PlayerInterface";
 import PlaylistInterface from "./PlaylistInterface";
 import AdapterInterface from "./adapter/AdapterInterface";
-import DomAdapter from "./adapter/DomAdapter";
 import Playlist from "./Playlist";
 import PlayableItem from "./PlayableItem";
+import DomAdapter from "./adapter/DomAdapter";
 
 class Player implements PlayerInterface {
     private _autoplay: boolean = true;
@@ -232,8 +232,8 @@ class Player implements PlayerInterface {
         this.selectedQualityIndex = 0;
     }
 
-    getVideoElement() {
-        return this.adapter.getVideoElement();
+    getVideoElementHeight(): string {
+        return this.adapter.getVideoElementHeight();
     }
 
     private qualityLabel(url: string): string  {

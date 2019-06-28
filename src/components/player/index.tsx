@@ -9,12 +9,13 @@ import Divider from '@material-ui/core/Divider';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
+import PlayerInterface from "../../service/player/PlayerInterface";
 
 function Index(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef<HTMLVideoElement>(null);
 
-    const {player} = useSelector((state: any) => ({
+    const {player} = useSelector<{player: PlayerInterface}, {player: PlayerInterface}>((state) => ({
         player: state.player,
     }));
 

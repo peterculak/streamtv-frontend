@@ -6,6 +6,7 @@ interface PlayerInterface {
     currentlyPlayingItemOrder: number;
     playlistItemsCount: number;
     playlistItems: Array<PlayableItem>;
+    selectedQualityIndex: number;
 
     play(): void;
     pause(): void;
@@ -56,7 +57,7 @@ interface PlayerInterface {
     setLowestVideoQuality(): void;
     setHighestQuality(): void;
 
-    getVideoElement(): any;
+    getVideoElementHeight(): string;
 }
 
 export default PlayerInterface;

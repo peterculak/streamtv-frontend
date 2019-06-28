@@ -4,12 +4,20 @@ import AdapterException from "./AdapterException";
 class DomAdapter implements AdapterInterface {
     private htmlVideoElement: HTMLVideoElement|undefined;
 
+    constructor(private _window: Window = window) {
+        this._window = window;
+    }
+
     setVideoElement(ref: HTMLVideoElement): void {
         this.htmlVideoElement = ref;
     }
 
-    getVideoElement(): HTMLVideoElement|undefined {
-        return this.htmlVideoElement;
+    getVideoElementHeight(): string {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement()
+        }
+
+        return String(this._window.getComputedStyle(this.htmlVideoElement).height);
     }
 
     hasVideoElement(): boolean {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -115,7 +115,7 @@ function Playlist(props: any) {
 
     const {classes} = props;
 
-    const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
+    const [selectedSeasonIndex, setSelectedSeasonIndex] = useState<number>(0);
 
     const handlePlaylistChange = (event: any) => {
         setSelectedSeasonIndex(parseInt(event.target.value));
@@ -137,12 +137,12 @@ function Playlist(props: any) {
         setAnchorEl(null);
     }
 
-    const [playlistHeight, setPlaylistHeight] = useState('600px');
+    const [playlistHeight, setPlaylistHeight] = useState<string>('600px');
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
     function setHeight() {
-        const videoHeight = parseInt(window.getComputedStyle(player.getVideoElement()).height as string);
+        const videoHeight = parseInt(player.getVideoElementHeight());
         const playlistHeight = window.innerHeight - videoHeight;
         const topPadding = 16;
         const playlistHeaderHeight = 100;

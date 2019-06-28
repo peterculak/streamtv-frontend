@@ -40,10 +40,10 @@ function EpisodeDetailController(props: any) {
         }
     }, [archive]);
 
-    const [videoElementHeight, setVideoElementHeight] = useState('auto');
+    const [videoElementHeight, setVideoElementHeight] = useState<string>('auto');
     useEffect(() => {
         if (player.isVideoDataLoaded) {
-            const height = window.getComputedStyle(player.getVideoElement()).height;
+            const height = player.getVideoElementHeight();
             if (height) {
                 const videoHeight = Math.ceil(parseFloat(height.replace('px', '')));
                 setVideoElementHeight(videoHeight + 'px');
