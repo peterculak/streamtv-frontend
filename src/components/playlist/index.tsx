@@ -180,10 +180,15 @@ function Playlist(props: any) {
             const quality = player.availableQuality();
             const filename = title+'_'+series+episode+'_'+quality[player.selectedQualityIndex]+ext;
 
-            fileDownload(
-                url,
-                filename
-            );
+            //todo fix this whole thing
+            if (mdUp) {
+                fileDownload(
+                    url,
+                    filename
+                );
+            } else {
+                window.open(url, '_blank');
+            }
         }
     }
 
@@ -247,16 +252,6 @@ function Playlist(props: any) {
                             <IconButton
                                 className={classes.playerControlsButtonCommon}
                                 size="small"
-                                title="Download"
-                                color='inherit'
-                                onClick={() => download(player.currentStream())}
-                            >
-                                <GetApp/>
-                            </IconButton>
-
-                            <IconButton
-                                className={classes.playerControlsButtonCommon}
-                                size="small"
                                 title="Loop playlist"
                                 color={player.isLoopEnabled() ? 'primary' : 'inherit'}
                                 onClick={() => dispatch(player.isLoopEnabled() ? ACTIONS.disableLoop() : ACTIONS.enableLoop())}
@@ -292,6 +287,16 @@ function Playlist(props: any) {
                                 onClick={() => dispatch(ACTIONS.reversePlaylistSort())}
                                 disabled={!player.playlistItemsCount}>
                                 <SortByAlpha/>
+                            </IconButton>
+
+                            <IconButton
+                                className={classes.playerControlsButtonCommon}
+                                size="small"
+                                title="Download"
+                                color='inherit'
+                                onClick={() => download(player.currentStream())}
+                            >
+                                <GetApp/>
                             </IconButton>
                         </Grid>
                     </Grid>
