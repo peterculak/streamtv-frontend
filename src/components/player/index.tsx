@@ -12,7 +12,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 function Index(props: any, ref: any) {
     const dispatch = useDispatch();
-    let playerRef = useRef(null) as any;
+    let playerRef = useRef<HTMLVideoElement>(null);
 
     const {player} = useSelector((state: any) => ({
         player: state.player,
@@ -33,15 +33,10 @@ function Index(props: any, ref: any) {
     }, [player && player.current()]);
 
     useEffect(() => {
-        if (playerRef) {
+        if (playerRef && playerRef.current) {
             dispatch(ACTIONS.setVideoElementAndStartPlaying(playerRef.current, playNextTrigger, dataLoaded));
         }
     }, [player]);
-
-    const qualityLabel = (url: string) => {
-        const r = url.match(/-([^-]+[p]?)\.mp4/);
-        return r && r[1] !== null ? r[1] : 'undefined';
-    };
 
     const changeVideoIndex = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
         dispatch(ACTIONS.setStreamQuality(event.target.value));
@@ -70,9 +65,9 @@ function Index(props: any, ref: any) {
                                         onChange={changeVideoIndex}
                                         name='selectedQualityIndex'
                                     >
-                                        {player && player.current() && player.current().mp4.map((url: any, index: number) =>
+                                        {player && player.current() && player.availableQuality().map((label: string, index: number) =>
                                             <MenuItem
-                                                key={index + url} value={index}>{qualityLabel(url)}</MenuItem>)}
+                                                key={index + label} value={index}>{label}</MenuItem>)}
                                     </Select>
                                 </FormControl>
                             </Grid>

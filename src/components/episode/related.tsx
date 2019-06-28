@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
+import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 
-const styles = (theme: Theme) => ({
+const styles = (theme: Theme) => createStyles({
     card: {
         // maxWidth: 345,
         backgroundColor: 'transparent',
@@ -28,23 +28,22 @@ const styles = (theme: Theme) => ({
         height: '100%',
     },
     title: {
-        fontWeight: 'bold' as any,
+        fontWeight: 'bold',
         marginBottom: 0,
     },
     playlistPosition: {
-        position: 'absolute' as any,
+        position: 'absolute',
         left: 0,
         top: '45px',
         width: '24px',
-        textAlign: 'center' as any,
+        textAlign: 'center',
         fontSize: '12px',
         color: theme.palette.text.secondary,
     }
 });
 
-
 function RelatedEpisode(props: any) {
-    const {classes, episode, itemClick, showDescription} = props;
+    const {classes, episode, itemClick} = props;
     return (
         <Card className={classes.card} onClick={itemClick} square elevation={0}>
             <CardActionArea>

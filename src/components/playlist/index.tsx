@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
+import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -17,14 +17,15 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import PlaylistFactory from "../../service/player/PlaylistFactory";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PlayerInterface from "../../service/player/PlayerInterface";
 
-const styles = (theme: Theme) => ({
+const styles = (theme: Theme) => createStyles({
     playlist: {
         borderBottom: '1px solid rgba(136, 136, 136, 0.4)',
         backgroundColor: 'hsla(0,0%,6.7%,.8)',
         [theme.breakpoints.down('sm')]: {
             height: '600px',
-            overflowY: 'auto' as any,
+            overflowY: 'auto',
         },
         [theme.breakpoints.up('md')]: {
             padding: '0 8px 8px 0',
@@ -63,7 +64,7 @@ const styles = (theme: Theme) => ({
         [theme.breakpoints.up('md')]: {
             marginBottom: '4px',
         },
-        fontWeight: 'bold' as any,
+        fontWeight: 'bold',
         lineHeight: '16px',
     },
     playlistHeaderSubHead: {
@@ -95,7 +96,7 @@ const styles = (theme: Theme) => ({
         [theme.breakpoints.up('md')]: {
             backgroundColor: 'rgba(238, 238, 238, 0.6)',
             paddingTop: '8px',
-            overflowY: 'auto' as any,
+            overflowY: 'auto',
         },
         paddingBottom: '12px',
     },
@@ -107,7 +108,7 @@ const styles = (theme: Theme) => ({
 function Playlist(props: any) {
     const dispatch = useDispatch();
 
-    const {player, archive} = useSelector((state: any) => ({
+    const {player, archive} = useSelector<{ player: PlayerInterface, selectedProgramArchive: any }, { player: PlayerInterface, archive: any }>((state) => ({
         player: state.player,
         archive: state.selectedProgramArchive
     }));
@@ -146,11 +147,12 @@ function Playlist(props: any) {
         const topPadding = 16;
         const playlistHeaderHeight = 100;
         if (mdUp) {
-            setPlaylistHeight(window.innerHeight - 2*topPadding - playlistHeaderHeight + 'px');
+            setPlaylistHeight(window.innerHeight - 2 * topPadding - playlistHeaderHeight + 'px');
         } else {
             setPlaylistHeight(playlistHeight + 'px');
         }
     }
+
     useEffect(() => {
         if (player.isLoaded()) {
             setHeight();
@@ -250,7 +252,7 @@ function Playlist(props: any) {
                                 title="Sort by episode number"
                                 color={player.getPlaylistSortOrder() === 'desc' ? 'primary' : 'inherit'}
                                 onClick={() => dispatch(ACTIONS.reversePlaylistSort())}
-                                disabled={!player.playlist.size()}>
+                                disabled={!player.playlistItemsCount}>
                                 <SortByAlpha/>
                             </IconButton>
                         </Grid>

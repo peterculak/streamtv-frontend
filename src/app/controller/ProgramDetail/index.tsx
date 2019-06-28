@@ -4,7 +4,7 @@ import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../../../service/ProgramServiceInterface";
 import {ChannelInterface} from "../../../entities/ChannelInterface";
 import Grid from '@material-ui/core/Grid';
-import {withStyles, Theme} from '@material-ui/core/styles';
+import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Episode from "../../../components/episode";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -21,9 +21,9 @@ interface PropsInterface {
     classes: any,
 }
 
-const styles = (theme: Theme) => ({
+const styles = (theme: Theme) => createStyles({
     mainFeaturedPost: {
-        position: 'relative' as any,
+        position: 'relative',
         backgroundColor: theme.palette.grey[800],
         color: theme.palette.common.white,
         marginBottom: theme.spacing(4),
@@ -32,7 +32,7 @@ const styles = (theme: Theme) => ({
         backgroundPosition: 'center',
     },
     overlay: {
-        position: 'absolute' as any,
+        position: 'absolute',
         top: 0,
         bottom: 0,
         right: 0,
@@ -40,7 +40,7 @@ const styles = (theme: Theme) => ({
         backgroundColor: 'rgba(0,0,0,.3)',
     },
     mainFeaturedPostContent: {
-        position: 'relative' as any,
+        position: 'relative',
         padding: theme.spacing(3),
         [theme.breakpoints.up('md')]: {
             padding: theme.spacing(6),

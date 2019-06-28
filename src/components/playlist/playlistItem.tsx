@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, useTheme, Theme} from '@material-ui/core/styles';
+import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const styles = (theme: Theme) => ({
+const styles = (theme: Theme) => createStyles({
     card: {
         backgroundColor: 'transparent',
         [theme.breakpoints.down('sm')]: {
@@ -41,7 +41,7 @@ const styles = (theme: Theme) => ({
         [theme.breakpoints.up('md')]: {
             height: '94px',
         },
-        position: 'relative' as any,
+        position: 'relative',
     },
     detail: {
         height: '90px',
@@ -58,7 +58,7 @@ const styles = (theme: Theme) => ({
         lineHeight: '16px',
         maxHeight: '32px',
         overflow: 'hidden',
-        fontWeight: 'bold' as any,
+        fontWeight: 'bold',
         marginBottom: '4px',
     },
     subhead: {
@@ -68,11 +68,11 @@ const styles = (theme: Theme) => ({
         fontSize: '13px',
     },
     playlistPosition: {
-        position: 'absolute' as any,
+        position: 'absolute',
         left: '-24px',
         top: '42px',
         width: '24px',
-        textAlign: 'center' as any,
+        textAlign: 'center',
         fontSize: '12px',
     },
     playlistPositionNumberWidth: {
@@ -91,7 +91,7 @@ const styles = (theme: Theme) => ({
         color: theme.palette.text.secondary,
     },
     itemLength: {
-        position: 'absolute' as any,
+        position: 'absolute',
         bottom: 0,
         right: 0,
         padding: '2px 4px',
@@ -101,7 +101,7 @@ const styles = (theme: Theme) => ({
         borderRadius: '2px',
         letterSpacing: '.5px',
         fontSize: '12px',
-        fontWeight: 'bold' as any,
+        fontWeight: 'bold',
         lineHeight: '12px',
     }
 });

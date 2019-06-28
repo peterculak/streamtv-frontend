@@ -2,6 +2,11 @@ import PlaylistInterface from "./PlaylistInterface";
 import PlayableItem from "./PlayableItem";
 
 interface PlayerInterface {
+    isVideoDataLoaded: boolean;
+    currentlyPlayingItemOrder: number;
+    playlistItemsCount: number;
+    playlistItems: Array<PlayableItem>;
+
     play(): void;
     pause(): void;
     load(playlist: PlaylistInterface): void;
@@ -50,6 +55,8 @@ interface PlayerInterface {
     isHighQualitySelected(): boolean;
     setLowestVideoQuality(): void;
     setHighestQuality(): void;
+
+    getVideoElement(): any;
 }
 
 export default PlayerInterface;

@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import ArchiveItem from "../../../components/archiveItem";
+import {useTheme} from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
+import {GridSpacing} from '@material-ui/core/Grid';
+import ArchiveItem from "../../../components/archiveItem";
 
 function ProgramController(props: any) {
     const [archive, setArchive] = useState<Array<any>>([]);
@@ -9,11 +12,21 @@ function ProgramController(props: any) {
         setArchive(archive);
     });
 
+    const theme = useTheme();
+    let spacing = 0;
+    const isBetween = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+    const isMd = useMediaQuery(theme.breakpoints.up('md'));
+    if (isBetween) {
+        spacing = 1;
+    } else if (isMd) {
+        spacing = 2;
+    }
+
     return (
         <div className="app-wrapper">
             {archive && archive.length &&
             (<div>
-                <Grid container spacing={2}>
+                <Grid container spacing={spacing as GridSpacing}>
                     {archive.map(
                         (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
                             <ArchiveItem
