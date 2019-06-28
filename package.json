@@ -19,6 +19,7 @@
     "env-cmd": "^9.0.3",
     "gh-pages": "^2.0.1",
     "inversify": "^5.0.1",
+    "js-file-download": "^0.4.7",
     "moment": "^2.24.0",
     "react": "^16.6.3",
     "react-custom-scrollbars": "^4.2.1",

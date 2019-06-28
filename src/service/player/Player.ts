@@ -43,6 +43,8 @@ class Player implements PlayerInterface {
                 dataLoadedCallback();
             });
         }
+
+        // this.adapter.addListener('loadedmetadata', (a: any) => console.log(a));
     }
 
     get isVideoDataLoaded(): boolean {

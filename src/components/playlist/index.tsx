@@ -12,12 +12,14 @@ import Shuffle from '@material-ui/icons/Shuffle';
 import Repeat from '@material-ui/icons/Repeat';
 import List from '@material-ui/icons/List';
 import HighQuality from '@material-ui/icons/HighQuality';
+import GetApp from '@material-ui/icons/GetApp';
 import PlaylistItem from "./playlistItem";
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import PlaylistFactory from "../../service/player/PlaylistFactory";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PlayerInterface from "../../service/player/PlayerInterface";
+const fileDownload = require('js-file-download');
 
 const styles = (theme: Theme) => createStyles({
     playlist: {
@@ -159,6 +161,32 @@ function Playlist(props: any) {
         }
     }, [player && player.isLoaded(), player.isVideoDataLoaded]);
 
+    function download(url: string): void {
+        const m = url.match(/\.[0-9a-z]+$/i);
+        if (m && m[0]) {
+            const title = archive.name;
+            let seriesNumber = String(selectedSeasonIndex+1);
+            if (selectedSeasonIndex+1) {
+                seriesNumber = '0' + seriesNumber;
+            }
+            const series =  `S${seriesNumber}`;
+            const meta = player.current().meta as any;
+            let episodeNumber = String(meta.episodeNumber);
+            if (meta.episodeNumber < 9) {
+                episodeNumber = '0' + episodeNumber;
+            }
+            const episode = `E${episodeNumber}`;
+            const ext = m[0];
+            const quality = player.availableQuality();
+            const filename = title+'_'+series+episode+'_'+quality[player.selectedQualityIndex]+ext;
+
+            fileDownload(
+                url,
+                filename
+            );
+        }
+    }
+
     return (
         <div style={{height: mdUp ? 'auto' : playlistHeight}} className={classes.playlist}>
             <Box className={classes.playlistHeader}>
@@ -216,6 +244,16 @@ function Playlist(props: any) {
                             </Menu>
                         </Grid>
                         <Grid item>
+                            <IconButton
+                                className={classes.playerControlsButtonCommon}
+                                size="small"
+                                title="Download"
+                                color='inherit'
+                                onClick={() => download(player.currentStream())}
+                            >
+                                <GetApp/>
+                            </IconButton>
+
                             <IconButton
                                 className={classes.playerControlsButtonCommon}
                                 size="small"
