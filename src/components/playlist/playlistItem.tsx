@@ -67,6 +67,10 @@ const styles = (theme: Theme) => createStyles({
         },
         fontSize: '13px',
     },
+    dateAdded: {
+        fontSize: '12px',
+        opacity: .6,
+    },
     playlistPosition: {
         position: 'absolute',
         left: '-24px',
@@ -188,16 +192,20 @@ function PlaylistItem(props: any) {
                                                 {episode.title}
                                             </Typography>
                                         </Grid>
-                                        <Grid container
-                                              justify="space-between"
-                                              alignItems="flex-start"
-                                        >
-                                            <Grid item>
-                                                <Typography className={classes.subhead} variant={'subtitle2'} component="p">
-                                                    {episode.subtitle}
-                                                </Typography>
-                                            </Grid>
+                                        <Grid item>
+                                            <Typography className={classes.subhead} variant={'subtitle2'} component="p">
+                                                Epizóda: {episode.meta.episodeNumber}
+                                            </Typography>
                                         </Grid>
+
+                                        {episode.meta.dateAdded && (
+                                            <Grid item>
+                                                <Box mt="-4px">
+                                                    <Typography className={classes.dateAdded} variant={'subtitle2'} component="p">
+                                                        Pridané: {episode.meta.dateAdded}
+                                                    </Typography>
+                                                </Box>
+                                            </Grid>)}
                                     </Grid>
                                 </CardContent>
                             </Grid>

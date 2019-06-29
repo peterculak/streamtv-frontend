@@ -11,7 +11,7 @@ import SortByAlpha from '@material-ui/icons/SortByAlpha';
 import Shuffle from '@material-ui/icons/Shuffle';
 import Repeat from '@material-ui/icons/Repeat';
 import List from '@material-ui/icons/List';
-import HighQuality from '@material-ui/icons/HighQuality';
+import Hd from '@material-ui/icons/Hd';
 import GetApp from '@material-ui/icons/GetApp';
 import PlaylistItem from "./playlistItem";
 import {useSelector, useDispatch} from 'react-redux';
@@ -84,7 +84,8 @@ const styles = (theme: Theme) => createStyles({
         },
         [theme.breakpoints.up('md')]: {
             color: 'rgb(144, 144, 144)',
-        }
+        },
+        paddingRight: '4px',
     },
     playerControlsButton: {
         marginLeft: '10px',
@@ -272,21 +273,21 @@ function Playlist(props: any) {
                             <IconButton
                                 className={classes.playerControlsButtonCommon}
                                 size="small"
-                                color={player.isHighQualitySelected() ? 'primary' : 'inherit'}
-                                disabled={!player.hasHiqhQualityAvailable()}
-                                onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}
-                                title="High quality">
-                                <HighQuality/>
-                            </IconButton>
-
-                            <IconButton
-                                className={classes.playerControlsButtonCommon}
-                                size="small"
                                 title="Sort by episode number"
                                 color={player.getPlaylistSortOrder() === 'desc' ? 'primary' : 'inherit'}
                                 onClick={() => dispatch(ACTIONS.reversePlaylistSort())}
                                 disabled={!player.playlistItemsCount}>
                                 <SortByAlpha/>
+                            </IconButton>
+
+                            <IconButton
+                                className={classes.playerControlsButtonCommon}
+                                size="small"
+                                color={player.isHighQualitySelected() ? 'primary' : 'inherit'}
+                                disabled={!player.hasHiqhQualityAvailable()}
+                                onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}
+                                title="High quality">
+                                <Hd/>
                             </IconButton>
 
                             <IconButton

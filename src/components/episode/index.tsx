@@ -41,8 +41,9 @@ function Episode(props: any) {
                           alignItems="center"
                     >
                         <Typography variant={'caption'} component="p">
-                            Episode: {episode.episodeNumber}
+                            Epizóda: {episode.episodeNumber}
                         </Typography>
+
                         <Typography variant={'caption'} component="p">
                             {moment.duration(parseInt(episode.timeRequired.replace(/PT|S/g, ''))*1000).humanize()}
                         </Typography>

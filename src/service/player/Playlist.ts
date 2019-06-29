@@ -82,7 +82,7 @@ class Playlist implements PlaylistInterface {
     moveIndexTo(moveTo: PlaylistItem): void {
         let moveToIndex = -1;
         this._items.forEach((item: PlaylistItem, index: number) => {
-            if (moveTo.title === item.title && moveTo.subtitle === item.subtitle) {
+            if (moveTo.title === item.title && moveTo.mp4 === item.mp4) {
                 moveToIndex = index;
             }
         });

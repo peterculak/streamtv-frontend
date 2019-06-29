@@ -20,8 +20,8 @@ class PlaylistFactory {
             item.thumbnailUrl,
             item.mp4,
             parseInt(item.timeRequired.replace(/PT|S/g, '')),
-            `Episode: ${item.episodeNumber}`,
-            {episodeNumber: item.episodeNumber}
+            '',
+            {episodeNumber: item.episodeNumber, dateAdded: item.dateAdded}
         )
     }
 }
