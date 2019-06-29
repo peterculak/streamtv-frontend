@@ -54,7 +54,6 @@ function EpisodeDetailController(props: any) {
     if (player && archive) {
         return (
             <div className="app-wrapper">
-
                 {/*<Grid container direction="row" alignItems="flex-start"><Box mb={1}>top row</Box></Grid>*/}
                 <Hidden mdUp>
                     <Grid container spacing={0}

@@ -161,6 +161,7 @@ function Playlist(props: any) {
         }
     }, [player && player.isLoaded(), player.isVideoDataLoaded]);
 
+    //todo fix this whole thing
     function download(url: string): void {
         const m = url.match(/\.[0-9a-z]+$/i);
         if (m && m[0]) {
@@ -180,7 +181,6 @@ function Playlist(props: any) {
             const quality = player.availableQuality();
             const filename = title+'_'+series+episode+'_'+quality[player.selectedQualityIndex]+ext;
 
-            //todo fix this whole thing
             if (mdUp) {
                 fileDownload(
                     url,
@@ -244,7 +244,7 @@ function Playlist(props: any) {
                                     <MenuItem
                                         disabled={index === selectedSeasonIndex}
                                         onClick={handlePlaylistChange}
-                                        key={index + season.seasonNumber}
+                                        key={index}
                                         value={index}>{season.name}</MenuItem>)}
                             </Menu>
                         </Grid>

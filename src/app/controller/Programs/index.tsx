@@ -4,10 +4,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
 import {GridSpacing} from '@material-ui/core/Grid';
 import ArchiveItem from "../../../components/archiveItem";
+import ScrollManager from "../../../components/scrollManager";
 
 function ProgramController(props: any) {
     const [archive, setArchive] = useState<Array<any>>([]);
-
     props.programService.findAll(props.match.params.channelId).then((archive: Array<any>) => {
         setArchive(archive);
     });
@@ -24,6 +24,7 @@ function ProgramController(props: any) {
 
     return (
         <div className="app-wrapper">
+            <ScrollManager scrollKey="program-list" />
             {archive && archive.length &&
             (<div>
                 <Grid container spacing={spacing as GridSpacing}>

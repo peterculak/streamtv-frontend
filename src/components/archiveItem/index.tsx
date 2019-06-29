@@ -6,7 +6,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/archiveItem";
 import ProgramServiceInterface from "../../service/ProgramServiceInterface";
 
