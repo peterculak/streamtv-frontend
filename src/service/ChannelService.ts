@@ -10,7 +10,8 @@ class ChannelService implements ChannelServiceInterface {
     constructor() {
         this.channels = [
             new Channel('joj.sk', 'Joj', 'https://img.joj.sk/rx/logojoj.png'),
-            new Channel('plus.joj.sk', 'Plus', 'https://img.joj.sk/rx/78c61f2d0cdbde28c9ebe3af34299a98.png')
+            new Channel('plus.joj.sk', 'Plus', 'https://img.joj.sk/rx/78c61f2d0cdbde28c9ebe3af34299a98.png'),
+            new Channel('wau.joj.sk', 'Wau', 'https://img.joj.sk/rx/logowau.png')
         ];
     }
 

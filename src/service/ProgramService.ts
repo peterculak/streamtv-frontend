@@ -3,6 +3,7 @@ import "reflect-metadata";
 import ProgramServiceInterface from "./ProgramServiceInterface";
 import * as joj from "../data/joj.sk/archive.json";
 import * as plus from "../data/plus.joj.sk/archive.json";
+import * as wau from "../data/wau.joj.sk/archive.json";
 
 @injectable()
 class ProgramService implements ProgramServiceInterface {
@@ -15,6 +16,8 @@ class ProgramService implements ProgramServiceInterface {
             data = (<any>joj).default;
         } else if (channelId === 'plus.joj.sk') {
             data = (<any>plus).default;
+        } else if (channelId === 'wau.joj.sk') {
+            data = (<any>wau).default;
         }
         return new Promise(function (resolve) {
             resolve(data);
