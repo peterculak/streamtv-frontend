@@ -5,16 +5,24 @@ import Grid from '@material-ui/core/Grid';
 import {GridSpacing} from '@material-ui/core/Grid';
 import ArchiveItem from "../../../components/archiveItem";
 import ScrollManager from "../../../components/scrollManager";
+import {useSelector, useDispatch} from 'react-redux';
+import * as ITEM_ACTIONS from "../../../actions/archiveItem";
 
 function ProgramController(props: any) {
-    const [archive, setArchive] = useState<Array<any>>([]);
+    const dispatch = useDispatch();
+    const {archives} = useSelector((state: any) => ({
+        archives: state.selectedTVChannelArchive
+    }));
+
+    const archive = archives[props.match.params.channelId];
+
     useEffect(() => {
-        if (!archive.length) {
+        if (!archive || !archive.length) {
             props.programService.findAll(props.match.params.channelId).then((archive: Array<any>) => {
-                setArchive(archive);
+                dispatch(ITEM_ACTIONS.selectTVChannelArchive(props.match.params.channelId, archive));
             });
         }
-    }, [archive.length]);
+    }, [archive]);
 
     const theme = useTheme();
     let spacing = 0;

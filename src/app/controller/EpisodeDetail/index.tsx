@@ -23,9 +23,9 @@ const styles = (theme: Theme) => ({
 });
 
 function EpisodeDetailController(props: any) {
-    const {player, archive} = useSelector((state: any) => ({
+    const {player, seriesArchive} = useSelector((state: any) => ({
         player: state.player,
-        archive: state.selectedProgramArchive
+        seriesArchive: state.selectedTVSeriesArchive
     }));
 
     const dispatch = useDispatch();
@@ -33,12 +33,12 @@ function EpisodeDetailController(props: any) {
 
     //this happens when somebody loads url directly not coming from programs list view
     useEffect(() => {
-        if (!archive) {
+        if (!seriesArchive) {
             props.programService.findOne(props.match.params.channelId, props.match.params.slug).then((newArchive: Array<any>) => {
-                dispatch(ITEM_ACTIONS.selectProgramArchiveItem(newArchive));
+                dispatch(ITEM_ACTIONS.selectSeriesArchive(newArchive));
             });
         }
-    }, [archive]);
+    }, [seriesArchive]);
 
     const [videoElementHeight, setVideoElementHeight] = useState<string>('auto');
     useEffect(() => {
@@ -51,7 +51,7 @@ function EpisodeDetailController(props: any) {
         }
     }, [player && player.isLoaded(), player.isVideoDataLoaded]);
 
-    if (player && archive) {
+    if (player && seriesArchive) {
         return (
             <div className="app-wrapper">
                 {/*<Grid container direction="row" alignItems="flex-start"><Box mb={1}>top row</Box></Grid>*/}

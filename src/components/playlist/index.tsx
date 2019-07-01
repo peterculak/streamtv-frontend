@@ -111,9 +111,9 @@ const styles = (theme: Theme) => createStyles({
 function Playlist(props: any) {
     const dispatch = useDispatch();
 
-    const {player, archive} = useSelector<{ player: PlayerInterface, selectedProgramArchive: any }, { player: PlayerInterface, archive: any }>((state) => ({
+    const {player, archive} = useSelector<{ player: PlayerInterface, selectedTVSeriesArchive: any }, { player: PlayerInterface, archive: any }>((state) => ({
         player: state.player,
-        archive: state.selectedProgramArchive
+        archive: state.selectedTVSeriesArchive
     }));
 
     const {classes} = props;
