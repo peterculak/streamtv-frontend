@@ -1,9 +1,8 @@
 import {injectable} from "inversify";
 import "reflect-metadata";
 import ProgramServiceInterface from "./ProgramServiceInterface";
-import * as joj from "../data/joj.sk/archive.json";
-import * as plus from "../data/plus.joj.sk/archive.json";
-import * as wau from "../data/wau.joj.sk/archive.json";
+import * as crypto from "crypto-js";
+
 
 @injectable()
 class ProgramService implements ProgramServiceInterface {
@@ -11,24 +10,22 @@ class ProgramService implements ProgramServiceInterface {
     }
 
     findAll(channelId: string): Promise<Array<{}>> {
-        let data: Array<{}> = [];
-        if (channelId === 'joj.sk') {
-            data = (<any>joj).default;
-        } else if (channelId === 'plus.joj.sk') {
-            data = (<any>plus).default;
-        } else if (channelId === 'wau.joj.sk') {
-            data = (<any>wau).default;
-        }
-        return new Promise(function (resolve) {
-            resolve(data);
-        });
+        const url = this.basename ? `${this.basename}/data/${channelId}/archive_enc.json` : `/data/${channelId}/archive_enc.json`;
+        return fetch(url).then((r: any) => r.text())
+            .then((content: string) => JSON.parse(this.decrypt(content)));
+    }
+
+    private decrypt(content: string): string {
+        const bytes = crypto.AES.decrypt(content, process.env.REACT_APP_PASSWORD as string);
+        return bytes.toString(crypto.enc.Utf8);
     }
 
     findOne(channel: string, slug: string): Promise<Array<any>> {
-        const url = this.basename ? `${this.basename}/data/${channel}/${slug}.json` : `/data/${channel}/${slug}.json`;
+        const url = this.basename ? `${this.basename}/data/${channel}/${slug}` : `/data/${channel}/${slug}`;
         return fetch(url)
             .then((r: Response) => r.text())
-            .then((str: string) => JSON.parse(str));
+            .then((encrypted: string) => JSON.parse(this.decrypt(encrypted)))
+            ;
     }
 }
 

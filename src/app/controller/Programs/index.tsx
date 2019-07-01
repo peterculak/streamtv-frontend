@@ -8,9 +8,13 @@ import ScrollManager from "../../../components/scrollManager";
 
 function ProgramController(props: any) {
     const [archive, setArchive] = useState<Array<any>>([]);
-    props.programService.findAll(props.match.params.channelId).then((archive: Array<any>) => {
-        setArchive(archive);
-    });
+    useEffect(() => {
+        if (!archive.length) {
+            props.programService.findAll(props.match.params.channelId).then((archive: Array<any>) => {
+                setArchive(archive);
+            });
+        }
+    }, [archive.length]);
 
     const theme = useTheme();
     let spacing = 0;
@@ -25,7 +29,7 @@ function ProgramController(props: any) {
     return (
         <div className="app-wrapper">
             <ScrollManager scrollKey="program-list" />
-            {archive && archive.length &&
+            {archive &&
             (<div>
                 <Grid container spacing={spacing as GridSpacing}>
                     {archive.map(
