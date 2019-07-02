@@ -34,7 +34,7 @@ function EpisodeDetailController(props: any) {
     //this happens when somebody loads url directly not coming from programs list view
     useEffect(() => {
         if (!seriesArchive) {
-            props.programService.findOne(props.match.params.channelId, props.match.params.slug).then((newArchive: Array<any>) => {
+            props.programService.findOne(props.match.params.slug).then((newArchive: Array<any>) => {
                 dispatch(ITEM_ACTIONS.selectSeriesArchive(newArchive));
             });
         }

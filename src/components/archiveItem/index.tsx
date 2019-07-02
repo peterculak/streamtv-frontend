@@ -20,7 +20,7 @@ function ArchiveItem(props: {history: any, match: any, programService: ProgramSe
     const {classes, archiveItem, itemClick} = props;
 
     const defaultClickHandler = () => {
-        props.programService.findOne(props.match.params.channelId, archiveItem.slug).then((programArchive: any) => {
+        props.programService.findOne(archiveItem.slug).then((programArchive: any) => {
             dispatch(ACTIONS.selectSeriesArchive(programArchive));
             props.history.push(`/${props.match.params.channelId}/${archiveItem.slug}`);
         });

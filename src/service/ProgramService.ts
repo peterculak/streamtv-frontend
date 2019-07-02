@@ -19,15 +19,23 @@ class ProgramService implements ProgramServiceInterface {
                 .then((channels: any) => {
                     this.channels = JSON.parse(channels);
                     const filename = this.channels[channelId];
-                    return this.fetchChannel(channelId, filename);
+                    return this.fetchChannel(filename);
                 });
         } else {
-            return this.fetchChannel(channelId, filename);
+            return this.fetchChannel(filename);
         }
     }
 
-    private fetchChannel(channelId: string, filename: string) {
-        const url = this.basename ? `${this.basename}/data/${channelId}/${filename}` : `/data/${channelId}/${filename}`;
+    findOne(slug: string): Promise<Array<any>> {
+        const url = this.basename ? `${this.basename}/data/${slug}` : `/data/${slug}`;
+        return fetch(url)
+            .then((r: Response) => r.text())
+            .then((encrypted: string) => JSON.parse(this.decrypt(encrypted)))
+            ;
+    }
+
+    private fetchChannel(filename: string) {
+        const url = this.basename ? `${this.basename}/data/${filename}` : `/data/${filename}`;
         return fetch(url).then((r: any) => r.text())
             .then((content: string) => JSON.parse(this.decrypt(content)));
     }
@@ -35,14 +43,6 @@ class ProgramService implements ProgramServiceInterface {
     private decrypt(content: string): string {
         const bytes = crypto.AES.decrypt(content, process.env.REACT_APP_PASSWORD as string);
         return bytes.toString(crypto.enc.Utf8);
-    }
-
-    findOne(channel: string, slug: string): Promise<Array<any>> {
-        const url = this.basename ? `${this.basename}/data/${channel}/${slug}` : `/data/${channel}/${slug}`;
-        return fetch(url)
-            .then((r: Response) => r.text())
-            .then((encrypted: string) => JSON.parse(this.decrypt(encrypted)))
-            ;
     }
 }
 

@@ -66,7 +66,7 @@ class ProgramDetailController extends React.Component<PropsInterface, any> {
             });
         });
 
-        this.props.programService.findOne(params.channelId, params.slug).then((programArchive: any) => {
+        this.props.programService.findOne(params.slug).then((programArchive: any) => {
             this.setState({
                 archive: programArchive,
                 selectedSeasonIndex: programArchive.seasons.length - 1

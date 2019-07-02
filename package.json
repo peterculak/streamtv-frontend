@@ -48,13 +48,10 @@
     "watch": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rm -rf ./public/data/*",
-    "refresh-data": "npm run clean && npm run create-dirs && npm run copy-data",
+    "refresh-data": "npm run clean && npm run copy-data",
+    "copy-data": "npm run copy-channels-index && npm run copy-program-data",
     "copy-channels-index": "cp ../streamtv/var/cache/channels.json ./public/data/",
-    "copy-data": "npm run copy-joj-data && npm run copy-wau-data && npm run copy-plus-data && npm run copy-channels-index",
-    "create-dirs": "mkdir ./public/data/joj.sk; mkdir ./public/data/wau.joj.sk; mkdir ./public/data/plus.joj.sk",
-    "copy-joj-data": "find ../streamtv/var/cache/joj.sk/ -type f ! -name \"*.*\" -exec cp {} ./public/data/joj.sk/ \\;",
-    "copy-wau-data": "find ../streamtv/var/cache/wau.joj.sk/ -type f ! -name \"*.*\" -exec cp {} ./public/data/wau.joj.sk/ \\;",
-    "copy-plus-data": "find ../streamtv/var/cache/plus.joj.sk/ -type f ! -name \"*.*\" -exec cp {} ./public/data/plus.joj.sk/ \\;"
+    "copy-program-data": "find ../streamtv/var/cache/ -type f ! -name \"*.*\" -exec cp {} ./public/data/ \\;"
   },
   "eslintConfig": {
     "extends": "react-app"
