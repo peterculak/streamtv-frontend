@@ -8,6 +8,7 @@ import Player from "../../../components/player";
 import Playlist from "../../../components/playlist";
 import ErrorBoundary from "../../../components/errorBoundary";
 import Hidden from '@material-ui/core/Hidden';
+import {useAuth} from "../../../context/authContext";
 
 const styles = (theme: Theme) => ({
     videoPlayer: {
@@ -29,6 +30,7 @@ function EpisodeDetailController(props: any) {
     }));
 
     const dispatch = useDispatch();
+    const auth = useAuth() as any;
     const {classes} = props;
 
     //this happens when somebody loads url directly not coming from programs list view
@@ -36,6 +38,8 @@ function EpisodeDetailController(props: any) {
         if (!seriesArchive) {
             props.programService.findOne(props.match.params.slug).then((newArchive: Array<any>) => {
                 dispatch(ITEM_ACTIONS.selectSeriesArchive(newArchive));
+            }).catch((e: Error) => {
+                auth.logout();
             });
         }
     }, [seriesArchive]);

@@ -7,9 +7,11 @@ import ArchiveItem from "../../../components/archiveItem";
 import ScrollManager from "../../../components/scrollManager";
 import {useSelector, useDispatch} from 'react-redux';
 import * as ITEM_ACTIONS from "../../../actions/archiveItem";
+import {useAuth} from "../../../context/authContext";
 
 function ProgramController(props: any) {
     const dispatch = useDispatch();
+    const auth = useAuth() as any;
     const {archives} = useSelector((state: any) => ({
         archives: state.selectedTVChannelArchive
     }));
@@ -20,6 +22,8 @@ function ProgramController(props: any) {
         if (!archive || !archive.length) {
             props.programService.findAll(props.match.params.channelId).then((archive: Array<any>) => {
                 dispatch(ITEM_ACTIONS.selectTVChannelArchive(props.match.params.channelId, archive));
+            }).catch((e: Error) => {
+                auth.logout();
             });
         }
     }, [archive]);

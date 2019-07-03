@@ -3,15 +3,23 @@ import AuthInterface from "../service/auth/AuthInterface";
 const AuthContext = React.createContext({});
 
 function AuthProvider(props: {authService: AuthInterface}) {
-    const [password, setPassword] = React.useState('');
+    const PASSWORD_KEY = 'password';
+    const cached = sessionStorage.getItem(PASSWORD_KEY);
+    if (cached) {
+        props.authService.login(cached);
+    }
+
+    const [password, setPassword] = React.useState(props.authService.password);
 
     const login = (password: string) => {
         props.authService.login(password);
+        sessionStorage.setItem(PASSWORD_KEY, password);
         setPassword(password);
     };
 
     const logout = () => {
         props.authService.logout();
+        sessionStorage.clear();
         setPassword('');
     };
 
