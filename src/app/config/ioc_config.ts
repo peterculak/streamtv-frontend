@@ -10,10 +10,15 @@ import Auth from "../../service/auth/index";
 
 let container = new Container();
 container.bind<AuthInterface>(CONSTANTS.AUTH).to(Auth).inSingletonScope();
-container.bind<ChannelServiceInterface>(CONSTANTS.CHANNELS).to(ChannelService);
-
 const auth = container.get<AuthInterface>(CONSTANTS.AUTH);
+
+const channelService = () => new ChannelService(
+    process.env.REACT_APP_BASENAME as string,
+    auth.password
+);
+container.bind<ChannelServiceInterface>(CONSTANTS.CHANNELS).toDynamicValue(channelService);
 container.bind<ProgramServiceInterface>(CONSTANTS.PROGRAMS).toDynamicValue( () => new ProgramService(
+    channelService(),
     process.env.REACT_APP_BASENAME as string,
     auth.password
 ));

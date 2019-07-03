@@ -1,29 +1,24 @@
 import {injectable} from "inversify";
 import "reflect-metadata";
-import ProgramServiceInterface from "./ProgramServiceInterface";
 import * as crypto from "crypto-js";
+import ProgramServiceInterface from "./ProgramServiceInterface";
+import {ChannelInterface} from "../entities/ChannelInterface";
+import ChannelServiceInterface from "./ChannelServiceInterface";
 
 @injectable()
 class ProgramService implements ProgramServiceInterface {
-    private channels: any = {};
-
-    constructor(private readonly basename: string, private readonly password: string) {
+    constructor(
+        private channelService: ChannelServiceInterface,
+        private readonly basename: string,
+        private readonly password: string) {
     }
 
     findAll(channelId: string): Promise<Array<{}>> {
-        const channelsUrl = this.basename ? `${this.basename}/data/channels.json` : '/data/channels.json';
-        const filename = this.channels[channelId];
-
-        if (!this.channels.length) {
-            return fetch(channelsUrl).then((r: any) => r.text())
-                .then((channels: any) => {
-                    this.channels = JSON.parse(channels);
-                    const filename = this.channels[channelId];
-                    return this.fetchChannel(filename);
-                });
-        } else {
-            return this.fetchChannel(filename);
-        }
+        return this.channelService.find(channelId).then((channel: ChannelInterface) => {
+            const url = this.basename ? `${this.basename}/data/${channel.datafile}` : `/data/${channel.datafile}`;
+            return fetch(url).then((r: any) => r.text())
+                .then((content: string) => JSON.parse(this.decrypt(content)));
+        });
     }
 
     findOne(slug: string): Promise<Array<any>> {
@@ -32,12 +27,6 @@ class ProgramService implements ProgramServiceInterface {
             .then((r: Response) => r.text())
             .then((encrypted: string) => JSON.parse(this.decrypt(encrypted)))
             ;
-    }
-
-    private fetchChannel(filename: string) {
-        const url = this.basename ? `${this.basename}/data/${filename}` : `/data/${filename}`;
-        return fetch(url).then((r: any) => r.text())
-            .then((content: string) => JSON.parse(this.decrypt(content)));
     }
 
     private decrypt(content: string): string {

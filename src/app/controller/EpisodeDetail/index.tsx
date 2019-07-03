@@ -38,9 +38,7 @@ function EpisodeDetailController(props: any) {
         if (!seriesArchive) {
             props.programService.findOne(props.match.params.slug).then((newArchive: Array<any>) => {
                 dispatch(ITEM_ACTIONS.selectSeriesArchive(newArchive));
-            }).catch((e: Error) => {
-                auth.logout();
-            });
+            }).catch((e: Error) => auth.logout());
         }
     }, [seriesArchive]);
 

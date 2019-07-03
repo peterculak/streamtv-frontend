@@ -1,4 +1,6 @@
 export interface ChannelInterface {
     id: string;
-    name: string;
+    datafile: string;
+    name?: string;
+    image?: string;
 }
