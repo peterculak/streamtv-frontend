@@ -10,18 +10,27 @@ import CONSTANTS from "../app/config/constants/ioc";
 import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
 import {useAuth} from "../context/authContext";
+import {withStyles, Theme} from '@material-ui/core/styles';
 
 interface PropsInterface {
-    container: Container
+    classes: any,
+    container: Container,
 }
+
+const styles = (theme: Theme) => ({
+    main: {
+        height: '100%',
+    }
+});
 
 function Main(props: PropsInterface) {
     const channelService = props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS);
     const programService = props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS);
     const auth = useAuth() as any;
+    const {classes} = props;
 
     return auth.isLoggedIn() ? (
-        <main>
+        <main className={classes.main}>
             <Switch>
                 <Route exact path='/'
                        render={(props: any) => <ChannelsController
@@ -47,7 +56,7 @@ function Main(props: PropsInterface) {
             </Switch>
         </main>
     ) : (
-        <main>
+        <main className={classes.main}>
             <Switch>
                 <Route path='/'
                        render={(props: any) => <AuthController
@@ -59,4 +68,4 @@ function Main(props: PropsInterface) {
     );
 }
 
-export default Main;
+export default withStyles(styles, {withTheme: true})(Main);

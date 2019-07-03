@@ -9,7 +9,7 @@ const baseSettings = {
             light: red[500],
             main: '#065fd4',
             dark: indigo[700],
-            contrastText: '#065fd4'
+            // contrastText: '#065fd4'
         },
         secondary: {
             light: '#eeeeee',

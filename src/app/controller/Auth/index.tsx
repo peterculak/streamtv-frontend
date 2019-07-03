@@ -10,8 +10,17 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import {useAuth} from "../../../context/authContext";
-
+import Box from '@material-ui/core/Box';
 const styles = (theme: Theme) => ({
+    form: {
+        height: '100%',
+    },
+    container: {
+        height: '100%',
+    },
+    gridItem: {
+        width: '100%',
+    }
 });
 
 interface State {
@@ -39,32 +48,53 @@ function AuthController(props: any) {
         auth.login(values.password);
     };
 
-    return (
-        <form onSubmit={handleLogin}>
-            <Grid container direction="column">
-                <Grid item>
-                        <FormControl>
-                            <InputLabel htmlFor="adornment-password">Password</InputLabel>
-                            <Input
-                                id="adornment-password"
-                                type={values.showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                onChange={handleChange('password')}
-                                autoFocus
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton aria-label="Toggle password visibility"
-                                                    onClick={handleClickShowPassword}>
-                                            {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                            />
-                        </FormControl>
-                </Grid>
+    const {classes} = props;
 
-                <Grid item>
-                    <Button onClick={handleLogin}>Login</Button>
+    return (
+        <form onSubmit={handleLogin} className={classes.form}>
+            <Grid
+                className={classes.container}
+                alignItems="center"
+                justify="center"
+                container
+                direction="row"
+            >
+                <Grid item xs={8} md={3} lg={2}>
+                    <Grid container
+                          alignItems="center"
+                          justify="center"
+                          spacing={2}
+                    >
+
+                        <Grid item className={classes.gridItem}>
+                            <Box textAlign="right">
+                                <FormControl>
+                                    <InputLabel htmlFor="adornment-password">Password</InputLabel>
+                                    <Input
+                                        id="adornment-password"
+                                        type={values.showPassword ? 'text' : 'password'}
+                                        value={values.password}
+                                        onChange={handleChange('password')}
+                                        autoFocus
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton aria-label="Toggle password visibility"
+                                                            onClick={handleClickShowPassword}>
+                                                    {values.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
+                            </Box>
+                        </Grid>
+
+                        <Grid item className={classes.gridItem}>
+                            <Box textAlign="right">
+                                <Button size="large" variant="contained" color="primary" onClick={handleLogin}>Login</Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </form>
