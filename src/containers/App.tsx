@@ -5,18 +5,23 @@ import Layout from './Layout';
 import streamTv from './themes/streamTv';
 import {Container} from "inversify";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import {AuthProvider} from "../context/authContext";
+import AuthInterface from "../service/auth/AuthInterface";
+import CONSTANTS from "../app/config/constants/ioc";
 
 interface PropsInterface {
     container: Container
 }
 class App extends React.Component<PropsInterface, any> {
     render() {
-
+        const authService = this.props.container.get<AuthInterface>(CONSTANTS.AUTH);
         return (
             <HashRouter>
                 <MuiThemeProvider theme={streamTv}>
                     <CssBaseline>
-                        <Layout container={this.props.container} {...this.props} />
+                        <AuthProvider authService={authService}>
+                            <Layout container={this.props.container} {...this.props} />
+                        </AuthProvider>
                     </CssBaseline>
                 </MuiThemeProvider>
             </HashRouter>

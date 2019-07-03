@@ -7,7 +7,7 @@ import * as crypto from "crypto-js";
 class ProgramService implements ProgramServiceInterface {
     private channels: any = {};
 
-    constructor(private readonly basename: string) {
+    constructor(private readonly basename: string, private readonly password: string) {
     }
 
     findAll(channelId: string): Promise<Array<{}>> {
@@ -41,7 +41,7 @@ class ProgramService implements ProgramServiceInterface {
     }
 
     private decrypt(content: string): string {
-        const bytes = crypto.AES.decrypt(content, process.env.REACT_APP_PASSWORD as string);
+        const bytes = crypto.AES.decrypt(content, this.password);
         return bytes.toString(crypto.enc.Utf8);
     }
 }

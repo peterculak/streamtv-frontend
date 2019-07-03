@@ -5,7 +5,6 @@ import {ChannelInterface} from "../../../entities/ChannelInterface";
 const device = require('current-device').default;
 import Grid from '@material-ui/core/Grid';
 import TvChannel from "../../../components/tvChannel";
-import * as crypto from "crypto-js";
 
 interface PropsInterface {
     channelService: ChannelServiceInterface,
