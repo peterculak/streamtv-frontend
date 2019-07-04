@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
 import {ChannelInterface} from "../../../entities/ChannelInterface";
-
+import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import TvChannel from "../../../components/tvChannel";
 import {useAuth} from "../../../context/authContext";
@@ -37,18 +37,17 @@ function ChannelsController(props: PropsInterface) {
 
     return (
         <div className="app-wrapper">
-            {channels && channels.length &&
-                (
-                    <Grid container spacing={2}>
-                        {channels.map((channel: any) => (
-                            <Grid key={channel.id} item xs={12} sm={6} md={4}>
-                                <TvChannel itemClick={() => history.push(`/${channel.id}/`)}
-                                           channel={channel}/>
-                            </Grid>
-                        ))}
-                    </Grid>
-                )
-            }
+            {channels.length ?
+            (
+                <Grid container spacing={2}>
+                    {channels.map((channel: any) => (
+                        <Grid key={channel.id} item xs={12} sm={6} md={4}>
+                            <TvChannel itemClick={() => history.push(`/${channel.id}/`)}
+                                       channel={channel}/>
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : ''}
         </div>
     );
 }

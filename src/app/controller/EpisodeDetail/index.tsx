@@ -62,7 +62,8 @@ function EpisodeDetailController(props: any) {
                           direction="row"
                           justify="flex-start"
                           alignItems="flex-start">
-                        <Grid container direction="column" className={classes.videoPlayer} style={{height: videoElementHeight}}>
+                        <Grid container direction="column" className={classes.videoPlayer}
+                              style={{height: videoElementHeight}}>
                             <ErrorBoundary>
                                 <Player/>
                             </ErrorBoundary>

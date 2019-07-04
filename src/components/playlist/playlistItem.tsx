@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ResponsiveLazyLoad from "../responsiveLazyLoad";
 
 const styles = (theme: Theme) => createStyles({
     card: {
@@ -155,6 +156,12 @@ function PlaylistItem(props: any) {
 
                             <Grid item xs={6} sm={3} md={5}>
                                 <Box className={classes.playlistPositionNumberWidth}>
+                                    <ResponsiveLazyLoad
+                                        debounce={false}
+                                        offsetVertical={600}
+                                        throttle={250}
+                                        height={mdUp ? 94 : 90}
+                                    >
                                     <CardMedia
                                         className={classes.media}
                                         image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r640x480')}
@@ -177,6 +184,7 @@ function PlaylistItem(props: any) {
                                         </Typography>
 
                                     </CardMedia>
+                                    </ResponsiveLazyLoad>
                                 </Box>
                             </Grid>
 

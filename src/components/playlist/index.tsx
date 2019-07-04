@@ -19,6 +19,7 @@ import * as ACTIONS from "../../actions/player";
 import PlaylistFactory from "../../service/player/PlaylistFactory";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PlayerInterface from "../../service/player/PlayerInterface";
+
 const fileDownload = require('js-file-download');
 
 const styles = (theme: Theme) => createStyles({
@@ -167,11 +168,11 @@ function Playlist(props: any) {
         const m = url.match(/\.[0-9a-z]+$/i);
         if (m && m[0]) {
             const title = archive.name;
-            let seriesNumber = String(selectedSeasonIndex+1);
-            if (selectedSeasonIndex+1) {
+            let seriesNumber = String(selectedSeasonIndex + 1);
+            if (selectedSeasonIndex + 1) {
                 seriesNumber = '0' + seriesNumber;
             }
-            const series =  `S${seriesNumber}`;
+            const series = `S${seriesNumber}`;
             const meta = player.current().meta as any;
             let episodeNumber = String(meta.episodeNumber);
             if (meta.episodeNumber < 9) {
@@ -180,7 +181,7 @@ function Playlist(props: any) {
             const episode = `E${episodeNumber}`;
             const ext = m[0];
             const quality = player.availableQuality();
-            const filename = title+'_'+series+episode+'_'+quality[player.selectedQualityIndex]+ext;
+            const filename = title + '_' + series + episode + '_' + quality[player.selectedQualityIndex] + ext;
 
             if (mdUp) {
                 fileDownload(

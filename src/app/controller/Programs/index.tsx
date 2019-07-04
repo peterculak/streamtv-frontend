@@ -38,22 +38,26 @@ function ProgramController(props: any) {
         spacing = 2;
     }
 
+    const {classes, ...rest} = props;
+
     return (
         <div className="app-wrapper">
-            <ScrollManager scrollKey="program-list" />
-            {archive &&
-            (<div>
-                <Grid container spacing={spacing as GridSpacing}>
-                    {archive.map(
-                        (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
-                            <ArchiveItem
-                                {...props}
-                                programService={props.programService}
-                                key={archiveItem.title} archiveItem={archiveItem}/>
-                        </Grid>)}
+            <ScrollManager scrollKey="program-list"/>
+            {archive ?
+                (
+                    <Grid container spacing={spacing as GridSpacing}>
+                        {archive.map(
+                            (archiveItem: any) => <Grid key={archiveItem.title} item xs={12} sm={6} md={4}>
+                                <ArchiveItem
+                                    {...rest}
+                                    programService={props.programService}
+                                    key={archiveItem.title}
+                                    archiveItem={archiveItem}
+                                />
+                            </Grid>)}
 
-                </Grid>
-            </div>)}
+                    </Grid>
+                ) : ''}
         </div>
     );
 }

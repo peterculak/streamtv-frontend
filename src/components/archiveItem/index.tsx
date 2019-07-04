@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -9,12 +9,14 @@ import Typography from '@material-ui/core/Typography';
 import {useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/archiveItem";
 import ProgramServiceInterface from "../../service/ProgramServiceInterface";
+import ResponsiveLazyLoad from "../responsiveLazyLoad";
 
-const styles = {
+const mediaHeight = 240;
+const styles = createStyles({
     media: {
-        height: 240,
+        height: mediaHeight,
     },
-};
+});
 
 function ArchiveItem(props: {history: any, match: any, programService: ProgramServiceInterface, classes: any, archiveItem: {slug: string, img: string, title: string}, itemClick?: any}) {
     const {classes, archiveItem, itemClick} = props;
@@ -32,13 +34,20 @@ function ArchiveItem(props: {history: any, match: any, programService: ProgramSe
     const dispatch = useDispatch();
 
     return (
-        <Card className={classes.card} onClick={onClickHandler} square elevation={0}>
+        <Card onClick={onClickHandler} square elevation={0}>
                 <CardActionArea>
-                    <CardMedia
-                        className={classes.media}
-                        image={archiveItem.img.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r600x400')}
-                        title={archiveItem.title}
-                    />
+                    <ResponsiveLazyLoad
+                        debounce={false}
+                        offsetVertical={600}
+                        throttle={250}
+                        height={mediaHeight}
+                    >
+                        <CardMedia
+                            className={classes.media}
+                            image={archiveItem.img.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r400x300')}
+                            title={archiveItem.title}
+                        />
+                    </ResponsiveLazyLoad>
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                             {archiveItem.title}
