@@ -36,18 +36,18 @@ function ArchiveItem(props: {history: any, match: any, programService: ProgramSe
     return (
         <Card onClick={onClickHandler} square elevation={0}>
                 <CardActionArea>
-                    <ResponsiveLazyLoad
-                        debounce={false}
-                        offsetVertical={600}
-                        throttle={250}
-                        height={mediaHeight}
-                    >
+                    {/*<ResponsiveLazyLoad*/}
+                    {/*    debounce={false}*/}
+                    {/*    offsetVertical={600}*/}
+                    {/*    throttle={250}*/}
+                    {/*    height={mediaHeight}*/}
+                    {/*>*/}
                         <CardMedia
                             className={classes.media}
                             image={archiveItem.img.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r400x300')}
                             title={archiveItem.title}
                         />
-                    </ResponsiveLazyLoad>
+                    {/*</ResponsiveLazyLoad>*/}
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                             {archiveItem.title}
