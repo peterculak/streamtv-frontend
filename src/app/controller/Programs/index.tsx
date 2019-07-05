@@ -65,7 +65,7 @@ function ProgramController(props: any) {
 
     const cellMeasurerCache = new CellMeasurerCache({
         fixedWidth: true,
-        defaultHeight: 100
+        defaultHeight: 300
     });
 
     return (

@@ -205,7 +205,7 @@ function Playlist(props: any) {
                         isPlaying={player.currentlyPlayingItemOrder === index + 1}
                         playlistPosition={index + 1}
                         key={index}
-                        episode={data[index]}
+                        episode={playlistItem}
                         itemClick={() => dispatch(ACTIONS.playPlaylistItem(playlistItem))}
                     />
                 </ListItem>
@@ -333,7 +333,7 @@ function Playlist(props: any) {
                 <Grid item xs={12}
                       container
                       direction="row"
-                      spacing={mdUp ? 0 : 0}
+                      spacing={0}
                 >
                     <AutoSizer
                         disableHeight={true}

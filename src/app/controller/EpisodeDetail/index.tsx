@@ -68,7 +68,6 @@ function EpisodeDetailController(props: any) {
                                 <Player/>
                             </ErrorBoundary>
                         </Grid>
-
                         {player && (
                             <Grid container direction="column">
                                 <Box className={classes.rhc}>

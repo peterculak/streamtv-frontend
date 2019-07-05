@@ -170,11 +170,13 @@ function PlaylistItem(props: any) {
                                             </Box>
                                         )}
 
-                                        <Typography variant={'caption'} component="span">
-                                            <Box className={classes.itemLength}>
-                                                {formatLength(episode.length)}
-                                            </Box>
-                                        </Typography>
+                                        {episode.length ? (
+                                            <Typography variant={'caption'} component="span">
+                                                <Box className={classes.itemLength}>
+                                                    {formatLength(episode.length)}
+                                                </Box>
+                                            </Typography>
+                                        ) : ''}
 
                                     </CardMedia>
                                 </Box>
@@ -192,15 +194,18 @@ function PlaylistItem(props: any) {
                                                 {episode.title}
                                             </Typography>
                                         </Grid>
-                                        <Grid item>
-                                            <Typography className={classes.subhead} variant={'subtitle2'} component="p">
-                                                Epizóda: {episode.meta.episodeNumber}
-                                            </Typography>
-                                        </Grid>
+
+                                        {episode['@type'] === 'TVSeries' ? (
+                                            <Grid item>
+                                                <Typography className={classes.subhead} variant={'subtitle2'} component="p">
+                                                    Epizóda: {episode.meta.episodeNumber}
+                                                </Typography>
+                                            </Grid>
+                                        ) : ''}
 
                                         {episode.meta.dateAdded && (
                                             <Grid item>
-                                                <Box mt="-4px">
+                                                <Box mt={episode['@type'] === 'TVSeries' ? '-4px' : '0'}>
                                                     <Typography className={classes.dateAdded} variant={'subtitle2'} component="p">
                                                         Pridané: {episode.meta.dateAdded}
                                                     </Typography>
