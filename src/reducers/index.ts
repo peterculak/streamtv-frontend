@@ -25,7 +25,7 @@ import PlaylistFactory from "../service/player/PlaylistFactory";
 const initialState = {
     player: new Player(),
     selectedTVSeriesArchive: null,
-    selectedTVChannelArchive: {} as any,
+    channelArchives: {} as any,
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -101,7 +101,7 @@ function rootReducer(state = initialState, action: any) {
             state.player.disableLoop();
             return state;
         case SELECT_CHANNEL_ARCHIVE:
-            state.selectedTVChannelArchive[action.payload.channelId] = action.payload.archive;
+            state.channelArchives[action.payload.channelId] = action.payload.archive;
             return state;
         case SELECT_TVSERIES_ARCHIVE:
             state.player.load(PlaylistFactory.createPlaylistForProgramSeason(action.payload.seasons[0]));

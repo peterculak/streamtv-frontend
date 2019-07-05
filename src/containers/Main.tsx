@@ -26,7 +26,7 @@ const styles = (theme: Theme) => ({
 function Main(props: PropsInterface) {
     const channelService = props.container.get<ChannelServiceInterface>(CONSTANTS.CHANNELS);
     const programService = props.container.get<ProgramServiceInterface>(CONSTANTS.PROGRAMS);
-    const auth = useAuth() as any;
+    const auth = useAuth();
     const {classes} = props;
 
     return auth.isLoggedIn() ? (

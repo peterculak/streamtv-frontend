@@ -29,7 +29,7 @@ interface State {
 }
 
 function AuthController(props: any) {
-    const auth = useAuth() as any;
+    const auth = useAuth();
 
     const [values, setValues] = React.useState<State>({
         password: '',
@@ -65,7 +65,6 @@ function AuthController(props: any) {
                           justify="center"
                           spacing={2}
                     >
-
                         <Grid item className={classes.gridItem}>
                             <Box textAlign="right">
                                 <FormControl>

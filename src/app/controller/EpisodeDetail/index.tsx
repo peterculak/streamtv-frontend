@@ -30,7 +30,7 @@ function EpisodeDetailController(props: any) {
     }));
 
     const dispatch = useDispatch();
-    const auth = useAuth() as any;
+    const auth = useAuth();
     const {classes} = props;
 
     //this happens when somebody loads url directly not coming from programs list view

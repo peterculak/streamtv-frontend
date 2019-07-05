@@ -11,9 +11,9 @@ import {useAuth} from "../../../context/authContext";
 
 function ProgramController(props: any) {
     const dispatch = useDispatch();
-    const auth = useAuth() as any;
+    const auth = useAuth();
     const {archives} = useSelector((state: any) => ({
-        archives: state.selectedTVChannelArchive
+        archives: state.channelArchives
     }));
 
     const archive = archives[props.match.params.channelId];

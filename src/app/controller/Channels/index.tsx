@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ChannelServiceInterface from "../../../service/ChannelServiceInterface";
 import {ChannelInterface} from "../../../entities/ChannelInterface";
-import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import TvChannel from "../../../components/tvChannel";
 import {useAuth} from "../../../context/authContext";
@@ -13,7 +12,7 @@ interface PropsInterface {
 }
 
 function ChannelsController(props: PropsInterface) {
-    const auth = useAuth() as any;
+    const auth = useAuth();
     const [channels, setChannels] = useState<any>([]);
 
     useEffect(() => {

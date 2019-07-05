@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, forwardRef} from 'react';
 import PropTypes from 'prop-types';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import { AutoSizer } from 'react-virtualized';
 import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +21,7 @@ import * as ACTIONS from "../../actions/player";
 import PlaylistFactory from "../../service/player/PlaylistFactory";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PlayerInterface from "../../service/player/PlayerInterface";
+import ListItem from '@material-ui/core/ListItem';
 
 const fileDownload = require('js-file-download');
 
@@ -26,10 +29,6 @@ const styles = (theme: Theme) => createStyles({
     playlist: {
         borderBottom: '1px solid rgba(136, 136, 136, 0.4)',
         backgroundColor: 'hsla(0,0%,6.7%,.8)',
-        [theme.breakpoints.down('sm')]: {
-            height: '600px',
-            overflowY: 'auto',
-        },
         [theme.breakpoints.up('md')]: {
             padding: '0 8px 8px 0',
             backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -97,12 +96,13 @@ const styles = (theme: Theme) => createStyles({
         height: '40px',
     },
     playlistItems: {
+        height: '100%',
         [theme.breakpoints.up('md')]: {
             backgroundColor: 'rgba(238, 238, 238, 0.6)',
-            paddingTop: '8px',
-            overflowY: 'auto',
+            // paddingTop: '8px',
+            // overflowY: 'auto',
         },
-        paddingBottom: '12px',
+        // paddingBottom: '12px',
     },
     firstButton: {
         marginLeft: '-10px',
@@ -148,12 +148,13 @@ function Playlist(props: any) {
     function setHeight() {
         const videoHeight = parseInt(player.getVideoElementHeight());
         const playlistHeight = window.innerHeight - videoHeight;
-        const topPadding = 16;
-        const playlistHeaderHeight = 100;
+        const bodyTopPadding = 16;
         if (mdUp) {
-            setPlaylistHeight(window.innerHeight - 2 * topPadding - playlistHeaderHeight + 'px');
+            const playlistHeaderHeight = 100;
+            setPlaylistHeight(window.innerHeight - 2 * bodyTopPadding - playlistHeaderHeight + 'px');
         } else {
-            setPlaylistHeight(playlistHeight + 'px');
+            const playlistHeaderHeight = 96;
+            setPlaylistHeight( `${playlistHeight - playlistHeaderHeight}px`);
         }
     }
 
@@ -194,8 +195,31 @@ function Playlist(props: any) {
         }
     }
 
+    function Row(props: ListChildComponentProps) {
+        const { data, index, style } = props;
+        const playlistItem = data[index];
+        return (
+            <Grid item xs={12}>
+                <ListItem style={style} key={index} disableGutters={true}>
+                    <PlaylistItem
+                        isPlaying={player.currentlyPlayingItemOrder === index + 1}
+                        playlistPosition={index + 1}
+                        key={index}
+                        episode={data[index]}
+                        itemClick={() => dispatch(ACTIONS.playPlaylistItem(playlistItem))}
+                    />
+                </ListItem>
+            </Grid>
+        );
+    }
+
+    Row.propTypes = {
+        index: PropTypes.number,
+        style: PropTypes.object,
+    } as any;
+
     return (
-        <div style={{height: mdUp ? 'auto' : playlistHeight}} className={classes.playlist}>
+        <div className={classes.playlist}>
             <Box className={classes.playlistHeader}>
                 {player.current() && (
                     <div className={classes.playlistHeaderMetaData}>
@@ -305,24 +329,27 @@ function Playlist(props: any) {
                 </div>
             </Box>
 
-            <Box style={{height: mdUp ? playlistHeight : 'auto'}} className={classes.playlistItems}>
+            <Box style={{height: playlistHeight}} className={classes.playlistItems}>
                 <Grid item xs={12}
                       container
                       direction="row"
-                      spacing={mdUp ? 1 : 0}
+                      spacing={mdUp ? 0 : 0}
                 >
-                    {player.isLoaded() && player.playlistItems.map(
-                        (playlistItem: any, index: number) =>
-                            <Grid key={index + playlistItem.title} item xs={12}>
-                                <PlaylistItem
-                                    isPlaying={player.currentlyPlayingItemOrder === index + 1}
-                                    playlistPosition={index + 1}
-                                    key={index + playlistItem.title}
-                                    episode={playlistItem}
-                                    itemClick={() => dispatch(ACTIONS.playPlaylistItem(playlistItem))}
-                                />
-                            </Grid>
-                    )}
+                    <AutoSizer
+                        disableHeight={true}
+                    >
+                        {({ height, width }) => (
+                            <FixedSizeList
+                                height={parseInt(playlistHeight)}
+                                width={width}
+                                itemSize={102}
+                                itemCount={player.playlistItemsCount}
+                                itemData={player.playlistItems}
+                            >
+                                {Row}
+                            </FixedSizeList>
+                        )}
+                    </AutoSizer>
                 </Grid>
             </Box>
         </div>

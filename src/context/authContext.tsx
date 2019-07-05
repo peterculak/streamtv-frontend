@@ -30,8 +30,8 @@ function AuthProvider(props: {authService: AuthInterface}) {
     )
 }
 
-function useAuth() {
-    const context = React.useContext(AuthContext);
+function useAuth<T = AuthInterface>(): T {
+    const context = React.useContext(AuthContext) as T;
     if (context === undefined) {
         throw new Error(`useAuth must be used within a AuthProvider`)
     }
