@@ -43,7 +43,9 @@ const styles = (theme: Theme) => createStyles({
             padding: '0 0 0 12px',
         },
         [theme.breakpoints.up('md')]: {
-            backgroundColor: 'rgba(238, 238, 238)',
+            // backgroundColor: 'rgba(238, 238, 238)',//lighttheme
+            backgroundColor: 'hsla(0,0%, 53.3%, 0.4)',//darktheme
+            color: '#fff',//darktheme
             padding: '0 0 0 16px',
         },
     },
@@ -73,7 +75,7 @@ const styles = (theme: Theme) => createStyles({
         fontSize: '12px',
         lineHeight: '16.5px',
         [theme.breakpoints.up('md')]: {
-            color: 'rgba(17, 17, 17, 0.6)',
+            // color: 'rgba(17, 17, 17, 0.6)',//lighttheme
         },
     },
     controlBar: {
@@ -98,7 +100,8 @@ const styles = (theme: Theme) => createStyles({
     playlistItems: {
         height: '100%',
         [theme.breakpoints.up('md')]: {
-            backgroundColor: 'rgba(238, 238, 238, 0.6)',
+            backgroundColor: 'hsla(0,0%, 53.3%, 0.2)',//darktheme
+            // backgroundColor: 'rgba(238, 238, 238, 0.6)',
             // paddingTop: '8px',
             // overflowY: 'auto',
         },

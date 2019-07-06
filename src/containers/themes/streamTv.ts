@@ -7,7 +7,8 @@ const baseSettings = {
     palette: {
         primary: {
             light: red[500],
-            main: '#065fd4',
+            // main: '#065fd4',//lighttheme
+            main: 'rgb(62, 166, 255)',//darktheme
             dark: indigo[700],
             // contrastText: '#065fd4'
         },
@@ -18,7 +19,8 @@ const baseSettings = {
             contrastText: '#fff'
         },
         background: {
-            default: '#fff'
+            // default: '#fff'//lighttheme
+            default: 'hsl(0, 0%, 7%)',//darktheme
         }
     },
     typography: {

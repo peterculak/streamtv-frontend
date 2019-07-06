@@ -42,7 +42,7 @@ class PlaylistFactory {
                 dateAdded = new Date(correctlyFormattedDateString);
             } catch (error){}
         }
-        if (!dateAdded) {
+        if (!this.isValidDate(dateAdded)) {
             dateAdded = item.dateAdded;
         }
         return new PlaylistItem(

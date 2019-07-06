@@ -9,9 +9,22 @@ import Divider from '@material-ui/core/Divider';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
+import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import PlayerInterface from "../../service/player/PlayerInterface";
 
-function Index(props: any, ref: any) {
+const styles = (theme: Theme) => createStyles({
+    title: {
+        color: 'white'//darktheme
+    },
+    subtitle: {
+        color: 'white'//darktheme
+    },
+    qualitySelect: {
+        color: 'white'//darktheme
+    }
+});
+
+function Player(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef<HTMLVideoElement>(null);
 
@@ -43,6 +56,7 @@ function Index(props: any, ref: any) {
         dispatch(ACTIONS.setStreamQuality(event.target.value));
     };
 
+    const {classes} = props;
     return (
         <React.Fragment>
             <video ref={playerRef} width="100%" height="100%" controls/>
@@ -55,13 +69,14 @@ function Index(props: any, ref: any) {
                               alignItems="flex-start">
 
                             <Grid item>
-                                <Typography variant="h6" component="h1">{player.current().title}</Typography>
-                                <Typography variant={'caption'} component="p">{player.current().subtitle}</Typography>
+                                <Typography className={classes.title} variant="h6" component="h1">{player.current().title}</Typography>
+                                <Typography className={classes.subtitle} variant={'caption'} component="p">{player.current().subtitle}</Typography>
                             </Grid>
 
                             <Grid item>
                                 <FormControl>
                                     <Select
+                                        className={classes.qualitySelect}
                                         value={player ? player.selectedQualityIndex : 0}
                                         onChange={changeVideoIndex}
                                         name='selectedQualityIndex'
@@ -83,4 +98,4 @@ function Index(props: any, ref: any) {
     );
 }
 
-export default Index;
+export default withStyles(styles)(Player);

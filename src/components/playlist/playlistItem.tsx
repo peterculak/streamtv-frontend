@@ -15,6 +15,8 @@ import ReactTimeAgo from 'react-time-ago';
 const styles = (theme: Theme) => createStyles({
     card: {
         backgroundColor: 'transparent',
+        //darktheme no color here below
+        color: 'rgb(255, 255, 255)',
         [theme.breakpoints.down('sm')]: {
             padding: '12px',
             color: 'rgb(255, 255, 255)',
@@ -70,7 +72,7 @@ const styles = (theme: Theme) => createStyles({
     },
     dateAdded: {
         fontSize: '12px',
-        opacity: .6,
+        // opacity: .6,//lighttheme
     },
     playlistPosition: {
         position: 'absolute',
@@ -90,10 +92,13 @@ const styles = (theme: Theme) => createStyles({
     },
     playlistPositionArrow: {
         fontSize: '16px',
-        color: theme.palette.text.hint,
+        // color: theme.palette.text.hint,//lighttheme
+        color: 'rgb(62, 166, 255)'//darktheme
+        //rgb(62, 166, 255)
     },
     playlistPositionNumber: {
-        color: theme.palette.text.secondary,
+        // color: theme.palette.text.secondary,//lighttheme
+        color: 'hsl(0, 0%, 53.3%)'//darktheme
     },
     itemLength: {
         position: 'absolute',
