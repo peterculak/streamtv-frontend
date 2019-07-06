@@ -11,10 +11,12 @@ import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
 import {useAuth} from "../context/authContext";
 import {withStyles, Theme} from '@material-ui/core/styles';
+import LocaleInterface from "../entities/LocaleInterface";
 
 interface PropsInterface {
     classes: any,
     container: Container,
+    locale: LocaleInterface,
 }
 
 const styles = (theme: Theme) => ({
@@ -33,22 +35,25 @@ function Main(props: PropsInterface) {
         <main className={classes.main}>
             <Switch>
                 <Route exact path='/'
-                       render={(props: any) => <ChannelsController
+                       render={(routeProps: any) => <ChannelsController
                            channelService={channelService}
-                           {...props}
+                           locale={props.locale}
+                           {...routeProps}
                        />}
                 />
                 <Route exact path='/:channelId'
-                       render={(props: any) => <ProgramController
+                       render={(routeProps: any) => <ProgramController
                            programService={programService}
-                           {...props}
+                           locale={props.locale}
+                           {...routeProps}
                        />}
                 />
                 <Route exact path='/:channelId/:slug'
-                       render={(props: any) => <EpisodeDetailController
+                       render={(routeProps: any) => <EpisodeDetailController
                            channelService={channelService}
                            programService={programService}
-                           {...props}
+                           locale={props.locale}
+                           {...routeProps}
                        />}
                 />
                 <Route

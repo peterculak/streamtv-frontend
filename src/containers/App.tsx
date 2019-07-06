@@ -8,9 +8,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {AuthProvider} from "../context/authContext";
 import AuthInterface from "../service/auth/AuthInterface";
 import CONSTANTS from "../app/config/constants/ioc";
+import LocaleInterface from "../entities/LocaleInterface";
 
 interface PropsInterface {
-    container: Container
+    container: Container,
+    locale: LocaleInterface,
 }
 class App extends React.Component<PropsInterface, any> {
     render() {

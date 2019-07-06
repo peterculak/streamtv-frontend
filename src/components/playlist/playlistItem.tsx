@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ReactTimeAgo from 'react-time-ago';
 
 const styles = (theme: Theme) => createStyles({
     card: {
@@ -207,7 +208,7 @@ function PlaylistItem(props: any) {
                                             <Grid item>
                                                 <Box mt={episode['@type'] === 'TVSeries' ? '-4px' : '0'}>
                                                     <Typography className={classes.dateAdded} variant={'subtitle2'} component="p">
-                                                        Pridané: {episode.meta.dateAdded}
+                                                        <ReactTimeAgo locale={props.locale.lang()} date={new Date(episode.meta.dateAdded)}/>
                                                     </Typography>
                                                 </Box>
                                             </Grid>)}

@@ -110,6 +110,8 @@ const styles = (theme: Theme) => createStyles({
 });
 
 function Playlist(props: any) {
+    const locale = props.locale;
+
     const dispatch = useDispatch();
 
     const {player, archive} = useSelector<{ player: PlayerInterface, selectedTVSeriesArchive: any }, { player: PlayerInterface, archive: any }>((state) => ({
@@ -202,6 +204,7 @@ function Playlist(props: any) {
             <Grid item xs={12}>
                 <ListItem style={style} key={index} disableGutters={true}>
                     <PlaylistItem
+                        locale={locale}
                         isPlaying={player.currentlyPlayingItemOrder === index + 1}
                         playlistPosition={index + 1}
                         key={index}
@@ -345,6 +348,7 @@ function Playlist(props: any) {
                                 itemSize={102}
                                 itemCount={player.playlistItemsCount}
                                 itemData={player.playlistItems}
+                                overscanCount={5}
                             >
                                 {Row}
                             </FixedSizeList>

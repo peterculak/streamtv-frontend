@@ -8,6 +8,12 @@ import CONSTANTS from "./constants/ioc";
 import AuthInterface from "../../service/auth/AuthInterface";
 import Auth from "../../service/auth/index";
 
+import JavascriptTimeAgo from 'javascript-time-ago';
+import sk from 'javascript-time-ago/locale/sk';
+import en from 'javascript-time-ago/locale/en';
+JavascriptTimeAgo.locale(en);
+JavascriptTimeAgo.locale(sk);
+
 let container = new Container();
 container.bind<AuthInterface>(CONSTANTS.AUTH).to(Auth).inSingletonScope();
 const auth = container.get<AuthInterface>(CONSTANTS.AUTH);

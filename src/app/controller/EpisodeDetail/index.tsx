@@ -31,7 +31,7 @@ function EpisodeDetailController(props: any) {
 
     const dispatch = useDispatch();
     const auth = useAuth();
-    const {classes} = props;
+    const {classes, ...rest} = props;
 
     //this happens when somebody loads url directly not coming from programs list view
     useEffect(() => {
@@ -72,7 +72,7 @@ function EpisodeDetailController(props: any) {
                             <Grid container direction="column">
                                 <Box className={classes.rhc}>
                                     <ErrorBoundary>
-                                        <Playlist/>
+                                        <Playlist {...rest}/>
                                     </ErrorBoundary>
                                 </Box>
                             </Grid>
@@ -95,7 +95,7 @@ function EpisodeDetailController(props: any) {
                             <Grid item sm={12} md={4}>
                                 <Box className={classes.rhc}>
                                     <ErrorBoundary>
-                                        <Playlist/>
+                                        <Playlist {...rest}/>
                                     </ErrorBoundary>
                                 </Box>
                             </Grid>

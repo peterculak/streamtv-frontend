@@ -6,13 +6,18 @@ import App from './containers/App';
 import {container} from "./app/config/ioc_config";
 import { Provider } from 'react-redux'
 import store from "./store";
+import LocaleInterface from "./entities/LocaleInterface";
+import Locale from "./entities/Locale";
+const localeString = require('browser-locale')();
 
 class ReactAppKernel extends Kernel {
     protected readonly root: HTMLElement;
+    protected locale: LocaleInterface;
 
     constructor(root: HTMLElement) {
         super();
         this.root = root;
+        this.locale = Locale.fromString(localeString);
     }
 
     static attachTo(root: HTMLElement): ReactAppKernel {
@@ -21,7 +26,7 @@ class ReactAppKernel extends Kernel {
 
     run(): void {
         this.boot();
-        render(<Provider store={store}><App container={this._container}/></Provider>, this.root);
+        render(<Provider store={store}><App locale={this.locale} container={this._container}/></Provider>, this.root);
     }
 
     protected initializeContainer(): void {

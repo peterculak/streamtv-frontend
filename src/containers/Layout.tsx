@@ -2,10 +2,12 @@ import * as React from 'react';
 import {withStyles, Theme} from '@material-ui/core/styles';
 import Main from './Main';
 import {Container} from "inversify";
+import LocaleInterface from "../entities/LocaleInterface";
 
 interface PropsInterface {
     classes: any,
     container: Container,
+    locale: LocaleInterface,
 }
 
 const styles = (theme: Theme) => ({
