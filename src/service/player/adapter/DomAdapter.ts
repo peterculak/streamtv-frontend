@@ -106,6 +106,14 @@ class DomAdapter implements AdapterInterface {
 
         this.htmlVideoElement.currentTime = numberOfSeconds;
     }
+
+    getVideoDuration(): number {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+
+        return this.htmlVideoElement.duration;
+    }
 }
 
 export default DomAdapter;

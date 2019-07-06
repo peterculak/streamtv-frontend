@@ -3,7 +3,7 @@ interface PlayableItem {
     subtitle: string;
     image: string;
     mp4: Array<any>;
-    length: number;//in seconds
+    duration: number;//in seconds
     description?: string;
     meta: {};
 }

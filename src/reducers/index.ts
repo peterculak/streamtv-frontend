@@ -18,7 +18,11 @@ import {
     PLAYER_SHUFFLE_OFF,
     PLAYER_LOOP_ON,
     PLAYER_LOOP_OFF,
-    SELECT_TVSERIES_ARCHIVE, PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY, SELECT_CHANNEL_ARCHIVE,
+    SELECT_TVSERIES_ARCHIVE,
+    PLAYER_SET_HIGHEST_QUALITY,
+    PLAYER_SET_LOWEST_QUALITY,
+    SELECT_CHANNEL_ARCHIVE,
+    PLAYER_UPDATE_NEXT_ITEM_DURATION,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 
@@ -106,6 +110,12 @@ function rootReducer(state = initialState, action: any) {
         case SELECT_TVSERIES_ARCHIVE:
             state.player.load(PlaylistFactory.createPlaylistForProgramSeason(action.payload.seasons[0]));
             state.selectedTVSeriesArchive = action.payload;
+            return state;
+        case PLAYER_UPDATE_NEXT_ITEM_DURATION:
+            const next = state.player.willPlayNext();
+            if (next) {
+                next.duration = action.payload;
+            }
             return state;
         default:
             return state;

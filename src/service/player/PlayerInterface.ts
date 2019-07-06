@@ -58,6 +58,8 @@ interface PlayerInterface {
     setHighestQuality(): void;
 
     getVideoElementHeight(): string;
+
+    willPlayNext(): PlayableItem | null;
 }
 
 export default PlayerInterface;

@@ -16,7 +16,10 @@ import {
     PLAYER_SHUFFLE_OFF,
     PLAYER_LOOP_ON,
     PLAYER_LOOP_OFF,
-    PLAYER_SET_HIGHEST_QUALITY, PLAYER_SET_LOWEST_QUALITY, PLAYER_VIDEO_ELEMENT_DATA_LOADED
+    PLAYER_SET_HIGHEST_QUALITY,
+    PLAYER_SET_LOWEST_QUALITY,
+    PLAYER_VIDEO_ELEMENT_DATA_LOADED,
+    PLAYER_UPDATE_NEXT_ITEM_DURATION,
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
@@ -99,4 +102,8 @@ export function setVideoLowestQuality() {
 
 export function videoElementDataLoaded() {
     return {type: PLAYER_VIDEO_ELEMENT_DATA_LOADED};
+}
+
+export function addNextItemDuration(duration: number) {
+    return {type: PLAYER_UPDATE_NEXT_ITEM_DURATION, payload: duration};
 }

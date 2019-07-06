@@ -24,14 +24,34 @@ class PlaylistFactory {
         return playlist;
     }
 
+    private static isValidDate(d: any) {
+        return !isNaN(d) && d instanceof Date;
+    }
+
     private static createPlaylistItem(item: any): PlaylistItem {
+        let dateAdded;
+        try {
+            dateAdded = new Date(item.dateAdded);
+        } catch (error) {
+        }
+
+        if (!this.isValidDate(dateAdded)) {
+            const bits = item.dateAdded.split('.');
+            const correctlyFormattedDateString = `${bits[2]}-${bits[1]}-${bits[0]}`;
+            try {
+                dateAdded = new Date(correctlyFormattedDateString);
+            } catch (error){}
+        }
+        if (!dateAdded) {
+            dateAdded = item.dateAdded;
+        }
         return new PlaylistItem(
             item.name,
             item.thumbnailUrl ? item.thumbnailUrl : item.image,
             item.mp4,
             item.timeRequired ? parseInt(item.timeRequired.replace(/PT|S/g, '')) : 0,
             '',
-            {episodeNumber: item.episodeNumber, dateAdded: item.dateAdded}
+            {episodeNumber: item.episodeNumber, dateAdded: dateAdded}
         )
     }
 }

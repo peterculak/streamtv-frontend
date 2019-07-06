@@ -10,14 +10,14 @@ class PlaylistItem implements PlayableItem, Sortable {
         public title: string,
         public image: string,
         public mp4: Array<any>,
-        public length: number,
+        public duration: number,
         public subtitle: string,
         public meta: {},
     ) {
         this.title = title;
         this.image = image;
         this.mp4 = mp4;
-        this.length = length;
+        this.duration = duration;
         this.subtitle = subtitle;
         this.meta = meta;
     }

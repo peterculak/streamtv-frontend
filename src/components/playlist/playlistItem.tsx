@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -171,10 +171,10 @@ function PlaylistItem(props: any) {
                                             </Box>
                                         )}
 
-                                        {episode.length ? (
+                                        {episode.duration ? (
                                             <Typography variant={'caption'} component="span">
                                                 <Box className={classes.itemLength}>
-                                                    {formatLength(episode.length)}
+                                                    {formatLength(episode.duration)}
                                                 </Box>
                                             </Typography>
                                         ) : ''}
@@ -208,7 +208,7 @@ function PlaylistItem(props: any) {
                                             <Grid item>
                                                 <Box mt={episode['@type'] === 'TVSeries' ? '-4px' : '0'}>
                                                     <Typography className={classes.dateAdded} variant={'subtitle2'} component="p">
-                                                        <ReactTimeAgo locale={props.locale.lang()} date={new Date(episode.meta.dateAdded)}/>
+                                                        <ReactTimeAgo locale={props.locale.lang()} date={episode.meta.dateAdded}/>
                                                     </Typography>
                                                 </Box>
                                             </Grid>)}

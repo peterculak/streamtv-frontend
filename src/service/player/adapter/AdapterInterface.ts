@@ -58,6 +58,11 @@ interface AdapterInterface {
     addListener(eventName: string, callback: any): void;
 
     getVideoElementHeight(): string;
+
+    /**
+     * Returns video duration from host environment
+     */
+    getVideoDuration(): number;
 }
 
 export default AdapterInterface;

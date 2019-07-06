@@ -1,4 +1,4 @@
-import React, {useEffect, useState, forwardRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import PropTypes from 'prop-types';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { AutoSizer } from 'react-virtualized';
@@ -111,7 +111,7 @@ const styles = (theme: Theme) => createStyles({
 
 function Playlist(props: any) {
     const locale = props.locale;
-
+    let hiddenVideoPlayerRef = useRef<HTMLVideoElement>(null);
     const dispatch = useDispatch();
 
     const {player, archive} = useSelector<{ player: PlayerInterface, selectedTVSeriesArchive: any }, { player: PlayerInterface, archive: any }>((state) => ({

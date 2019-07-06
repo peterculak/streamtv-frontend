@@ -40,6 +40,9 @@ class Player implements PlayerInterface {
         if (dataLoadedCallback) {
             this.adapter.addListener('loadeddata', (event: any) => {
                 this._isVideoDataLoaded = true;
+                if (!this.current().duration) {
+                    this.current().duration = Math.ceil(this.adapter.getVideoDuration());
+                }
                 dataLoadedCallback();
             });
         }
