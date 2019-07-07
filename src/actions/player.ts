@@ -23,6 +23,7 @@ import {
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
+import PlayableItem from "../service/player/PlayableItem";
 
 export function play() {
     return {type: PLAYER_PLAY};
@@ -56,7 +57,7 @@ export function setVideoElementAndStartPlaying(videoElement: HTMLVideoElement, c
     return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callback: callback, dataLoadedCallback: dataLoadedCallback};
 }
 
-export function playPlaylistItem(item: PlaylistItem) {
+export function playPlaylistItem(item: PlayableItem) {
     return {type: PLAYER_PLAY_PLAYLIST_ITEM, payload: item};
 }
 

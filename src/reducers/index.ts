@@ -1,3 +1,6 @@
+import getTheme from '../containers/themes/streamTv';
+import {createMuiTheme} from '@material-ui/core/styles';
+
 import Player from "../service/player/Player";
 import {
     PLAYER_NEXT,
@@ -23,6 +26,7 @@ import {
     PLAYER_SET_LOWEST_QUALITY,
     SELECT_CHANNEL_ARCHIVE,
     PLAYER_UPDATE_NEXT_ITEM_DURATION,
+    THEME_SELECT_MODE, THEME_TOGGLE_MODE,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 
@@ -30,6 +34,7 @@ const initialState = {
     player: new Player(),
     selectedTVSeriesArchive: null,
     channelArchives: {} as any,
+    theme: getTheme('dark'),
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -116,6 +121,16 @@ function rootReducer(state = initialState, action: any) {
             if (next) {
                 next.duration = action.payload;
             }
+            return state;
+        case THEME_SELECT_MODE:
+            state.theme = createMuiTheme({
+                palette: {
+                    type: action.payload,
+                },
+            });
+            return state;
+        case THEME_TOGGLE_MODE:
+            state.theme = getTheme(state.theme.palette.type === 'light' ? 'dark' : 'light');
             return state;
         default:
             return state;

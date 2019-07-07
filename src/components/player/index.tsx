@@ -9,20 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
-import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import PlayerInterface from "../../service/player/PlayerInterface";
-
-const styles = (theme: Theme) => createStyles({
-    title: {
-        color: 'white'//darktheme
-    },
-    subtitle: {
-        color: 'white'//darktheme
-    },
-    qualitySelect: {
-        color: 'white'//darktheme
-    }
-});
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
@@ -69,14 +56,13 @@ function Player(props: any, ref: any) {
                               alignItems="flex-start">
 
                             <Grid item>
-                                <Typography className={classes.title} variant="h6" component="h1">{player.current().title}</Typography>
-                                <Typography className={classes.subtitle} variant={'caption'} component="p">{player.current().subtitle}</Typography>
+                                <Typography variant="h6" component="h1">{player.current().title}</Typography>
+                                <Typography variant={'caption'} component="p">{player.current().subtitle}</Typography>
                             </Grid>
 
                             <Grid item>
                                 <FormControl>
                                     <Select
-                                        className={classes.qualitySelect}
                                         value={player ? player.selectedQualityIndex : 0}
                                         onChange={changeVideoIndex}
                                         name='selectedQualityIndex'
@@ -98,4 +84,4 @@ function Player(props: any, ref: any) {
     );
 }
 
-export default withStyles(styles)(Player);
+export default Player;

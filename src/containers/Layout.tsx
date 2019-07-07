@@ -11,13 +11,11 @@ interface PropsInterface {
 }
 
 const styles = (theme: Theme) => ({
-    toolbar: theme.mixins.toolbar,
     app: {
         height: '100%',
         [theme.breakpoints.up('md')]: {
             padding: '16px'
         },
-        backgroundColor: 'hsl(0, 0%, 7%)',//darktheme
     }
 });
 

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -15,11 +15,9 @@ import ReactTimeAgo from 'react-time-ago';
 const styles = (theme: Theme) => createStyles({
     card: {
         backgroundColor: 'transparent',
-        //darktheme no color here below
-        color: 'rgb(255, 255, 255)',
+        paddingBottom: '12px',
         [theme.breakpoints.down('sm')]: {
             padding: '12px',
-            color: 'rgb(255, 255, 255)',
         },
     },
     notSelectedCard: {
@@ -65,14 +63,11 @@ const styles = (theme: Theme) => createStyles({
         marginBottom: '4px',
     },
     subhead: {
-        [theme.breakpoints.down('sm')]: {
-            opacity: .6,
-        },
         fontSize: '13px',
     },
     dateAdded: {
         fontSize: '12px',
-        // opacity: .6,//lighttheme
+        opacity: .6,
     },
     playlistPosition: {
         position: 'absolute',
@@ -92,13 +87,10 @@ const styles = (theme: Theme) => createStyles({
     },
     playlistPositionArrow: {
         fontSize: '16px',
-        // color: theme.palette.text.hint,//lighttheme
-        color: 'rgb(62, 166, 255)'//darktheme
-        //rgb(62, 166, 255)
+        color: theme.palette.type === 'dark' ? theme.palette.primary.main : theme.palette.text.hint
     },
     playlistPositionNumber: {
-        // color: theme.palette.text.secondary,//lighttheme
-        color: 'hsl(0, 0%, 53.3%)'//darktheme
+        color: theme.palette.type === 'dark' ? 'hsl(0, 0%, 53.3%)' : theme.palette.text.secondary
     },
     itemLength: {
         position: 'absolute',
