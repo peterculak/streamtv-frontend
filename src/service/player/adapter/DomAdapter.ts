@@ -122,6 +122,64 @@ class DomAdapter implements AdapterInterface {
 
         return this.htmlVideoElement.duration;
     }
+
+    getVideoVolume(): number {
+        if (!this.htmlVideoElement) {
+            return 1;
+        }
+
+        return this.muted ? 0 : this.htmlVideoElement.volume;
+    }
+
+    setVideoVolume(volume: number): void {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+
+        if (volume < 0 || volume > 1) {
+            throw AdapterException.volumeOutOfRange(volume, 0, 1);
+        }
+
+        if (volume === 0) {
+            this.htmlVideoElement.muted = true;
+        } else {
+            if (this.htmlVideoElement.muted) {
+                this.htmlVideoElement.muted = false;
+            }
+        }
+        this.htmlVideoElement.volume = volume;
+    }
+
+    get muted(): boolean {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+
+        return this.htmlVideoElement.muted;
+    }
+
+    set muted(value: boolean) {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+        this.htmlVideoElement.muted = value;
+    }
+
+    isFullScreenAvailable(): boolean {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+
+        return typeof this.htmlVideoElement.requestFullscreen === 'function';
+    }
+
+    requestFullScreen(): Promise<void> {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+
+        return this.htmlVideoElement.requestFullscreen();
+    }
 }
 
 export default DomAdapter;

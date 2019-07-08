@@ -10,7 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
 import PlayerInterface from "../../service/player/PlayerInterface";
-import MediaControl from "./mediaControl";
+import MediaControls from "./mediaControls";
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
@@ -56,17 +56,15 @@ function Player(props: any, ref: any) {
         dispatch(ACTIONS.setStreamQuality(event.target.value));
     };
 
-    const {classes} = props;
     return (
         <React.Fragment>
             <div
-                style={{height: '100%'}}
+                style={{height: '100%', position: 'relative'}}
                 onMouseOver={() => setIsHover(true)}
                 onMouseOut={() => setIsHover(false)}
-                onClick={() => dispatch(ACTIONS.toggle())}
             >
                 <video ref={playerRef} width="100%" height="100%"/>
-                <MediaControl isHover={isHover}/>
+                <MediaControls isHover={isHover}/>
             </div>
             {player && player.current() && (
                 <Hidden smDown>

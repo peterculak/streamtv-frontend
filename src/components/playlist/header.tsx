@@ -238,15 +238,15 @@ function PlaylistHeader(props: any) {
                             <SortByAlpha/>
                         </IconButton>
 
-                        <IconButton
-                            className={classes.playerControlsButtonCommon}
-                            size="small"
-                            color={player.isHighQualitySelected() ? 'primary' : undefined}
-                            disabled={!player.hasHiqhQualityAvailable()}
-                            onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}
-                            title="High quality">
-                            <Hd/>
-                        </IconButton>
+                        {/*<IconButton*/}
+                        {/*    className={classes.playerControlsButtonCommon}*/}
+                        {/*    size="small"*/}
+                        {/*    color={player.isHighQualitySelected() ? 'primary' : undefined}*/}
+                        {/*    disabled={!player.hasHiqhQualityAvailable()}*/}
+                        {/*    onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}*/}
+                        {/*    title="High quality">*/}
+                        {/*    <Hd/>*/}
+                        {/*</IconButton>*/}
 
                         <IconButton
                             className={classes.playerControlsButtonCommon}

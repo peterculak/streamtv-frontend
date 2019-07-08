@@ -62,6 +62,20 @@ interface PlayerInterface {
     willPlayNext(): PlayableItem | null;
 
     getCurrentTime(): number;
-}
+    getVolume(): number;
+    setVolume(volume: number): void;
 
+    mute(): void;
+    unMute(): void;
+    isMuted(): boolean;
+
+    /**
+     * number between 0 - 100
+     * @param percentage
+     */
+    setProgress(percentage: number): void;
+
+    isFullScreenAvailable(): boolean;
+    requestFullScreen(): Promise<void>;
+}
 export default PlayerInterface;

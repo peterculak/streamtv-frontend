@@ -12,7 +12,8 @@ class Player implements PlayerInterface {
     private shuffleEnabled: boolean = false;
     private loopEnabled: boolean = false;
     private _isVideoDataLoaded: boolean = false;
-    private _currentTime: number = 0;
+
+    private currentTime: number = 0;
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
@@ -50,7 +51,7 @@ class Player implements PlayerInterface {
         });
 
         this.adapter.addListener('timeupdate', (a: any) => {
-            this._currentTime = this.adapter.getCurrentVideoTime();
+            this.currentTime = this.adapter.getCurrentVideoTime();
             callbacks.timeupdate && callbacks.timeupdate();
         });
     }
@@ -253,7 +254,49 @@ class Player implements PlayerInterface {
     }
 
     getCurrentTime(): number {
-        return this._currentTime;
+        return this.currentTime;
+    }
+
+    getVolume(): number {
+        return this.adapter.getVideoVolume();
+    }
+
+    setVolume(volume: number): void {
+        this.adapter.setVideoVolume(volume);
+    }
+
+    isMuted(): boolean {
+        return this.adapter.muted;
+    }
+
+    mute(): void {
+        this.adapter.muted = true;
+    }
+
+    unMute(): void {
+        this.adapter.muted = false;
+        //if unmuted and is still 0 set to 20%
+        if (this.getVolume() === 0) {
+            this.setVolume(0.2);
+        }
+    }
+
+    setProgress(percentage: number): void {
+        if (percentage < 0 || percentage > 100) {
+            throw new Error(`Progress ${percentage} is out of range 0 - 100`);
+        }
+
+        const time = this.current().duration * (percentage/100);
+
+        this.adapter.setCurrentVideoTime(time);
+    }
+
+    isFullScreenAvailable(): boolean {
+        return this.adapter.isFullScreenAvailable();
+    }
+
+    requestFullScreen(): Promise<void> {
+        return this.adapter.requestFullScreen();
     }
 
     private qualityLabel(url: string): string  {
