@@ -35,10 +35,10 @@ const initialState = {
     selectedTVSeriesArchive: null,
     channelArchives: {} as any,
     theme: getTheme('dark'),
+    lastClicked: ''
 };
 
 function rootReducer(state = initialState, action: any) {
-    // console.log(action);
     switch(action.type) {
         case PLAYER_PLAY:
             state.player.play();
@@ -47,6 +47,7 @@ function rootReducer(state = initialState, action: any) {
             state.player.pause();
             return state;
         case PLAYER_NEXT:
+            state.lastClicked = '';
             state.player.next();
             return state;
         case PLAYER_PREVIOUS:
@@ -76,6 +77,7 @@ function rootReducer(state = initialState, action: any) {
             } else {
                 state.player.resume();
             }
+            state.lastClicked = action.payload;
             return state;
         case PLAYER_LOAD_PLAYLIST_AND_START_PLAYING:
             state.player.load(action.payload);

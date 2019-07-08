@@ -52,6 +52,7 @@ const styles = (theme: Theme) => createStyles({
                 opacity: 1,
                 color: "#fff",
             },
+            marginTop: '1px',
         },
         hdBadge: {
             '&::after': {
@@ -68,7 +69,7 @@ const styles = (theme: Theme) => createStyles({
         },
         timeDisplay: {
             position: 'absolute',
-            top: '4px',
+            top: '6px',
             display: 'inline-block',
             verticalAlign: 'middle',
             padding: '0 5px',
@@ -148,7 +149,7 @@ function MediaControls(props: any, ref: any) {
                         size="small"
                         className={classes.buttons}
                         style={{backgroundColor: 'transparent'}}
-                        onClick={() => dispatch(ACTIONS.toggle())}
+                        onClick={() => dispatch(ACTIONS.togglePlay('controlbar'))}
                     >
                         {player.isPlaying() ? (
                             <Pause

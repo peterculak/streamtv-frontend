@@ -11,14 +11,19 @@ import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
 import PlayerInterface from "../../service/player/PlayerInterface";
 import MediaControls from "./mediaControls";
+import PlayEffect from "./playEffect";
+
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef<HTMLVideoElement>(null);
 
-    const {player} = useSelector<{player: PlayerInterface}, {player: PlayerInterface}>((state) => ({
+    const {player, lastClicked} = useSelector<{player: PlayerInterface, lastClicked: string}, {player: PlayerInterface, lastClicked: string}>((state) => ({
         player: state.player,
+        lastClicked: state.lastClicked,
     }));
+
+    console.log('Player', lastClicked);
 
     const [isHover, setIsHover] = useState<boolean>(false);
 
@@ -56,6 +61,10 @@ function Player(props: any, ref: any) {
         dispatch(ACTIONS.setStreamQuality(event.target.value));
     };
 
+    const handleClick = (event: any) => {
+        dispatch(ACTIONS.togglePlay('screen'));
+    };
+
     return (
         <React.Fragment>
             <div
@@ -63,6 +72,13 @@ function Player(props: any, ref: any) {
                 onMouseOver={() => setIsHover(true)}
                 onMouseOut={() => setIsHover(false)}
             >
+                {player.isLoaded() ? (
+                    <PlayEffect
+                        play={lastClicked === 'screen' && player.isPlaying()}
+                        onClick={(event: any) => handleClick(event)}
+                    />
+                ) : ''}
+
                 <video ref={playerRef} width="100%" height="100%"/>
                 <MediaControls isHover={isHover}/>
             </div>

@@ -38,8 +38,8 @@ export function previous() {
     return {type: PLAYER_PREVIOUS};
 }
 
-export function toggle() {
-    return {type: PLAYER_TOGGLE_PAUSE_PLAY};
+export function togglePlay(trigger: string) {
+    return {type: PLAYER_TOGGLE_PAUSE_PLAY, payload: trigger};
 }
 
 export function loadPlaylist(playlist: PlaylistInterface) {

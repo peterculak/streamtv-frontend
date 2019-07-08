@@ -101,12 +101,14 @@ class Player implements PlayerInterface {
 
     next(): void {
         if (this.hasNext()) {
-            this.pause();
+            // this.pause();
+            this.currentTime = 0;
             this.playlist.next();
             this.play();
         } else {
             if (this.loopEnabled) {
-                this.pause();
+                // this.pause();
+                this.currentTime = 0;
                 this.playlist.rewind();
                 this.play();
             }
