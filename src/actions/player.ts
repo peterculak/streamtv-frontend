@@ -20,6 +20,7 @@ import {
     PLAYER_SET_LOWEST_QUALITY,
     PLAYER_VIDEO_ELEMENT_DATA_LOADED,
     PLAYER_UPDATE_NEXT_ITEM_DURATION,
+    PLAYER_VIDEO_TIME_UPDATE,
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlaylistItem from "../service/player/PlaylistItem";
@@ -53,8 +54,15 @@ export function setAutoplayOnOff(autoplay: boolean) {
     return {type: PLAYER_SET_AUTOPLAY_ON_OFF, payload: autoplay};
 }
 
-export function setVideoElementAndStartPlaying(videoElement: HTMLVideoElement, callback?: any, dataLoadedCallback?: any) {
-    return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callback: callback, dataLoadedCallback: dataLoadedCallback};
+export function setVideoElementAndStartPlaying(
+    videoElement: HTMLVideoElement,
+    callbacks?: {
+        ended?: any,
+        loadeddata?: any,
+        timeupdate?: any,
+    }
+) {
+    return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callbacks: callbacks};
 }
 
 export function playPlaylistItem(item: PlayableItem) {
@@ -107,4 +115,8 @@ export function videoElementDataLoaded() {
 
 export function addNextItemDuration(duration: number) {
     return {type: PLAYER_UPDATE_NEXT_ITEM_DURATION, payload: duration};
+}
+
+export function videoElementTimeUpdate() {
+    return {type: PLAYER_VIDEO_TIME_UPDATE};
 }

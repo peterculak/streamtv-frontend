@@ -60,6 +60,8 @@ interface PlayerInterface {
     getVideoElementHeight(): string;
 
     willPlayNext(): PlayableItem | null;
+
+    getCurrentTime(): number;
 }
 
 export default PlayerInterface;

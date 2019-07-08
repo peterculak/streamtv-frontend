@@ -20,6 +20,14 @@ class DomAdapter implements AdapterInterface {
         return String(this._window.getComputedStyle(this.htmlVideoElement).height);
     }
 
+    getVideoElementWidth(): string {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement()
+        }
+
+        return String(this._window.getComputedStyle(this.htmlVideoElement).width);
+    }
+
     hasVideoElement(): boolean {
         return this.htmlVideoElement !== undefined;
     }

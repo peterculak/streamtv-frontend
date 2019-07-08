@@ -83,7 +83,7 @@ function rootReducer(state = initialState, action: any) {
             }
             return state;
         case PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING:
-            state.player.setVideoElement(action.payload, action.callback, action.dataLoadedCallback);
+            state.player.setVideoElement(action.payload, action.callbacks);
             if (state.player.isLoaded() && state.player.autoplay) {
                 state.player.play();
             }

@@ -64,6 +64,7 @@ const styles = (theme: Theme) => createStyles({
         },
     },
     controlBar: {
+        height: '44px',
         width: '100%',
         [theme.breakpoints.down('sm')]: {
             height: '48px',
@@ -78,7 +79,6 @@ const styles = (theme: Theme) => createStyles({
         marginLeft: '10px',
     },
     playerControlsButtonCommon: {
-        padding: '.7em .57em',
         width: '40px',
         height: '40px',
         // color: theme.palette.type === 'light' ? 'rgb(144, 144, 144)' : 'inherit',

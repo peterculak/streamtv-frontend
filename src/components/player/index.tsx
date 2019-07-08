@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
 import PlayerInterface from "../../service/player/PlayerInterface";
+import MediaControl from "./mediaControl";
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
@@ -19,12 +20,20 @@ function Player(props: any, ref: any) {
         player: state.player,
     }));
 
+    const [isHover, setIsHover] = useState<boolean>(false);
+
     const playNextTrigger = () => {
         dispatch(ACTIONS.next());
     };
 
     const dataLoaded = () => {
+        //this is not in store it just triggers react to rerender
         dispatch(ACTIONS.videoElementDataLoaded());
+    };
+
+    const timeupdate = () => {
+        //this is not in store it just triggers react to rerender
+        dispatch(ACTIONS.videoElementTimeUpdate());
     };
 
     useEffect(() => {
@@ -35,7 +44,11 @@ function Player(props: any, ref: any) {
 
     useEffect(() => {
         if (playerRef && playerRef.current) {
-            dispatch(ACTIONS.setVideoElementAndStartPlaying(playerRef.current, playNextTrigger, dataLoaded));
+            dispatch(ACTIONS.setVideoElementAndStartPlaying(playerRef.current, {
+                ended: playNextTrigger,
+                loadeddata: dataLoaded,
+                timeupdate: timeupdate,
+            }));
         }
     }, [player]);
 
@@ -46,7 +59,15 @@ function Player(props: any, ref: any) {
     const {classes} = props;
     return (
         <React.Fragment>
-            <video ref={playerRef} width="100%" height="100%" controls/>
+            <div
+                style={{height: '100%'}}
+                onMouseOver={() => setIsHover(true)}
+                onMouseOut={() => setIsHover(false)}
+                onClick={() => dispatch(ACTIONS.toggle())}
+            >
+                <video ref={playerRef} width="100%" height="100%"/>
+                <MediaControl isHover={isHover}/>
+            </div>
             {player && player.current() && (
                 <Hidden smDown>
                     <Box>

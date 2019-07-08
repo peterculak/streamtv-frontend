@@ -12,6 +12,7 @@ class Player implements PlayerInterface {
     private shuffleEnabled: boolean = false;
     private loopEnabled: boolean = false;
     private _isVideoDataLoaded: boolean = false;
+    private _currentTime: number = 0;
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
@@ -29,25 +30,29 @@ class Player implements PlayerInterface {
         this._autoplay = value;
     }
 
-    setVideoElement(ref: HTMLVideoElement, callback?: any, dataLoadedCallback?: any ) {
+    setVideoElement(ref: HTMLVideoElement, callbacks?: any ) {
         this.adapter.setVideoElement(ref);
-        if (callback) {
-            this.adapter.addListener('ended', () => this._autoplay && callback());//todo this is ugly
+        if (callbacks.ended) {
+            this.adapter.addListener('ended', () => this._autoplay && callbacks.ended());
         } else {
-            this.adapter.addListener('ended', () => this._autoplay && this.next());//todo this is ugly
+            this.adapter.addListener('ended', () => this._autoplay && this.next());
         }
 
-        if (dataLoadedCallback) {
-            this.adapter.addListener('loadeddata', (event: any) => {
-                this._isVideoDataLoaded = true;
-                if (!this.current().duration) {
-                    this.current().duration = Math.ceil(this.adapter.getVideoDuration());
-                }
-                dataLoadedCallback();
-            });
-        }
+        this.adapter.addListener('loadeddata', (event: any) => {
+            this._isVideoDataLoaded = true;
+            if (!this.current().duration) {
+                this.current().duration = Math.ceil(this.adapter.getVideoDuration());
+            }
+            if (this._autoplay) {
+                this.adapter.resume();
+            }
+            callbacks.loadeddata && callbacks.loadeddata();
+        });
 
-        // this.adapter.addListener('loadedmetadata', (a: any) => console.log(a));
+        this.adapter.addListener('timeupdate', (a: any) => {
+            this._currentTime = this.adapter.getCurrentVideoTime();
+            callbacks.timeupdate && callbacks.timeupdate();
+        });
     }
 
     get isVideoDataLoaded(): boolean {
@@ -95,10 +100,12 @@ class Player implements PlayerInterface {
 
     next(): void {
         if (this.hasNext()) {
+            this.pause();
             this.playlist.next();
             this.play();
         } else {
             if (this.loopEnabled) {
+                this.pause();
                 this.playlist.rewind();
                 this.play();
             }
@@ -239,6 +246,14 @@ class Player implements PlayerInterface {
 
     getVideoElementHeight(): string {
         return this.adapter.getVideoElementHeight();
+    }
+
+    getVideoElementWidth(): string {
+        return this.adapter.getVideoElementWidth();
+    }
+
+    getCurrentTime(): number {
+        return this._currentTime;
     }
 
     private qualityLabel(url: string): string  {
