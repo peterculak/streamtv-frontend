@@ -12,7 +12,8 @@ import Hidden from '@material-ui/core/Hidden';
 import PlayerInterface from "../../service/player/PlayerInterface";
 import MediaControls from "./mediaControls";
 import PlayEffect from "./playEffect";
-
+import Pause from '@material-ui/icons/Pause';
+import PlayArrow from '@material-ui/icons/PlayArrow';
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
@@ -22,8 +23,6 @@ function Player(props: any, ref: any) {
         player: state.player,
         lastClicked: state.lastClicked,
     }));
-
-    console.log('Player', lastClicked);
 
     const [isHover, setIsHover] = useState<boolean>(false);
 
@@ -61,8 +60,10 @@ function Player(props: any, ref: any) {
         dispatch(ACTIONS.setStreamQuality(event.target.value));
     };
 
+    const [animate, setAnimate] = useState<boolean>(false);
     const handleClick = (event: any) => {
-        dispatch(ACTIONS.togglePlay('screen'));
+        setAnimate(!animate);
+        dispatch(ACTIONS.togglePlay());
     };
 
     return (
@@ -73,13 +74,19 @@ function Player(props: any, ref: any) {
                 onMouseOut={() => setIsHover(false)}
             >
                 {player.isLoaded() ? (
-                    <PlayEffect
-                        play={lastClicked === 'screen' && player.isPlaying()}
+                    <div
                         onClick={(event: any) => handleClick(event)}
-                    />
+                        style={{width: '100%', height: 'calc(100% - 36px)', position: 'absolute'}}
+                    >
+                        <PlayEffect
+                            animate={animate}
+                        >
+                            {player.isPlaying() ? (<PlayArrow/>) : (<Pause/>)}
+                        </PlayEffect>
+                    </div>
                 ) : ''}
-
-                <video ref={playerRef} width="100%" height="100%"/>
+                <video
+                    ref={playerRef} width="100%" height="100%"/>
                 <MediaControls isHover={isHover}/>
             </div>
             {player && player.current() && (

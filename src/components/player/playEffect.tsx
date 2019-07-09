@@ -1,25 +1,12 @@
-import React, {useState} from 'react';
-import {withStyles, useTheme, Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Pause from '@material-ui/icons/Pause';
-import PlayArrow from '@material-ui/icons/PlayArrow';
-import TransitionGroup from "react-transition-group/TransitionGroup";
+import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import Transition from "react-transition-group/Transition";
 
 const fadeInUp = "fade-in";
 const fadeOutLeft = "fade-out";
 
 const useStyles = makeStyles({
-    root: {},
-    bezel: {
+    root: {
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -35,13 +22,13 @@ const useStyles = makeStyles({
         height: '36px',
         margin: '14px',
         display: 'block',
+        color: 'white',
     },
     transitionGroup: {
         position: "absolute",
         width: "100%",
         height: "100%",
     },
-
     "fadeIn-entered": {
         display: "none",
     },
@@ -52,10 +39,14 @@ const useStyles = makeStyles({
         position: "absolute",
     },
     "fadeIn-exiting": {
-        display: "none",
+        top: '50%',
+        left: '50%',
         animation: `$${fadeInUp} .5s linear 1 normal forwards`,
+        position: "absolute",
     },
-
+    "fadeIn-exited": {
+        display: "none",
+    },
     [`@keyframes ${fadeInUp}`]: {
         from: {
             opacity: 1,
@@ -77,46 +68,23 @@ const useStyles = makeStyles({
     }
 });
 
-function Fade(props: any) {
-    const classes = useStyles();
-    return (
-        <Transition in={props.in} timeout={500} mountOnEnter unmountOnExit>
-            {state => (
-                <div className={classes[`fadeIn-${state}`] || ""}>{props.children}</div>
-            )}
-        </Transition>
-    );
-}
-
 function PlayEffect(props: any) {
     const classes = useStyles();
-    const {play, ...rest} = props;
+    const {animate, children, ...rest} = props;
+
     return (
-        <React.Fragment>
-            <TransitionGroup {...rest} component="div" className={classes.transitionGroup}>
-                {play ? (
-                    <Fade key={0}>
-                        <div className={classes.root}>
-                            <div className={classes.bezel}>
-                                <div className={classes.icon}>
-                                    <PlayArrow/>
-                                </div>
-                            </div>
+        <Transition
+            {...rest} in={animate} timeout={500}>
+            {state => {
+                return (<div className={classes[`fadeIn-${state}`] || ""}>
+                    <div className={classes.root}>
+                        <div className={classes.icon}>
+                            {children}
                         </div>
-                    </Fade>
-                ) : (
-                    <Fade key={1}>
-                        <div className={classes.root}>
-                            <div className={classes.bezel}>
-                                <div className={classes.icon}>
-                                    <Pause/>
-                                </div>
-                            </div>
-                        </div>
-                    </Fade>
-                )}
-            </TransitionGroup>
-        </React.Fragment>
+                    </div>
+                </div>);
+            }}
+        </Transition>
     );
 }
 

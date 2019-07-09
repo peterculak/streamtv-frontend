@@ -1,14 +1,12 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {withStyles, useTheme, Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import React from 'react';
+import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import Pause from '@material-ui/icons/Pause';
 import SkipNext from '@material-ui/icons/SkipNext';
 import Settings from '@material-ui/icons/Settings';
 import Fullscreen from '@material-ui/icons/Fullscreen';
 import * as ACTIONS from "../../../actions/player";
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
 import {useSelector, useDispatch} from 'react-redux';
 import VideoProgressBar from "./videoProgressBar";
 import VolumeControls from "./volumeControls";
@@ -16,13 +14,11 @@ import VolumeControls from "./volumeControls";
 const styles = (theme: Theme) => createStyles({
         root: {
             position: 'absolute',
-            bottom: '-2px',
+            bottom: '0px',
             left: '12px',
             height: '36px',
             zIndex: 1000,
-            // margin: '-36px 0px 0px 0px',
             padding: '0px',
-            // backgroundColor: 'rgba(0, 0, 0, 0.7)',
             // transition: 'opacity .1s cubic-bezier(0.4,0.0,1,1)',
             opacity: 0,
         },
@@ -76,6 +72,7 @@ const styles = (theme: Theme) => createStyles({
             lineHeight: '24px',
             fontSize: '13px',
             textShadow: '0 0 2px rgba(0,0,0,.5)',
+            color: 'rgb(238, 238, 238)',
         },
         leftControls: {
             height: '100%',
@@ -149,7 +146,7 @@ function MediaControls(props: any, ref: any) {
                         size="small"
                         className={classes.buttons}
                         style={{backgroundColor: 'transparent'}}
-                        onClick={() => dispatch(ACTIONS.togglePlay('controlbar'))}
+                        onClick={() => dispatch(ACTIONS.togglePlay())}
                     >
                         {player.isPlaying() ? (
                             <Pause
