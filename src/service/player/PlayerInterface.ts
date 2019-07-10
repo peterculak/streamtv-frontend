@@ -1,7 +1,9 @@
 import PlaylistInterface from "./PlaylistInterface";
 import PlayableItem from "./PlayableItem";
+import AdapterInterface from "./adapter/AdapterInterface";
 
 interface PlayerInterface {
+    autoplay: boolean;
     isVideoDataLoaded: boolean;
     currentlyPlayingItemOrder: number;
     playlistItemsCount: number;
@@ -10,8 +12,12 @@ interface PlayerInterface {
 
     play(): void;
     pause(): void;
+    resume(): void;
+    next(): void;
+    previous(): void;
     load(playlist: PlaylistInterface): void;
     isLoaded(): boolean;
+    setVideoElement(ref: any, callbacks?: any ): void;
 
     /**
      * currently video which is loaded, can be playing or paused
@@ -27,6 +33,8 @@ interface PlayerInterface {
      * Stream url which is currently playing
      */
     currentStream(): string;
+
+    playPlaylistItem(item: PlayableItem): void;
 
     /**
      * Reverses order of items in playlist
@@ -77,5 +85,10 @@ interface PlayerInterface {
 
     isFullScreenAvailable(): boolean;
     requestFullScreen(): Promise<void>;
+
+    //////////////////cast related methods to be moved
+    initializeCastPlayer(adapter: any): void;//todo
+    canCast: boolean;
+    isCasting(): boolean;
 }
 export default PlayerInterface;

@@ -11,6 +11,8 @@ import Box from '@material-ui/core/Box';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ReactTimeAgo from 'react-time-ago';
+import PlayerInterface from "../../service/player/PlayerInterface";
+import {useSelector, useDispatch} from 'react-redux';
 
 const styles = (theme: Theme) => createStyles({
     card: {
@@ -109,6 +111,9 @@ const styles = (theme: Theme) => createStyles({
 });
 
 function PlaylistItem(props: any) {
+    const {player} = useSelector<{ player: PlayerInterface }, { player: PlayerInterface }>((state) => ({
+        player: state.player,
+    }));
     const {classes, episode, itemClick} = props;
 
     const formatLength = (lengthInSeconds: number) => {
@@ -141,6 +146,10 @@ function PlaylistItem(props: any) {
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
+    let imageQuality = 'r320x240';
+    if (player.isHighQualitySelected()) {
+        imageQuality = 'r640x480';
+    }
     return (
         <Box width="100%" className={props.isPlaying && props.playlistPosition > 1 ? classes.selectedCardMarginTop : ''} >
             <Box width="100%" className={props.isPlaying ? classes.selectedCard : classes.notSelectedCard}>
@@ -155,8 +164,9 @@ function PlaylistItem(props: any) {
                                 <Box className={classes.playlistPositionNumberWidth}>
                                     <CardMedia
                                         className={classes.media}
-                                        image={episode.image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r640x480')}
+                                        image={episode.image.replace(/\/[r]?[0-9]+x?[0-9]?[n]?\/?/, `/${imageQuality}/`)}
                                         title={episode.title}
+
                                     >
                                         {mdUp && props.playlistPosition && (
                                             <Box className={classes.playlistPosition}>

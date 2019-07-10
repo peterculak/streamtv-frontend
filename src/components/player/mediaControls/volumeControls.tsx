@@ -1,7 +1,7 @@
 import React from 'react';
 import {withStyles, useTheme, Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux';
-import Slider from '@material-ui/core/Slider';
+import Slider from '../../slider/Slider';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import VolumeDown from '@material-ui/icons/VolumeDown';
@@ -13,6 +13,23 @@ const progressBarStyles = makeStyles({
     root: {
         color: 'rgb(255,255,255)',
     },
+    thumb: (props: any) => ({
+        '&$focusVisible,&:hover': {
+            boxShadow: 'none',
+        },
+        '&$active': {
+            boxShadow: 'none',
+        }
+    }),
+    active: (props: any) => ({
+        boxShadow: 'none',
+    }),
+    focusVisible: (props: any) => ({
+        boxShadow: 'none',
+    }),
+    railHover:(props: any) => ({
+        display: 'none',
+    }),
 });
 
 function StyledSlider(props: any) {

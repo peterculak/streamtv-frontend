@@ -76,7 +76,7 @@ function Player(props: any, ref: any) {
                 {player.isLoaded() ? (
                     <div
                         onClick={(event: any) => handleClick(event)}
-                        style={{width: '100%', height: 'calc(100% - 36px)', position: 'absolute'}}
+                        style={{width: '100%', height: 'calc(100% - 36px)', zIndex: 99, position: 'absolute'}}
                     >
                         <PlayEffect
                             animate={animate}

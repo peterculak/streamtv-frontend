@@ -1,26 +1,28 @@
-// import {injectable} from "inversify";
+import {injectable} from "inversify";
 import PlayerInterface from "./PlayerInterface";
 import PlaylistInterface from "./PlaylistInterface";
 import AdapterInterface from "./adapter/AdapterInterface";
 import Playlist from "./Playlist";
 import PlayableItem from "./PlayableItem";
 import DomAdapter from "./adapter/DomAdapter";
+import CastSenderAdapter from "./adapter/CastSenderAdapter";
 
+@injectable()
 class Player implements PlayerInterface {
     private _autoplay: boolean = true;
     private _selectedQualityIndex: number = 0;
     private shuffleEnabled: boolean = false;
     private loopEnabled: boolean = false;
     private _isVideoDataLoaded: boolean = false;
-
+    private _isHighQualitySelected: boolean = false;
     private currentTime: number = 0;
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
-        private adapter: AdapterInterface = new DomAdapter(),
+        private _adapter: AdapterInterface = new DomAdapter(),
     ) {
         this.playlist = playlist;
-        this.adapter = adapter;
+        this._adapter = _adapter;
     }
 
     get autoplay(): boolean {
@@ -32,26 +34,26 @@ class Player implements PlayerInterface {
     }
 
     setVideoElement(ref: HTMLVideoElement, callbacks?: any ) {
-        this.adapter.setVideoElement(ref);
+        this.adapter().setVideoElement(ref);
         if (callbacks.ended) {
-            this.adapter.addListener('ended', () => this._autoplay && callbacks.ended());
+            this.adapter().addListener('ended', () => this._autoplay && callbacks.ended());
         } else {
-            this.adapter.addListener('ended', () => this._autoplay && this.next());
+            this.adapter().addListener('ended', () => this._autoplay && this.next());
         }
 
-        this.adapter.addListener('loadeddata', (event: any) => {
+        this.adapter().addListener('loadeddata', (event: any) => {
             this._isVideoDataLoaded = true;
             if (!this.current().duration) {
-                this.current().duration = Math.ceil(this.adapter.getVideoDuration());
+                this.current().duration = Math.ceil(this.adapter().getVideoDuration());
             }
             if (this._autoplay) {
-                this.adapter.resume();
+                this.adapter().resume();
             }
             callbacks.loadeddata && callbacks.loadeddata();
         });
 
-        this.adapter.addListener('timeupdate', (a: any) => {
-            this.currentTime = this.adapter.getCurrentVideoTime();
+        this.adapter().addListener('timeupdate', (a: any) => {
+            this.currentTime = this.adapter().getCurrentVideoTime();
             callbacks.timeupdate && callbacks.timeupdate();
         });
     }
@@ -65,17 +67,25 @@ class Player implements PlayerInterface {
     }
 
     isLoaded(): boolean {
-        return this.adapter.hasVideoElement() && this.playlist && this.playlist.size() > 0;
+        return this.adapter().hasVideoElement() && this.playlist && this.playlist.size() > 0;
     }
 
     pause(): void {
-        this.adapter.pause();
+        this.adapter().pause();
     }
 
     play(): void {
+        this.currentTime = 0;
         this._isVideoDataLoaded = false;
         // this.setPoster();
-        this.adapter.play(this.playlist.current().mp4[this._selectedQualityIndex]);
+        if (this._selectedQualityIndex + 1 === this.availableQuality().length) {
+            this._isHighQualitySelected = true;
+        }
+        if (this._isHighQualitySelected) {
+            this.setHighestQuality();
+        } else {
+            this.adapter().play(this.playlist.current().mp4[this._selectedQualityIndex]);
+        }
     }
 
     playPlaylistItem(item: PlayableItem): void {
@@ -84,7 +94,7 @@ class Player implements PlayerInterface {
     }
 
     resume(): void {
-        this.adapter.resume();
+        this.adapter().resume();
     }
 
     current(): PlayableItem {
@@ -92,23 +102,19 @@ class Player implements PlayerInterface {
     };
 
     isPlaying(): boolean {
-        return this.adapter.isPlaying();
+        return this.adapter().isPlaying();
     }
 
     currentStream(): string {
-        return this.adapter.currentStream();
+        return this.adapter().currentStream();
     }
 
     next(): void {
         if (this.hasNext()) {
-            // this.pause();
-            this.currentTime = 0;
             this.playlist.next();
             this.play();
         } else {
             if (this.loopEnabled) {
-                // this.pause();
-                this.currentTime = 0;
                 this.playlist.rewind();
                 this.play();
             }
@@ -148,9 +154,9 @@ class Player implements PlayerInterface {
         const wasPlaying = this.isPlaying();
         this.playlist.sortAsc();
         // this.setPoster();
-        this.adapter.setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
+        this.adapter().setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
         if (wasPlaying) {
-            this.adapter.play();
+            this.adapter().play();
         }
     }
 
@@ -158,9 +164,9 @@ class Player implements PlayerInterface {
         const wasPlaying = this.isPlaying();
         this.playlist.sortDesc();
         // this.setPoster();
-        this.adapter.setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
+        this.adapter().setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
         if (wasPlaying) {
-            this.adapter.play();
+            this.adapter().play();
         }
     }
 
@@ -170,12 +176,14 @@ class Player implements PlayerInterface {
 
     set selectedQualityIndex(value: number) {
         this._selectedQualityIndex = value;
-        const wasPlaying = this.adapter.isPlaying();
-        const currentVideoTime = this.adapter.getCurrentVideoTime();
-        this.adapter.setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
-        this.adapter.setCurrentVideoTime(currentVideoTime);
+        if (this._selectedQualityIndex + 1 === this.availableQuality().length) {
+            this._isHighQualitySelected = true;
+        }
+        const wasPlaying = this.adapter().isPlaying();
+        this.adapter().setVideoSource(this.playlist.current().mp4[this._selectedQualityIndex]);
+        this.adapter().setCurrentVideoTime(this.currentTime);
         if (wasPlaying) {
-            this.adapter.play();
+            this.adapter().play();
         }
     }
 
@@ -232,7 +240,7 @@ class Player implements PlayerInterface {
     }
 
     isHighQualitySelected(): boolean {
-        return this.selectedQualityIndex > 0;
+        return this._isHighQualitySelected;
     }
 
     availableQuality(): Array<string> {
@@ -240,19 +248,21 @@ class Player implements PlayerInterface {
     }
 
     setHighestQuality(): void {
+        this._isHighQualitySelected = true;
         this.selectedQualityIndex = this.current().mp4.length -1;
     }
 
     setLowestVideoQuality(): void {
+        this._isHighQualitySelected = false;
         this.selectedQualityIndex = 0;
     }
 
     getVideoElementHeight(): string {
-        return this.adapter.getVideoElementHeight();
+        return this.adapter().getVideoElementHeight();
     }
 
     getVideoElementWidth(): string {
-        return this.adapter.getVideoElementWidth();
+        return this.adapter().getVideoElementWidth();
     }
 
     getCurrentTime(): number {
@@ -260,23 +270,23 @@ class Player implements PlayerInterface {
     }
 
     getVolume(): number {
-        return this.adapter.getVideoVolume();
+        return this.adapter().getVideoVolume();
     }
 
     setVolume(volume: number): void {
-        this.adapter.setVideoVolume(volume);
+        this.adapter().setVideoVolume(volume);
     }
 
     isMuted(): boolean {
-        return this.adapter.muted;
+        return this.adapter().muted;
     }
 
     mute(): void {
-        this.adapter.muted = true;
+        this.adapter().muted = true;
     }
 
     unMute(): void {
-        this.adapter.muted = false;
+        this.adapter().muted = false;
         //if unmuted and is still 0 set to 20%
         if (this.getVolume() === 0) {
             this.setVolume(0.2);
@@ -290,15 +300,56 @@ class Player implements PlayerInterface {
 
         const time = this.current().duration * (percentage/100);
 
-        this.adapter.setCurrentVideoTime(time);
+        this.adapter().setCurrentVideoTime(time);
     }
 
     isFullScreenAvailable(): boolean {
-        return this.adapter.isFullScreenAvailable();
+        return this.adapter().isFullScreenAvailable();
     }
 
     requestFullScreen(): Promise<void> {
-        return this.adapter.requestFullScreen();
+        return this.adapter().requestFullScreen();
+    }
+
+    private castSenderAdapter: CastSenderAdapter|undefined;//todo
+
+    get canCast(): boolean {
+        return this.castSenderAdapter !== undefined;
+    }
+
+    isCasting(): boolean {
+        return this.castSenderAdapter !== undefined && this.castSenderAdapter.isConnected();
+    }
+
+    initializeCastPlayer(adapter: CastSenderAdapter): void {
+        console.log('initialize cast player');
+        this.castSenderAdapter = adapter;
+    }
+
+    switchPlayer(): void {
+        // this.playerStateBeforeSwitch = this.playerState;
+
+        // this.stopProgressTimer();
+        // this.resetVolumeSlider();
+
+        // Session is active
+        // if (this.canCast && this.castSenderAdapter.isConnected()) {
+            // this.isCasting = true;
+            // Pause local playback
+            // this.playerHandler.pause();
+            // this.castSenderAdapter.init();
+        // } else {
+            // this.setupLocalPlayer();
+            // this.isCasting = false;
+        // }
+    }
+
+    private adapter(): AdapterInterface {
+        if (this.castSenderAdapter && this.castSenderAdapter.isConnected()) {
+            return this.castSenderAdapter;
+        } else {
+            return this._adapter;
+        }
     }
 
     private qualityLabel(url: string): string  {
@@ -308,7 +359,7 @@ class Player implements PlayerInterface {
 
     private setPoster(): void {
         if (this.playlist.current().image) {
-            this.adapter.setPosterSource(this.playlist.current().image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r800x'));
+            this.adapter().setPosterSource(this.playlist.current().image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r800x'));
         }
     }
 }

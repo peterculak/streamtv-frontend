@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {useSelector} from 'react-redux';
-import Slider from '../../slider/Slider';
+import Slider from '../../../../components/slider/Slider';
 
 const progressBarStyles = makeStyles({
     root: {
@@ -9,8 +8,6 @@ const progressBarStyles = makeStyles({
         height: '5px',
         padding: '16px 0 0 0',
         display: 'block',
-        position: 'absolute',
-        bottom: '33px',
     },
     thumb: (props: any) => ({
         transition: 'transform .1s cubic-bezier(0.4,0.0,1,1)',
@@ -53,17 +50,12 @@ function StyledSlider(props: any) {
     const {hover, ...rest} = props;
     const classes = progressBarStyles(props);
 
-    return <Slider classes={classes} {...rest} />
+    return <Slider
+        classes={classes} {...rest} />
 }
 
-function VideoProgressBar(props: any, ref: any) {
-    const {player} = useSelector((state: any) => ({
-        player: state.player,
-    }));
+function Index(props: any) {
     const [isVideoProgressMouseOver, setIsVideoProgressMouseOver] = React.useState<boolean>(false);
-    const videoProgresChange = (event: any, newValue: any) => {
-        player.setProgress(newValue);
-    };
     const progressBarMouseOut = () => {
         setIsVideoProgressMouseOver(false);
     };
@@ -71,21 +63,13 @@ function VideoProgressBar(props: any, ref: any) {
         setIsVideoProgressMouseOver(true);
     };
 
-    if (player && player.isLoaded()) {
-        return (
-            <StyledSlider
-                hover={isVideoProgressMouseOver}
-                onMouseOver={() => progressBarMouseOver()}
-                onMouseOut={() => progressBarMouseOut()}
-                component="div"
-                value={(player.getCurrentTime() / player.current().duration) * 100}
-                onChange={videoProgresChange}
-                aria-labelledby="continuous-slider"
-            />
-        );
-    }
+    return (
+        <StyledSlider
+            hover={isVideoProgressMouseOver}
+            onMouseOver={() => progressBarMouseOver()}
+            onMouseOut={() => progressBarMouseOut()}
+        />
+    );
+};
 
-    return (<div></div>);
-}
-
-export default VideoProgressBar;
+export default Index;

@@ -1,7 +1,8 @@
 import getTheme from '../containers/themes/streamTv';
 import {createMuiTheme} from '@material-ui/core/styles';
+import CONSTANTS from "../app/config/constants/ioc";
+import {container} from "../app/config/ioc_config";
 
-import Player from "../service/player/Player";
 import {
     PLAYER_NEXT,
     PLAYER_PAUSE,
@@ -29,9 +30,10 @@ import {
     THEME_SELECT_MODE, THEME_TOGGLE_MODE,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
+import PlayerInterface from "../service/player/PlayerInterface";
 
 const initialState = {
-    player: new Player(),
+    player: container.get<PlayerInterface>(CONSTANTS.PLAYER),
     selectedTVSeriesArchive: null,
     channelArchives: {} as any,
     theme: getTheme('dark'),

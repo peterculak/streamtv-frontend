@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import {useSelector, useDispatch} from 'react-redux';
 import VideoProgressBar from "./videoProgressBar";
 import VolumeControls from "./volumeControls";
+import GoogleCastButton from "./castButton";
 
 const styles = (theme: Theme) => createStyles({
         root: {
@@ -97,7 +98,9 @@ function MediaControls(props: any, ref: any) {
     const {classes} = props;
 
     function showControls(): boolean {
-        return props.isHover || !player.isPlaying();
+        // console.log('show controls?');
+        // console.log('isCasting', player.isCasting());
+        return player.isCasting() || props.isHover || !player.isPlaying();
     }
 
     const formatLength = (lengthInSeconds: number) => {
@@ -194,9 +197,15 @@ function MediaControls(props: any, ref: any) {
                             />
                         </Button>
 
+                        {player.canCast ? (
+                            <GoogleCastButton
+                                disabled={!player.canCast}
+                            />
+                        ) : ''}
+
                         <Button
                             onClick={() => requestFullScreenVideo()}
-                            size="small"
+                            size="medium"
                             className={classes.buttons}
                             style={{backgroundColor: 'transparent'}}
                         >

@@ -6,12 +6,15 @@ import AuthController from "../app/controller/Auth";
 import EpisodeDetailController from "../app/controller/EpisodeDetail";
 import ChannelsController from "../app/controller/Channels";
 import ProgramController from "../app/controller/Programs";
+import Animation from "../app/controller/Sandbox/animation";
+import Slider from "../app/controller/Sandbox/slider";
 import CONSTANTS from "../app/config/constants/ioc";
 import ChannelServiceInterface from "../service/ChannelServiceInterface";
 import ProgramServiceInterface from "../service/ProgramServiceInterface";
 import {useAuth} from "../context/authContext";
 import {withStyles, Theme} from '@material-ui/core/styles';
 import LocaleInterface from "../entities/LocaleInterface";
+import GoogleCastButton from "../app/controller/Sandbox/castButton";
 
 interface PropsInterface {
     classes: any,
@@ -38,6 +41,21 @@ function Main(props: PropsInterface) {
                        render={(routeProps: any) => <ChannelsController
                            channelService={channelService}
                            locale={props.locale}
+                           {...routeProps}
+                       />}
+                />
+                <Route exact path='/sandbox/animate'
+                       render={(routeProps: any) => <Animation
+                           {...routeProps}
+                       />}
+                />
+                <Route exact path='/sandbox/slider'
+                       render={(routeProps: any) => <Slider
+                           {...routeProps}
+                       />}
+                />
+                <Route exact path='/sandbox/cast'
+                       render={(routeProps: any) => <GoogleCastButton
                            {...routeProps}
                        />}
                 />

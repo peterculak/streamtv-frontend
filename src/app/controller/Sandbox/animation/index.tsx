@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Transition} from 'react-transition-group';
 
 const duration = 1000;
@@ -7,7 +7,6 @@ const defaultStyle = {
     transition: `opacity ${duration}ms ease-in-out`,
     opacity: 0,
 };
-
 
 const transitionStyles: {
     [key: string]: any
@@ -18,7 +17,7 @@ const transitionStyles: {
     exited: {opacity: 0},
 };
 
-function Fade(props: any) {
+function Index(props: any) {
     const [inProp, setInProp] = useState(false);
     const [run, setRun] = useState(false);
 
@@ -74,4 +73,4 @@ function Fade(props: any) {
     );
 };
 
-export default Fade;
+export default Index;
