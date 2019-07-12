@@ -2,12 +2,13 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {useSelector} from 'react-redux';
 import Slider from '../../slider/Slider';
+import {formatLength} from "../../../helpers/functions";
 
 const progressBarStyles = makeStyles({
     root: {
         color: 'rgb(255,0,0)',
         height: '5px',
-        padding: '16px 0 0 0',
+        padding: '28px 0 0 0',
         display: 'block',
         position: 'absolute',
         bottom: '33px',
@@ -33,6 +34,7 @@ const progressBarStyles = makeStyles({
         height: '5px',
         transform: props.hover ? '' : 'scaleY(0.6)',
         transition: 'transform .1s cubic-bezier(0.4,0.0,1,1)',
+        //this could have width transition but only when state is playing so it's smoother
     }),
     rail:(props: any) => ({
         color: 'rgba(255,255,255,.2)',
@@ -45,9 +47,29 @@ const progressBarStyles = makeStyles({
         backgroundColor: props.hover ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
         height: '5px',
         transform: props.hover ? '' : 'scaleY(0.6)',
-        transition: 'transform .1s cubic-bezier(0.4,0.0,1,1)',
+        transition: 'opacity .25s cubic-bezier(0.0,0.0,0.2,1)',
     }),
+    railHoverTooltip: {
+        left: '0px',
+        transformOrigin: '0',
+        bottom: '20px',
+        color: 'white',
+        borderRadius: '2px',
+        letterSpacing: '.5px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        lineHeight: '12px',
+    },
+    railHoverTooltipInner: {
+        padding: '5px 9px',
+        backgroundColor: 'rgba(28,28,28,0.9)',
+        borderRadius: '2px',
+        fontSize: '118%',
+        fontWeight: 'bold',
+        lineHeight: '15px',
+    }
 });
+
 
 function StyledSlider(props: any) {
     const {hover, ...rest} = props;
@@ -71,9 +93,15 @@ function VideoProgressBar(props: any, ref: any) {
         setIsVideoProgressMouseOver(true);
     };
 
+    const format = (value: number, index : number): string => {
+        return formatLength(player.current().duration * value / 100, index);
+    };
+
     if (player && player.isLoaded()) {
         return (
             <StyledSlider
+                railHoverLabel={true}
+                railHoverLabelFormat={(value: any, index: number) => format(value, index)}
                 hover={isVideoProgressMouseOver}
                 onMouseOver={() => progressBarMouseOver()}
                 onMouseOut={() => progressBarMouseOut()}

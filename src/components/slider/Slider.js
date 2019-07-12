@@ -181,6 +181,7 @@ export const styles = theme => (  {
     },
   },
   railHover: {
+    transformOrigin: '0',
     position: 'absolute',
     width: '100%',
     height: 2,
@@ -191,6 +192,15 @@ export const styles = theme => (  {
       height: '100%',
       width: 2,
     },
+  },
+  railHoverTooltip: {
+    position: 'absolute',
+    left: '0px',
+    bottom: '12px',
+    transformOrigin: '0',
+  },
+  railHoverTooltipInner: {
+    marginLeft: '-50%',
   },
   /* Styles applied to the track element. */
   track: {
@@ -311,6 +321,8 @@ const Slider = React.forwardRef(function Slider(props, ref) {
     ValueLabelComponent = ValueLabel,
     valueLabelDisplay = 'off',
     valueLabelFormat = Identity,
+    railHoverLabel = false,
+    railHoverLabelFormat = Identity,
     onMouseOver,
     onMouseOut,
     ...other
@@ -505,6 +517,27 @@ const Slider = React.forwardRef(function Slider(props, ref) {
     [max, min, axis, range, step, marks],
   );
 
+  const getMouseNewValue = (mouse) => {
+      const { current: slider } = sliderRef;
+      const { width, height, bottom, left } = slider.getBoundingClientRect();
+      let percent;
+
+      if (axis.indexOf('vertical') === 0) {
+        percent = (bottom + ownerWindow(slider).pageYOffset - mouse.y) / height;
+      } else {
+        percent = (mouse.x - left - ownerWindow(slider).pageXOffset) / width;
+      }
+
+      if (axis.indexOf('-reverse') !== -1) {
+        percent = 1 - percent;
+      }
+
+      let newValue;
+      newValue = percentToValue(percent, min, max);
+
+      return newValue;
+    };
+
   const handleTouchMove = useEventCallback(event => {
     const finger = trackFinger(event, touchId);
 
@@ -630,29 +663,54 @@ const Slider = React.forwardRef(function Slider(props, ref) {
     document.body.addEventListener('mouseup', handleTouchEnd);
   });
 
-  const [railHoverWidth, setRailHoverWidth] = React.useState(0);
+  const [railHoverScaleX, setRailHoverScaleX] = React.useState(0);
+  const [railHoverTooltipOpacity, setRailHoverTooltipOpacity] = React.useState(0);
+  const [railHoverTooltipLeft, setRailHoverTooltipLeft] = React.useState(0);
+  const [railHoverTooltipValue, setRailHoverTooltipValue] = React.useState(0);
   const railHoverStyle = {
-    width: `${railHoverWidth}px`,
+    transform: `scaleX(${railHoverScaleX})`,
+  };
+  const railHoverTooltipStyle = {
+    opacity: `${railHoverTooltipOpacity}`,
+    transform: `translateX(${railHoverTooltipLeft}px)`
   };
   const handleSliderMouseOver = (event) => {
-    const rect = event.target.getBoundingClientRect();
-    const x = event.clientX - rect.left; //x position within the element.
-    setRailHoverWidth(x);
+    const parent = event.target.closest("div");
+    const rect = parent.getBoundingClientRect();
+    let left = event.clientX - rect.left; //x position within the element.
+    const scale = left / rect.width;
+    setRailHoverScaleX(scale);
+    setRailHoverTooltipOpacity(1);
+    setRailHoverTooltipLeft(left);
+    let newValue = getMouseNewValue({x: event.clientX, y: event.clientY});
+    if (newValue < 0) {
+      newValue = 0;
+    }
+    setRailHoverTooltipValue(newValue);
 
     if (onMouseOver) {
-      onMouseOver(event);
+      onMouseOver(event, newValue);
     }
   };
   const handleSliderMouseOut = (event) => {
     if (onMouseOut) {
       onMouseOut(event);
     }
-    setRailHoverWidth(0);
+    setRailHoverScaleX(0);
+    setRailHoverTooltipOpacity(0);
   };
   const handleSliderMouseMove = (event) => {
-    const rect = event.target.getBoundingClientRect();
-    const x = event.clientX - rect.left; //x position within the element.
-    setRailHoverWidth(x);
+    const parent = event.target.closest("div");
+    const rect = parent.getBoundingClientRect();
+    const left = event.clientX - rect.left; //x position within the element.
+    const scale = left / rect.width;
+    setRailHoverTooltipLeft(left);
+    setRailHoverScaleX(scale);
+    let newValue = getMouseNewValue({x: event.clientX, y: event.clientY});
+    if (newValue < 0) {
+      newValue = 0;
+    }
+    setRailHoverTooltipValue(newValue);
   };
 
   const trackOffset = valueToPercent(range ? values[0] : min, min, max);
@@ -685,6 +743,17 @@ const Slider = React.forwardRef(function Slider(props, ref) {
         style={railHoverStyle}
         className={classes.railHover}
       />
+      {railHoverLabel ? (
+        <span
+          style={railHoverTooltipStyle}
+          className={classes.railHoverTooltip}>
+            <span className={classes.railHoverTooltipInner}>
+              {typeof railHoverLabelFormat === 'function'
+                ? railHoverLabelFormat(railHoverTooltipValue)
+                : railHoverTooltipValue}
+            </span>
+        </span>
+      ) : ''}
       <span className={classes.track} style={trackStyle} />
       <input value={values.join(',')} name={name} type="hidden" />
       {marks.map(mark => {
@@ -887,6 +956,19 @@ Slider.propTypes = {
    * - {number} index The value label's index to format
    */
   valueLabelFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  /**
+   * Whether to display mouse over label with value
+   */
+  railHoverLabel: PropTypes.bool,
+  /**
+   * The format function for the label
+   *
+   * When a function is provided, it should have the following signature:
+   *
+   * - {number} value The value label's value to format
+   * - {number} index The value label's index to format
+   */
+  railHoverLabelFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 export default withStyles(styles, { name: 'MuiSlider' })(Slider);

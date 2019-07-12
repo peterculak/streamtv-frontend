@@ -13,6 +13,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ReactTimeAgo from 'react-time-ago';
 import PlayerInterface from "../../service/player/PlayerInterface";
 import {useSelector, useDispatch} from 'react-redux';
+import {formatLength} from '../../helpers/functions';
 
 const styles = (theme: Theme) => createStyles({
     card: {
@@ -115,33 +116,6 @@ function PlaylistItem(props: any) {
         player: state.player,
     }));
     const {classes, episode, itemClick} = props;
-
-    const formatLength = (lengthInSeconds: number) => {
-        let hours = 0;
-        let minutes = Math.floor(lengthInSeconds / 60);
-
-        if (minutes >=60) {
-            hours = Math.floor(minutes / 60);
-            minutes = minutes - hours * 60;
-        }
-        let seconds = lengthInSeconds - (hours * 60 * 60) - (minutes * 60);
-
-        let secondsStr = String(seconds);
-        if (seconds < 10) {
-            secondsStr = '0' + secondsStr;
-        }
-
-        let minutesStr = String(minutes);
-        if (hours) {
-            if (minutes < 10) {
-                minutesStr = '0' + minutesStr;
-            }
-
-            return `${hours}:${minutesStr}:${secondsStr}`;
-        }
-
-        return `${minutesStr}:${secondsStr}`;
-    };
 
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));

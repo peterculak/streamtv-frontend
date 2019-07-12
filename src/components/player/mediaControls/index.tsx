@@ -11,6 +11,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import VideoProgressBar from "./videoProgressBar";
 import VolumeControls from "./volumeControls";
 import GoogleCastButton from "./castButton";
+import {formatLength} from "../../../helpers/functions";
 
 const styles = (theme: Theme) => createStyles({
         root: {
@@ -102,33 +103,6 @@ function MediaControls(props: any, ref: any) {
         // console.log('isCasting', player.isCasting());
         return player.isCasting() || props.isHover || !player.isPlaying();
     }
-
-    const formatLength = (lengthInSeconds: number) => {
-        let hours = 0;
-        let minutes = Math.floor(lengthInSeconds / 60);
-
-        if (minutes >= 60) {
-            hours = Math.floor(minutes / 60);
-            minutes = minutes - hours * 60;
-        }
-        let seconds = Math.ceil(lengthInSeconds - (hours * 60 * 60) - (minutes * 60));
-
-        let secondsStr = String(seconds);
-        if (seconds < 10) {
-            secondsStr = '0' + secondsStr;
-        }
-
-        let minutesStr = String(minutes);
-        if (hours) {
-            if (minutes < 10) {
-                minutesStr = '0' + minutesStr;
-            }
-
-            return `${hours}:${minutesStr}:${secondsStr}`;
-        }
-
-        return `${minutesStr}:${secondsStr}`;
-    };
 
     const requestFullScreenVideo = () => {
         player.requestFullScreen();
