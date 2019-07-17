@@ -99,10 +99,8 @@ function PlaylistHeader(props: any) {
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 
-    const [selectedSeasonIndex, setSelectedSeasonIndex] = useState<number>(0);
-
     const handlePlaylistChange = (event: any) => {
-        setSelectedSeasonIndex(parseInt(event.target.value));
+        props.setSelectedSeasonIndex(parseInt(event.target.value));
         dispatch(
             ACTIONS.loadPlaylistAndStartPlaying(
                 PlaylistFactory.createPlaylistForProgramSeason(archive.seasons[parseInt(event.target.value)])
@@ -126,8 +124,8 @@ function PlaylistHeader(props: any) {
         const m = url.match(/\.[0-9a-z]+$/i);
         if (m && m[0]) {
             const title = archive.name;
-            let seriesNumber = String(selectedSeasonIndex + 1);
-            if (selectedSeasonIndex + 1) {
+            let seriesNumber = String(props.selectedSeasonIndex + 1);
+            if (props.selectedSeasonIndex + 1) {
                 seriesNumber = '0' + seriesNumber;
             }
             const series = `S${seriesNumber}`;
@@ -171,7 +169,7 @@ function PlaylistHeader(props: any) {
                         direction="row"
                     >
                         <Typography className={classes.playlistHeaderSubHead} display="block">
-                            {archive.seasons.length > 1 && (archive.seasons[selectedSeasonIndex].name + ' - ')}
+                            {archive.seasons.length > 1 && (archive.seasons[props.selectedSeasonIndex].name + ' - ')}
                             {player.currentlyPlayingItemOrder} / {player.playlistItemsCount}
                         </Typography>
                     </Grid>
@@ -201,7 +199,7 @@ function PlaylistHeader(props: any) {
                         >
                             {archive.seasons.map((season: any, index: number) =>
                                 <MenuItem
-                                    disabled={index === selectedSeasonIndex}
+                                    disabled={index === props.selectedSeasonIndex}
                                     onClick={handlePlaylistChange}
                                     key={index}
                                     value={index}>{season.name}</MenuItem>)}
