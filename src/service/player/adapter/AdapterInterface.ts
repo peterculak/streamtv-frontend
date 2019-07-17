@@ -1,3 +1,6 @@
+import PlayableItem from '../PlayableItem';
+import PlaylistInterface from "../PlaylistInterface";
+
 interface AdapterInterface {
     muted: boolean;
     /**
@@ -15,7 +18,7 @@ interface AdapterInterface {
     /**
      * Starts playing stream source
      */
-    play(src?: string): void;
+    play(item?: string|PlaylistInterface|PlayableItem): void;
 
     /**
      * Pause current stream

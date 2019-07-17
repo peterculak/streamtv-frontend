@@ -16,6 +16,8 @@ class Player implements PlayerInterface {
     private _isVideoDataLoaded: boolean = false;
     private _isHighQualitySelected: boolean = false;
     private currentTime: number = 0;
+    private isCasting: boolean = false;
+
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
@@ -81,10 +83,15 @@ class Player implements PlayerInterface {
         if (this._selectedQualityIndex + 1 === this.availableQuality().length) {
             this._isHighQualitySelected = true;
         }
-        if (this._isHighQualitySelected) {
-            this.setHighestQuality();
+
+        if (!this.isCasting) {
+            if (this._isHighQualitySelected) {
+                this.setHighestQuality();
+            } else {
+                this.adapter().play(this.playlist.current().mp4[this._selectedQualityIndex]);
+            }
         } else {
-            this.adapter().play(this.playlist.current().mp4[this._selectedQualityIndex]);
+            this.adapter().play(this.playlist);
         }
     }
 
@@ -317,31 +324,36 @@ class Player implements PlayerInterface {
         return this.castSenderAdapter !== undefined;
     }
 
-    isCasting(): boolean {
-        return this.castSenderAdapter !== undefined && this.castSenderAdapter.isConnected();
-    }
-
     initializeCastPlayer(adapter: CastSenderAdapter): void {
         console.log('initialize cast player');
         this.castSenderAdapter = adapter;
+        this.castSenderAdapter.addListener(
+            adapter.cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
+            (e: any) => this.switchAdapter(e)
+        );
     }
 
-    switchPlayer(): void {
-        // this.playerStateBeforeSwitch = this.playerState;
-
-        // this.stopProgressTimer();
-        // this.resetVolumeSlider();
-
+    switchAdapter(e: any): void {
         // Session is active
-        // if (this.canCast && this.castSenderAdapter.isConnected()) {
-            // this.isCasting = true;
-            // Pause local playback
-            // this.playerHandler.pause();
-            // this.castSenderAdapter.init();
-        // } else {
-            // this.setupLocalPlayer();
-            // this.isCasting = false;
-        // }
+        console.log('switching');
+        console.log('connected', this.castSenderAdapter!.isConnected());
+
+        const castRequested = e.value;
+
+        if (castRequested && this.canCast && this.castSenderAdapter!.isConnected()) {
+            this.isCasting = true;
+            this._adapter.pause();
+            this.play();
+        } else {
+            if (this.isCasting) {
+                this.isCasting = false;
+                this.castSenderAdapter!.pause();
+                setTimeout(() => {
+                    this._adapter.setCurrentVideoTime(this.castSenderAdapter!.getCurrentVideoTime());
+                    this._adapter.resume();
+                }, 500);
+            }
+        }
     }
 
     private adapter(): AdapterInterface {

@@ -101,7 +101,7 @@ function MediaControls(props: any, ref: any) {
     function showControls(): boolean {
         // console.log('show controls?');
         // console.log('isCasting', player.isCasting());
-        return player.isCasting() || props.isHover || !player.isPlaying();
+        return player.isCasting || props.isHover || !player.isPlaying();
     }
 
     const requestFullScreenVideo = () => {

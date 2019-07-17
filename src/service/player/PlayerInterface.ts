@@ -89,6 +89,5 @@ interface PlayerInterface {
     //////////////////cast related methods to be moved
     initializeCastPlayer(adapter: any): void;//todo
     canCast: boolean;
-    isCasting(): boolean;
 }
 export default PlayerInterface;

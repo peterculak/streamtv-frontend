@@ -1,12 +1,14 @@
 import AdapterException from "./AdapterException";
 import AdapterInterface from "./AdapterInterface";
+import PlaylistInterface from "../PlaylistInterface";
+import PlayableItem from "../PlayableItem";
 
 class CastSenderAdapter implements AdapterInterface {
     /**
      * Cast sender api (window.cast)
      * <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
      */
-    private cast: any;
+    public cast: any;
 
     /**
      * Chrome browser (window.chrome)
@@ -38,14 +40,8 @@ class CastSenderAdapter implements AdapterInterface {
 
         this.remotePlayer = new cast.framework.RemotePlayer();
         this.remotePlayerController = new cast.framework.RemotePlayerController(this.remotePlayer);
-        this.remotePlayerController.addEventListener(
-            cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
-            (e: any) => {
-                console.log('IS_CONNECTED_CHANGED', e);
-                const session = cast.framework.CastContext.getInstance().getCurrentSession();
-                console.log(session);
-            }
-        );
+
+        this.init();
     }
 
     init(): void {
@@ -70,7 +66,11 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     getCurrentVideoTime(): number {
-        return 0;
+        if (this.remotePlayer.savedPlayerState) {
+            return this.remotePlayer.savedPlayerState.currentTime;
+        }
+
+        return this.remotePlayer.currentTime;
     }
 
     getVideoDuration(): number {
@@ -107,12 +107,32 @@ class CastSenderAdapter implements AdapterInterface {
         }
     }
 
-    play(src?: string): void {
-        if (src) {
-            const mediaInfo = new this.chrome.cast.media.MediaInfo(src, 'video/mp4');
-            const request = new this.chrome.cast.media.LoadRequest(mediaInfo);
-            this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request);
-        }
+    play(playlist: PlaylistInterface): void {
+        // if (src) {
+            const items = [];
+            for (let i = 0; i<= 50; i++) {
+                items.push(playlist.items[i]);
+            }
+            console.log(items);
+
+        // const mediaInfo = new this.chrome.cast.media.MediaInfo(items[0].mp4[0], 'video/mp4');
+            const request = new this.chrome.cast.media.LoadRequest(items[0].mp4[0], 'video/mp4');
+
+            console.log(items);
+            request.queueData = new this.chrome.cast.media.QueueData(
+                'id',
+                'name',
+                'desc',
+                'OFF',
+                items.map((item: PlayableItem) => new this.chrome.cast.media.QueueItem(
+                    new this.chrome.cast.media.MediaInfo(item.mp4[0], 'video/mp4'))
+                )
+            );
+
+            this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request).then((r: any) => {
+                console.log('loaded', r);
+            });
+        // }
     }
 
     requestFullScreen(): Promise<void> {
@@ -122,7 +142,7 @@ class CastSenderAdapter implements AdapterInterface {
 
     resume(): void {
         // if (!this.remotePlayer.isPaused) {
-            this.remotePlayerController.playOrPause();
+        this.remotePlayerController.playOrPause();
         // }
     }
 
