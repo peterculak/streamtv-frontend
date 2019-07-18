@@ -89,6 +89,8 @@ function Playlist(props: any) {
         );
     }
 
+    const [selectedSeasonIndex, setSelectedSeasonIndex] = useState<number>(0);
+
     function rowSmDown(props: ListRowProps) {
         const {index, key, style, parent} = props;
         const playlistItem = player.playlistItems[index -1];
@@ -107,7 +109,7 @@ function Playlist(props: any) {
                         key={index}
                         episode={playlistItem}
                         itemClick={() => dispatch(ACTIONS.playPlaylistItem(playlistItem))}
-                    />) : (<PlaylistHeader/>)}
+                    />) : (<PlaylistHeader selectedSeasonIndex={selectedSeasonIndex} setSelectedSeasonIndex={setSelectedSeasonIndex}/>)}
                 </div>
             </CellMeasurer>
         );
@@ -122,7 +124,7 @@ function Playlist(props: any) {
         <div className={classes.playlist}>
 
             <Hidden smDown>
-                <PlaylistHeader/>
+                <PlaylistHeader selectedSeasonIndex={selectedSeasonIndex} setSelectedSeasonIndex={setSelectedSeasonIndex}/>
             </Hidden>
 
             <Box style={{height: playlistHeight}} className={classes.playlistItems}>
