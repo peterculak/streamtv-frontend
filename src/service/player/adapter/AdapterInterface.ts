@@ -18,7 +18,7 @@ interface AdapterInterface {
     /**
      * Starts playing stream source
      */
-    play(item?: string|PlaylistInterface|PlayableItem): void;
+    play(item?: string|PlayableItem): Promise<any>;
 
     /**
      * Pause current stream
@@ -87,6 +87,7 @@ interface AdapterInterface {
 
     isFullScreenAvailable(): boolean;
     requestFullScreen(): Promise<void>;
+    loadQueueData(items: Array<PlayableItem>): void;
 }
 
 export default AdapterInterface;

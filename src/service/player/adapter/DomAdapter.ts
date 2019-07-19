@@ -1,5 +1,6 @@
 import AdapterInterface from "./AdapterInterface";
 import AdapterException from "./AdapterException";
+import PlayableItem from "../PlayableItem";
 
 class DomAdapter implements AdapterInterface {
     private htmlVideoElement: HTMLVideoElement|undefined;
@@ -32,15 +33,15 @@ class DomAdapter implements AdapterInterface {
         return this.htmlVideoElement !== undefined;
     }
 
-    play(src?: string): void {
+    play(src?: string): Promise<any> {
         if (!this.htmlVideoElement) {
             throw AdapterException.noVideoElement()
         }
         if (src) {
             this.setVideoSource(src);
-            this.htmlVideoElement.play();
+            return this.htmlVideoElement.play();
         } else if (this.htmlVideoElement.src) {
-            this.htmlVideoElement.play();
+            return this.htmlVideoElement.play();
         } else {
             throw AdapterException.emptyVideoSource();
         }
@@ -179,6 +180,9 @@ class DomAdapter implements AdapterInterface {
         }
 
         return this.htmlVideoElement.requestFullscreen();
+    }
+
+    loadQueueData(items: Array<PlayableItem>): void {
     }
 }
 

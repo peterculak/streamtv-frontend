@@ -79,10 +79,10 @@ class Playlist implements PlaylistInterface {
         this._currentIndex = value;
     }
 
-    moveIndexTo(moveTo: PlaylistItem): void {
+    moveIndexTo(src: string): void {
         let moveToIndex = -1;
         this._items.forEach((item: PlaylistItem, index: number) => {
-            if (moveTo.title === item.title && moveTo.mp4 === item.mp4) {
+            if (item.mp4.indexOf(src) >= 0) {
                 moveToIndex = index;
             }
         });

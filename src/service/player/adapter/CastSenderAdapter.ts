@@ -13,42 +13,25 @@ class CastSenderAdapter implements AdapterInterface {
     /**
      * Chrome browser (window.chrome)
      */
-    private chrome: any;
+    public chrome: any;
 
-    private remotePlayer: any;
+    public remotePlayer: any;
 
-    private remotePlayerController: any;
+    public remotePlayerController: any;
+
+    private castQueueData: Array<any> = [];
 
     constructor(cast: any, chrome: any) {
         this.cast = cast;
         this.chrome = chrome;
 
         const options = {} as any;
-        // Set the receiver application ID to your own (created in the
-        // Google Cast Developer Console), or optionally
-        // use the chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-        // options.receiverApplicationId = 'C0868879';
         options.receiverApplicationId = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
-
-        // Auto join policy can be one of the following three:
-        // ORIGIN_SCOPED - Auto connect from same appId and page origin
-        // TAB_AND_ORIGIN_SCOPED - Auto connect from same appId, page origin, and tab
-        // PAGE_SCOPED - No auto connect
         options.autoJoinPolicy = chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED;
-
         cast.framework.CastContext.getInstance().setOptions(options);
 
         this.remotePlayer = new cast.framework.RemotePlayer();
         this.remotePlayerController = new cast.framework.RemotePlayerController(this.remotePlayer);
-
-        this.init();
-    }
-
-    init(): void {
-        this.remotePlayerController.addEventListener(
-            this.cast.framework.RemotePlayerEventType.MEDIA_INFO_CHANGED,
-            (e: any) => console.log('MEDIA_INFO_CHANGED', e)
-        );
     }
 
     isConnected(): boolean {
@@ -107,31 +90,48 @@ class CastSenderAdapter implements AdapterInterface {
         }
     }
 
-    play(playlist: PlaylistInterface): void {
+    play(item?: string): Promise<any> {
+            // console.log('play cast adapter', item);
         // if (src) {
+        //     const items = [{mp4: ['https://e2-vod.tmo.livebox.cz/TA3_VOD/_definst_/VideotekaEncoder/smil:20190717-DC74140B-9FE1-4528-AFB0-1A06B3FADD55_d.smil/playlist.m3u8?auth=_any_|1563478666|ebf79585f42d175e7c93990cf063e601367f170e']}];
             const items = [];
-            for (let i = 0; i<= 50; i++) {
-                items.push(playlist.items[i]);
+            // console.log(this.castQueueData.length);
+            const queueSize = 50;
+
+            let i = 0;
+            let add = false;
+            while (items.length < queueSize) {
+                if (this.castQueueData[i] === undefined || items.length >= 50) {
+                    break;
+                }
+
+                if (this.castQueueData[i].mp4.indexOf(item) >= 0) {
+                    add = true;
+                }
+
+                if (add) {
+                    items.push(new this.chrome.cast.media.MediaInfo(this.castQueueData[i].mp4[0], 'video/mp4'));
+                }
+
+                i++;
             }
-            console.log(items);
+            // console.log(items);
 
         // const mediaInfo = new this.chrome.cast.media.MediaInfo(items[0].mp4[0], 'video/mp4');
-            const request = new this.chrome.cast.media.LoadRequest(items[0].mp4[0], 'video/mp4');
-
-            console.log(items);
+            const request = new this.chrome.cast.media.LoadRequest();
             request.queueData = new this.chrome.cast.media.QueueData(
                 'id',
                 'name',
                 'desc',
                 'OFF',
-                items.map((item: PlayableItem) => new this.chrome.cast.media.QueueItem(
-                    new this.chrome.cast.media.MediaInfo(item.mp4[0], 'video/mp4'))
-                )
+                items.map((mediaInfoItem: any) => {
+                    const queueItem = new this.chrome.cast.media.QueueItem(mediaInfoItem);
+                    queueItem.preloadTime = 20;
+                    return queueItem;
+                })
             );
 
-            this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request).then((r: any) => {
-                console.log('loaded', r);
-            });
+            return this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request);
         // }
     }
 
@@ -147,6 +147,8 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     setCurrentVideoTime(time: number): void {
+        this.remotePlayer.currentTime = time;
+        this.remotePlayerController.seek();
     }
 
     setPosterSource(src: string): void {
@@ -159,6 +161,10 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     setVideoVolume(volume: number): void {
+    }
+
+    loadQueueData(items: Array<PlayableItem>): void {
+        this.castQueueData = items;
     }
 }
 

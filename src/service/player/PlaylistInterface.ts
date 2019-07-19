@@ -14,7 +14,7 @@ interface PlaylistInterface {
     rewind(): void;
     size(): number;
     rest(): Array<PlayableItem>;
-    moveIndexTo(item: PlayableItem): void;
+    moveIndexTo(src: string): void;
     sortAsc(): void;
     sortDesc(): void;
     reverse(): void;//reverse order of items in playlist

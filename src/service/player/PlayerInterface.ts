@@ -10,7 +10,7 @@ interface PlayerInterface {
     playlistItems: Array<PlayableItem>;
     selectedQualityIndex: number;
 
-    play(): void;
+    play(): Promise<any>;
     pause(): void;
     resume(): void;
     next(): void;
