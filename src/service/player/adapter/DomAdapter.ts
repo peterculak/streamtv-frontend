@@ -5,8 +5,9 @@ import PlayableItem from "../PlayableItem";
 class DomAdapter implements AdapterInterface {
     private htmlVideoElement: HTMLVideoElement|undefined;
 
-    constructor(private _window: Window = window) {
+    constructor(private _window: Window = window, ref: HTMLVideoElement) {
         this._window = window;
+        this.htmlVideoElement = ref;
     }
 
     setVideoElement(ref: HTMLVideoElement): void {

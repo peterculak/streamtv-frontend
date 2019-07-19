@@ -31,6 +31,7 @@ import {
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 import PlayerInterface from "../service/player/PlayerInterface";
+import DomAdapter from "../service/player/adapter/DomAdapter";
 
 const initialState = {
     player: container.get<PlayerInterface>(CONSTANTS.PLAYER),
@@ -85,7 +86,7 @@ function rootReducer(state = initialState, action: any) {
             }
             return state;
         case PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING:
-            state.player.setVideoElement(action.payload, action.callbacks);
+            state.player.initializeHtmlPlayer(new DomAdapter(window, action.payload), action.callbacks);
             if (state.player.isLoaded() && state.player.autoplay) {
                 state.player.play();
             }

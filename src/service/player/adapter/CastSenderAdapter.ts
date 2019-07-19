@@ -91,48 +91,41 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     play(item?: string): Promise<any> {
-            // console.log('play cast adapter', item);
-        // if (src) {
-        //     const items = [{mp4: ['https://e2-vod.tmo.livebox.cz/TA3_VOD/_definst_/VideotekaEncoder/smil:20190717-DC74140B-9FE1-4528-AFB0-1A06B3FADD55_d.smil/playlist.m3u8?auth=_any_|1563478666|ebf79585f42d175e7c93990cf063e601367f170e']}];
-            const items = [];
-            // console.log(this.castQueueData.length);
-            const queueSize = 50;
+        // console.log('play cast adapter', item);
+        // const items = [{mp4: ['https://e2-vod.tmo.livebox.cz/TA3_VOD/_definst_/VideotekaEncoder/smil:20190717-DC74140B-9FE1-4528-AFB0-1A06B3FADD55_d.smil/playlist.m3u8?auth=_any_|1563478666|ebf79585f42d175e7c93990cf063e601367f170e']}];
+        // console.log(this.castQueueData.length);
+        const items = [];
+        const queueSize = 50;
 
-            let i = 0;
-            let add = false;
-            while (items.length < queueSize) {
-                if (this.castQueueData[i] === undefined || items.length >= 50) {
-                    break;
-                }
-
-                if (this.castQueueData[i].mp4.indexOf(item) >= 0) {
-                    add = true;
-                }
-
-                if (add) {
-                    items.push(new this.chrome.cast.media.MediaInfo(this.castQueueData[i].mp4[0], 'video/mp4'));
-                }
-
-                i++;
+        let i = 0;
+        let add = false;
+        while (items.length < queueSize) {
+            if (this.castQueueData[i] === undefined || items.length >= 50) {
+                break;
             }
-            // console.log(items);
+            if (this.castQueueData[i].mp4.indexOf(item) >= 0) {
+                add = true;
+            }
+            if (add) {
+                items.push(new this.chrome.cast.media.MediaInfo(this.castQueueData[i].mp4[0], 'video/mp4'));
+            }
+            i++;
+        }
 
-        // const mediaInfo = new this.chrome.cast.media.MediaInfo(items[0].mp4[0], 'video/mp4');
-            const request = new this.chrome.cast.media.LoadRequest();
-            request.queueData = new this.chrome.cast.media.QueueData(
-                'id',
-                'name',
-                'desc',
-                'OFF',
-                items.map((mediaInfoItem: any) => {
-                    const queueItem = new this.chrome.cast.media.QueueItem(mediaInfoItem);
-                    queueItem.preloadTime = 20;
-                    return queueItem;
-                })
-            );
+        const request = new this.chrome.cast.media.LoadRequest();
+        request.queueData = new this.chrome.cast.media.QueueData(
+            'id',
+            'name',
+            'desc',
+            'OFF',
+            items.map((mediaInfoItem: any) => {
+                const queueItem = new this.chrome.cast.media.QueueItem(mediaInfoItem);
+                queueItem.preloadTime = 20;
+                return queueItem;
+            })
+        );
 
-            return this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request);
-        // }
+        return this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request);
     }
 
     requestFullScreen(): Promise<void> {

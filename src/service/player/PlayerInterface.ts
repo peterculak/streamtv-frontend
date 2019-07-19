@@ -1,6 +1,7 @@
 import PlaylistInterface from "./PlaylistInterface";
 import PlayableItem from "./PlayableItem";
 import AdapterInterface from "./adapter/AdapterInterface";
+import DomAdapter from "./adapter/DomAdapter";
 
 interface PlayerInterface {
     autoplay: boolean;
@@ -10,6 +11,7 @@ interface PlayerInterface {
     playlistItems: Array<PlayableItem>;
     selectedQualityIndex: number;
 
+    initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void;
     play(): Promise<any>;
     pause(): void;
     resume(): void;
@@ -17,7 +19,6 @@ interface PlayerInterface {
     previous(): void;
     load(playlist: PlaylistInterface): void;
     isLoaded(): boolean;
-    setVideoElement(ref: any, callbacks?: any ): void;
 
     /**
      * currently video which is loaded, can be playing or paused

@@ -43,7 +43,6 @@ function Player(props: any, ref: any) {
     useEffect(() => {
         if (player && player.current()) {
             document.title = player.current().subtitle;
-            console.log(player);
         }
     }, [player && player.current()]);
 

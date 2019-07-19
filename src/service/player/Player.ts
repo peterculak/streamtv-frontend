@@ -20,27 +20,19 @@ class Player implements PlayerInterface {
 
     private callbacks: any;
 
+    private _adapter: AdapterInterface|undefined;
+    private castSenderAdapter: CastSenderAdapter|undefined;//todo
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
-        private _adapter: AdapterInterface = new DomAdapter(),
     ) {
         this.playlist = playlist;
-        this._adapter = _adapter;
     }
 
-    get autoplay(): boolean {
-        return this._autoplay;
-    }
-
-    set autoplay(value: boolean) {
-        this._autoplay = value;
-    }
-
-    setVideoElement(ref: HTMLVideoElement, callbacks?: any ) {
-        this.adapter().setVideoElement(ref);
+    initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void {
+        this._adapter = adapter;
         this.callbacks = callbacks;
-        if (callbacks.ended) {
+        if (callbacks && callbacks.ended) {
             this.adapter().addListener('ended', () => this._autoplay && callbacks.ended());
         } else {
             this.adapter().addListener('ended', () => this._autoplay && this.next());
@@ -63,8 +55,28 @@ class Player implements PlayerInterface {
         });
     }
 
+    initializeCastPlayer(adapter: CastSenderAdapter): void {
+        this.castSenderAdapter = adapter;
+        this.castSenderAdapter.addListener(
+            adapter.cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
+            (e: any) => this.switchAdapter(e)
+        );
+    }
+
+    get canCast(): boolean {
+        return this.castSenderAdapter !== undefined;
+    }
+
     get isVideoDataLoaded(): boolean {
         return this._isVideoDataLoaded;
+    }
+
+    get autoplay(): boolean {
+        return this._autoplay;
+    }
+
+    set autoplay(value: boolean) {
+        this._autoplay = value;
     }
 
     load(playlist: PlaylistInterface): void {
@@ -75,6 +87,9 @@ class Player implements PlayerInterface {
     }
 
     isLoaded(): boolean {
+        if (!this._adapter || !this.castSenderAdapter) {
+            return false;
+        }
         return this.adapter().hasVideoElement() && this.playlist && this.playlist.size() > 0;
     }
 
@@ -97,11 +112,16 @@ class Player implements PlayerInterface {
         // } else {
         //     this.adapter().play(this.playlist.current().mp4[this._selectedQualityIndex]);
         // }
+        if (this._isHighQualitySelected) {
+            this._selectedQualityIndex = this.current().mp4.length -1;
+        }
+        // console.log('current', this.playlist.current());
+        // console.log('selected quality', this._selectedQualityIndex);
         return this.adapter().play(this.playlist.current().mp4[this._selectedQualityIndex]);
     }
 
     playPlaylistItem(item: PlayableItem): void {
-        this.playlist.moveIndexTo(item.mp4[0]);
+        this.playlist.moveIndexTo(item.mp4[this._selectedQualityIndex]);
         this.play();
     }
 
@@ -323,25 +343,32 @@ class Player implements PlayerInterface {
         return this.adapter().requestFullScreen();
     }
 
-    private castSenderAdapter: CastSenderAdapter|undefined;//todo
+    private adapter(): AdapterInterface {
+        if (!this._adapter && !this.castSenderAdapter) {
+            throw new Error('No adapter')
+        }
 
-    get canCast(): boolean {
-        return this.castSenderAdapter !== undefined;
+        if (this.castSenderAdapter && this.castSenderAdapter.isConnected()) {
+            return this.castSenderAdapter;
+        } else {
+            return this._adapter!;
+        }
     }
 
-    initializeCastPlayer(adapter: CastSenderAdapter): void {
-        this.castSenderAdapter = adapter;
-        this.castSenderAdapter.addListener(
-            adapter.cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
-            (e: any) => this.switchAdapter(e)
-        );
-    }
-
-    switchAdapter(e: any): void {
+    private switchAdapter(e: any): void {
         const castRequested = e.value;
         if (castRequested && this.canCast && this.castSenderAdapter!.isConnected()) {
             this.isCasting = true;
-            this.castSenderAdapter!.loadQueueData(this.playlist.items);
+            this.castSenderAdapter!.loadQueueData(this.playlist.items.map((item: PlayableItem, index: number) => {
+                const newItem = Object.assign({}, item);
+                if (this._isHighQualitySelected) {
+                    newItem.mp4 = [item.mp4[item.mp4.length -1]];
+                } else {
+                    newItem.mp4 = [item.mp4[0]];
+                }
+                return newItem;
+            }));
+
             this.castSenderAdapter!.addListener(
                 'mediaInfoChanged',
                 (e: any) => {
@@ -356,28 +383,25 @@ class Player implements PlayerInterface {
                     }
                 }
             );
-            this._adapter.pause();
-            const time = this._adapter.getCurrentVideoTime();
-            this._adapter.setVideoSource('');
-            this.play().then(() => this.castSenderAdapter!.setCurrentVideoTime(time));
+            let time = 0;
+            if (this._adapter !== undefined) {
+                this._adapter.pause();
+                time = this._adapter.getCurrentVideoTime();
+                this._adapter.setVideoSource('');
+            }
+            this.play().then(() => time ? this.castSenderAdapter!.setCurrentVideoTime(time) : false);
         } else {
             if (this.isCasting) {
                 this.isCasting = false;
                 this.castSenderAdapter!.pause();
-                setTimeout(() => {
-                    this._adapter.setVideoSource(this.playlist.current().mp4[0]);
-                    this._adapter.setCurrentVideoTime(this.castSenderAdapter!.getCurrentVideoTime());
-                    this._adapter.resume();
-                }, 500);
+                if (this._adapter !== undefined) {
+                    setTimeout(() => {
+                        this._adapter!.setVideoSource(this.playlist.current().mp4[0]);
+                        this._adapter!.setCurrentVideoTime(this.castSenderAdapter!.getCurrentVideoTime());
+                        this._adapter!.resume();
+                    }, 500);
+                }
             }
-        }
-    }
-
-    public adapter(): AdapterInterface {
-        if (this.castSenderAdapter && this.castSenderAdapter.isConnected()) {
-            return this.castSenderAdapter;
-        } else {
-            return this._adapter;
         }
     }
 

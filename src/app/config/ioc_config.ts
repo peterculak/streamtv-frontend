@@ -34,11 +34,15 @@ container.bind<ProgramServiceInterface>(CONSTANTS.PROGRAMS).toDynamicValue( () =
 
 container.bind<PlayerInterface>(CONSTANTS.PLAYER).to(Player).inSingletonScope();
 (window as any)['__onGCastApiAvailable'] = function (isAvailable: boolean) {
-    console.log('cast', isAvailable);
+    // console.log('cast', isAvailable);
     if (isAvailable) {
-        const adapter = new CastSenderAdapter((window as any).cast, (window as any).chrome);
-        console.log(adapter);
-        container.get<PlayerInterface>(CONSTANTS.PLAYER).initializeCastPlayer(adapter);
+        const cast = (window as any).cast;
+        const chrome = (window as any).chrome;
+        if (cast !== undefined && chrome !== undefined) {
+            container.get<PlayerInterface>(CONSTANTS.PLAYER).initializeCastPlayer(
+                new CastSenderAdapter(cast, chrome)
+            );
+        }
     }
 };
 
