@@ -97,6 +97,13 @@ class DomAdapter implements AdapterInterface {
         this.htmlVideoElement.addEventListener(type, listener);
     }
 
+    removeListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        if (!this.htmlVideoElement) {
+            throw AdapterException.noVideoElement();
+        }
+        this.htmlVideoElement.removeEventListener(type, listener);
+    }
+
     getCurrentVideoTime(): number {
         if (!this.htmlVideoElement) {
             throw AdapterException.noVideoElement();

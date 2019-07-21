@@ -87,7 +87,7 @@ function Player(props: any, ref: any) {
                 ) : ''}
                 <video
                     ref={playerRef} width="100%" height="100%"/>
-                <MediaControls isHover={true}/>
+                <MediaControls isHover={isHover || player.isCasting}/>
             </div>
             {player && player.current() && (
                 <Hidden smDown>

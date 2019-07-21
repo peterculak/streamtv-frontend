@@ -42,7 +42,17 @@ class CastSenderAdapter implements AdapterInterface {
         this.remotePlayerController.addEventListener(type, listener);
     }
 
-    muted: boolean = false;
+    removeListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        this.remotePlayerController.removeEventListener(type, listener);
+    }
+
+    get muted(): boolean {
+        return this.remotePlayer.isMuted;
+    }
+
+    set muted(value: boolean) {
+        this.remotePlayerController.muteOrUnmute();
+    }
 
     currentStream(): string {
         return "";
@@ -57,7 +67,7 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     getVideoDuration(): number {
-        return 0;
+        return this.remotePlayer.duration;
     }
 
     getVideoElementHeight(): string {
@@ -69,7 +79,7 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     getVideoVolume(): number {
-        return 0;
+        return this.muted ? 0 : this.remotePlayer.volumeLevel;
     }
 
     hasVideoElement(): boolean {
@@ -154,6 +164,8 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     setVideoVolume(volume: number): void {
+        this.remotePlayer.volumeLevel = volume;
+        this.remotePlayerController.setVolumeLevel(volume);
     }
 
     loadQueueData(items: Array<PlayableItem>): void {

@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.2.0",
     "@material-ui/icons": "^4.0.1",
+    "@types/chromecast-caf-sender": "^1.0.1",
     "@types/core-js": "^2.5.0",
     "@types/crypto-js": "^3.1.43",
     "@types/jest": "23.3.10",

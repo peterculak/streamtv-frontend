@@ -10,6 +10,7 @@ interface PlayerInterface {
     playlistItemsCount: number;
     playlistItems: Array<PlayableItem>;
     selectedQualityIndex: number;
+    isCasting: boolean;
 
     initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void;
     play(): Promise<any>;

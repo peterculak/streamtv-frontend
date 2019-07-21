@@ -60,6 +60,7 @@ interface AdapterInterface {
     hasVideoElement(): boolean;
 
     addListener(eventName: string, callback: any): void;
+    removeListener(eventName: string, callback: any): void;
 
     getVideoElementHeight(): string;
     getVideoElementWidth(): string;

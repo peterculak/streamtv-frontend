@@ -36,7 +36,7 @@ container.bind<PlayerInterface>(CONSTANTS.PLAYER).to(Player).inSingletonScope();
 (window as any)['__onGCastApiAvailable'] = function (isAvailable: boolean) {
     // console.log('cast', isAvailable);
     if (isAvailable) {
-        const cast = (window as any).cast;
+        const cast = window.cast;
         const chrome = (window as any).chrome;
         if (cast !== undefined && chrome !== undefined) {
             container.get<PlayerInterface>(CONSTANTS.PLAYER).initializeCastPlayer(

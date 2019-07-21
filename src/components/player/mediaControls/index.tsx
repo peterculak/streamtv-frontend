@@ -178,6 +178,7 @@ function MediaControls(props: any, ref: any) {
                         ) : ''}
 
                         <Button
+                            disabled={!player.isFullScreenAvailable()}
                             onClick={() => requestFullScreenVideo()}
                             size="medium"
                             className={classes.buttons}

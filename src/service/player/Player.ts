@@ -16,7 +16,7 @@ class Player implements PlayerInterface {
     private _isVideoDataLoaded: boolean = false;
     private _isHighQualitySelected: boolean = false;
     private currentTime: number = 0;
-    private isCasting: boolean = false;
+    public isCasting: boolean = false;
 
     private callbacks: any;
 
@@ -30,6 +30,7 @@ class Player implements PlayerInterface {
     }
 
     initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void {
+        // console.log('initializeHtmlPlayer', adapter);
         this._adapter = adapter;
         this.callbacks = callbacks;
         if (callbacks && callbacks.ended) {
@@ -87,10 +88,15 @@ class Player implements PlayerInterface {
     }
 
     isLoaded(): boolean {
-        if (!this._adapter || !this.castSenderAdapter) {
-            return false;
+        if (this._adapter !== undefined && this._adapter.hasVideoElement() && this.playlist && this.playlist.size() > 0) {
+            return true;
         }
-        return this.adapter().hasVideoElement() && this.playlist && this.playlist.size() > 0;
+
+        if (this.castSenderAdapter !== undefined && this.castSenderAdapter.isConnected() && this.playlist && this.playlist.size() > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     pause(): void {
@@ -344,7 +350,7 @@ class Player implements PlayerInterface {
     }
 
     private adapter(): AdapterInterface {
-        if (!this._adapter && !this.castSenderAdapter) {
+        if (this._adapter === undefined && this.castSenderAdapter === undefined) {
             throw new Error('No adapter')
         }
 
@@ -356,7 +362,34 @@ class Player implements PlayerInterface {
     }
 
     private switchAdapter(e: any): void {
+        // console.log('switchAdapter');
         const castRequested = e.value;
+
+        const handleMediaInfoChange = (e: any) => {
+            // console.log('mediaInfoChanged', e);
+            if (e.value) {
+                const streamUrl = e.value.contentId;
+                if (streamUrl) {
+                    // console.log('media change', streamUrl);
+                    // console.log(this.current());
+                    if (!this.current().duration) {
+                        this.current().duration = Math.ceil(this.castSenderAdapter!.getVideoDuration());
+                    }
+                    if (this.playlist.current().image) {
+                        this._adapter!.setPosterSource(this.playlist.current().image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r800x'));
+                    }
+                    this.playlist.moveIndexTo(streamUrl);
+                    if (this.callbacks && this.callbacks.loadeddata) {
+                        this.callbacks.loadeddata();
+                    }
+                }
+            }
+        };
+        const handleCurrentTimeChange = (e: any) => {
+            this.currentTime = e.value;
+            this.callbacks.timeupdate && this.callbacks.timeupdate();
+        };
+
         if (castRequested && this.canCast && this.castSenderAdapter!.isConnected()) {
             this.isCasting = true;
             this.castSenderAdapter!.loadQueueData(this.playlist.items.map((item: PlayableItem, index: number) => {
@@ -369,35 +402,59 @@ class Player implements PlayerInterface {
                 return newItem;
             }));
 
+            this.castSenderAdapter!.removeListener(
+                'mediaInfoChanged',
+                handleMediaInfoChange,
+            );
+            this.castSenderAdapter!.removeListener(
+                'mediaInfoChanged',
+                handleCurrentTimeChange,
+            );
             this.castSenderAdapter!.addListener(
                 'mediaInfoChanged',
-                (e: any) => {
-                    if (e.value) {
-                        const streamUrl = e.value.contentId;
-                        if (streamUrl) {
-                            this.playlist.moveIndexTo(streamUrl);
-                            if (this.callbacks && this.callbacks.loadeddata) {
-                                this.callbacks.loadeddata();
-                            }
-                        }
-                    }
-                }
+                handleMediaInfoChange,
+            );
+            this.castSenderAdapter!.addListener(
+                'currentTimeChanged',
+                handleCurrentTimeChange,
             );
             let time = 0;
+            let volume = 1;
             if (this._adapter !== undefined) {
                 this._adapter.pause();
+                if (this.playlist.current().image) {
+                    this._adapter.setPosterSource(this.playlist.current().image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r800x'));
+                }
                 time = this._adapter.getCurrentVideoTime();
+                volume = this._adapter.getVideoVolume();
                 this._adapter.setVideoSource('');
             }
-            this.play().then(() => time ? this.castSenderAdapter!.setCurrentVideoTime(time) : false);
+            this.play().then(() => {
+                if (time) {
+                    this.castSenderAdapter!.setCurrentVideoTime(time)
+                }
+                if (volume === 1) {
+                    volume = 0.99;//to prevent popup showing about max volume when just connected
+                }
+                this.castSenderAdapter!.setVideoVolume(volume);
+            });
         } else {
             if (this.isCasting) {
                 this.isCasting = false;
                 this.castSenderAdapter!.pause();
+                this.castSenderAdapter!.removeListener(
+                    'mediaInfoChanged',
+                    handleMediaInfoChange,
+                );
+                this.castSenderAdapter!.removeListener(
+                    'mediaInfoChanged',
+                    handleCurrentTimeChange,
+                );
                 if (this._adapter !== undefined) {
                     setTimeout(() => {
                         this._adapter!.setVideoSource(this.playlist.current().mp4[0]);
                         this._adapter!.setCurrentVideoTime(this.castSenderAdapter!.getCurrentVideoTime());
+                        this._adapter!.setVideoVolume(this.castSenderAdapter!.getVideoVolume());
                         this._adapter!.resume();
                     }, 500);
                 }
