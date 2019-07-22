@@ -68,15 +68,13 @@ function EpisodeDetailController(props: any) {
                                 <Player/>
                             </ErrorBoundary>
                         </Grid>
-                        {player && (
-                            <Grid container direction="column">
-                                <Box className={classes.rhc}>
-                                    <ErrorBoundary>
-                                        <Playlist {...rest}/>
-                                    </ErrorBoundary>
-                                </Box>
-                            </Grid>
-                        )}
+                        <Grid container direction="column">
+                            <Box className={classes.rhc}>
+                                <ErrorBoundary>
+                                    <Playlist {...rest}/>
+                                </ErrorBoundary>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Hidden>
 
@@ -91,15 +89,13 @@ function EpisodeDetailController(props: any) {
                             </ErrorBoundary>
                         </Grid>
 
-                        {player && (
-                            <Grid item sm={12} md={4}>
-                                <Box className={classes.rhc}>
-                                    <ErrorBoundary>
-                                        <Playlist {...rest}/>
-                                    </ErrorBoundary>
-                                </Box>
-                            </Grid>
-                        )}
+                        <Grid item sm={12} md={4}>
+                            <Box className={classes.rhc}>
+                                <ErrorBoundary>
+                                    <Playlist {...rest}/>
+                                </ErrorBoundary>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Hidden>
             </div>);

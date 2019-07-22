@@ -15,6 +15,8 @@ interface PlayerInterface {
     resume(): void;
     next(): void;
     previous(): void;
+    fastForward(seconds: number): void;
+    rewind(seconds: number): void;
     load(playlist: PlaylistInterface): void;
     isLoaded(): boolean;
 
@@ -73,6 +75,8 @@ interface PlayerInterface {
     mute(): void;
     unMute(): void;
     isMuted(): boolean;
+    volumeUp(): void;
+    volumeDown(): void;
 
     /**
      * number between 0 - 100

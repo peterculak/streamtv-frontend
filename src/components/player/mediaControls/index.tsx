@@ -120,7 +120,7 @@ function MediaControls(props: any, ref: any) {
                     <VideoProgressBar/>
 
                     <Tooltip
-                        title={player.isPlaying() ? 'Pause' : 'Play'}
+                        title={player.isPlaying() ? 'Pause (k)' : 'Play (k)'}
                     >
                         <Button
                             size="small"
@@ -141,7 +141,7 @@ function MediaControls(props: any, ref: any) {
                         </Button>
                     </Tooltip>
                     <Tooltip
-                        title="Next"
+                        title="Next (n)"
                     >
                         <Button
                             size="small"
@@ -169,7 +169,7 @@ function MediaControls(props: any, ref: any) {
 
                     <div className={classes.rightControls}>
                         <Tooltip
-                            title={player.isHighQualitySelected() ? "Low quality" : "Hight quality"}
+                            title={player.isHighQualitySelected() ? "Low quality (h)" : "Hight quality(h)"}
                         >
                             <Button
                                 size="small"
@@ -184,7 +184,7 @@ function MediaControls(props: any, ref: any) {
                         </Tooltip>
                         {player.canCast ? (
                           <Tooltip
-                            title="Cast"
+                            title="Cast (c)"
                           >
                             <GoogleCastButton
                                 disabled={!player.canCast}
@@ -193,7 +193,7 @@ function MediaControls(props: any, ref: any) {
                         ) : ''}
 
                         <Tooltip
-                            title="Full screen"
+                            title="Full screen (f)"
                         >
                         <Button
                             disabled={!player.isFullScreenAvailable()}

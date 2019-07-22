@@ -102,12 +102,7 @@ function VolumeControls(props: any, ref: any) {
         setIsVolumeMouseDown(false);
     };
     const toggleMute = () => {
-        if (player.isMuted()) {
-            player.unMute();
-        } else {
-            player.mute();
-        }
-        dispatch(ACTIONS.videoElementTimeUpdate());//dummy action to trigger render
+        dispatch(ACTIONS.toggleMute());
     };
     const shouldShowVolumeSlider = () => isVolumeMouseOver || isVolumeMouseDown;
 
@@ -120,7 +115,7 @@ function VolumeControls(props: any, ref: any) {
                 onMouseOver={(event: any) => volumeMouseOver(event, true)}
                 onMouseOut={(event: any) => volumeMouseOver(event, false)}
                 className={classes.volumeControlBar}>
-                <Tooltip title={player.isMuted() ? 'Unmute' : 'Mute'}>
+                <Tooltip title={player.isMuted() ? 'Unmute (m)' : 'Mute (m)'}>
                     <Button
                         size="small"
                         className={classes.buttons}

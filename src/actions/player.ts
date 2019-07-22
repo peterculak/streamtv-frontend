@@ -8,7 +8,10 @@ import {
     PLAYER_PREVIOUS,
     PLAYER_SET_AUTOPLAY_ON_OFF,
     PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING,
+    PLAYER_TOGGLE_MUTE,
+    PLAYER_TOGGLE_MUTE_WITH_ANIMATION,
     PLAYER_TOGGLE_PAUSE_PLAY,
+    PLAYER_TOGGLE_PAUSE_PLAY_WITH_ANIMATION,
     PLAYER_SORT_PLAYLIST_REVERSE_SORT,
     PLAYER_SORT_PLAYLIST_ASC,
     PLAYER_SORT_PLAYLIST_DESC,
@@ -21,9 +24,11 @@ import {
     PLAYER_VIDEO_ELEMENT_DATA_LOADED,
     PLAYER_UPDATE_NEXT_ITEM_DURATION,
     PLAYER_VIDEO_TIME_UPDATE,
+    PLAYER_FAST_FORWARD_WITH_ANIMATION,
+    PLAYER_REWIND_WITH_ANIMATION,
+    PLAYER_VOLUME_UP_WITH_ANIMATION, PLAYER_VOLUME_DOWN_WITH_ANIMATION,
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
-import PlaylistItem from "../service/player/PlaylistItem";
 import PlayableItem from "../service/player/PlayableItem";
 
 export function play() {
@@ -40,6 +45,34 @@ export function previous() {
 
 export function togglePlay() {
     return {type: PLAYER_TOGGLE_PAUSE_PLAY};
+}
+
+export function togglePlayWithAnimation() {
+    return {type: PLAYER_TOGGLE_PAUSE_PLAY_WITH_ANIMATION};
+}
+
+export function toggleMute() {
+    return {type: PLAYER_TOGGLE_MUTE};
+}
+
+export function toggleMuteWithAnimation() {
+    return {type: PLAYER_TOGGLE_MUTE_WITH_ANIMATION};
+}
+
+export function fastForwardWithAnimation() {
+    return {type: PLAYER_FAST_FORWARD_WITH_ANIMATION};
+}
+
+export function rewindWithAnimation() {
+    return {type: PLAYER_REWIND_WITH_ANIMATION};
+}
+
+export function volumeUpWithAnimation() {
+    return {type: PLAYER_VOLUME_UP_WITH_ANIMATION};
+}
+
+export function volumeDownWithAnimation() {
+    return {type: PLAYER_VOLUME_DOWN_WITH_ANIMATION};
 }
 
 export function loadPlaylist(playlist: PlaylistInterface) {
@@ -60,6 +93,12 @@ export function setVideoElementAndStartPlaying(
         ended?: any,
         loadeddata?: any,
         timeupdate?: any,
+        togglePlay?: any,
+        toggleMute?: any,
+        fastForward?: any,
+        rewind?: any,
+        volumeUp?: any,
+        volumeDown?: any,
     }
 ) {
     return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callbacks: callbacks};

@@ -19,6 +19,8 @@ class CastSenderAdapter implements CastSenderAdapterInterface {
 
     private castQueueData: Array<any> = [];
 
+    private listeners: Array<{ type: string, listener: EventListenerOrEventListenerObject }> = [];
+
     constructor(cast: any, chrome: any) {
         this.cast = cast;
         this.chrome = chrome;
@@ -38,10 +40,17 @@ class CastSenderAdapter implements CastSenderAdapterInterface {
 
     addListener(type: string, listener: EventListenerOrEventListenerObject): void {
         this.remotePlayerController.addEventListener(type, listener);
+        this.listeners.push({type: type, listener: listener});
     }
 
     removeListener(type: string, listener: EventListenerOrEventListenerObject): void {
         this.remotePlayerController.removeEventListener(type, listener);
+    }
+
+    unmount(): void {
+        this.listeners.forEach(
+            (listener: { type: string, listener: EventListenerOrEventListenerObject }) => this.remotePlayerController.removeEventListener(listener.type, listener.listener)
+        );
     }
 
     get muted(): boolean {

@@ -11,6 +11,9 @@ interface HtmlAdapterInterface extends AdapterInterface {
     getVideoElementWidth(): string;
     isFullScreenAvailable(): boolean;
     requestFullScreen(): Promise<void>;
+    toggleFullScreen(): Promise<void>;
+    addKeyDownListener(action: any): void;
+    removeKeyDownListener(action: any): void;
 }
 
 export default HtmlAdapterInterface;

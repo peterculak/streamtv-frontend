@@ -4,6 +4,9 @@ import AdapterException from "./AdapterException";
 class DomAdapter implements HtmlAdapterInterface {
     private readonly htmlVideoElement: HTMLVideoElement;
 
+    private documentListeners: Array<any> = [];
+    private htmlElementListeners: Array<any> = [];
+
     constructor(private _window: Window = window, ref: HTMLVideoElement) {
         this._window = window;
         this.htmlVideoElement = ref;
@@ -58,10 +61,25 @@ class DomAdapter implements HtmlAdapterInterface {
 
     addListener(type: string, listener: EventListenerOrEventListenerObject): void {
         this.htmlVideoElement.addEventListener(type, listener);
+        this.htmlElementListeners.push({type: type, listener: listener});
     }
 
     removeListener(type: string, listener: EventListenerOrEventListenerObject): void {
         this.htmlVideoElement.removeEventListener(type, listener);
+    }
+
+    addKeyDownListener(listener: EventListenerOrEventListenerObject): void {
+        this._window.document.addEventListener('keydown', listener);
+        this.documentListeners.push(listener);
+    }
+
+    removeKeyDownListener(listener: EventListenerOrEventListenerObject): void {
+        this._window.document.removeEventListener('keydown', listener);
+    }
+
+    unmount(): void {
+        this.documentListeners.forEach((listener: EventListenerOrEventListenerObject) => this._window.document.removeEventListener('keydown', listener));
+        this.htmlElementListeners.forEach((listener: {type: string, listener:EventListenerOrEventListenerObject }) => this.htmlVideoElement.removeEventListener(listener.type, listener.listener));
     }
 
     getCurrentVideoTime(): number {
@@ -109,6 +127,10 @@ class DomAdapter implements HtmlAdapterInterface {
 
     isFullScreenAvailable(): boolean {
         return typeof this.htmlVideoElement.requestFullscreen === 'function';
+    }
+
+    toggleFullScreen(): Promise<void> {
+        return this._window.document.fullscreen ? this._window.document.exitFullscreen() : this.htmlVideoElement.requestFullscreen();
     }
 
     requestFullScreen(): Promise<void> {

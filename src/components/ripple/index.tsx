@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Transition from "react-transition-group/Transition";
 
 const fadeInUp = "fade-in";
-const fadeOutLeft = "fade-out";
 
 const useStyles = makeStyles({
     root: {
@@ -57,18 +56,9 @@ const useStyles = makeStyles({
             transform: 'scale(2)'
         }
     },
-    [`@keyframes ${fadeOutLeft}`]: {
-        from: {
-            opacity: 1
-        },
-        to: {
-            opacity: 0,
-            transform: 'translateY(-50%)'
-        }
-    }
 });
 
-function PlayEffect(props: any) {
+function Index(props: any) {
     const classes = useStyles();
     const {animate, children, ...rest} = props;
 
@@ -88,4 +78,4 @@ function PlayEffect(props: any) {
     );
 }
 
-export default PlayEffect;
+export default Index;

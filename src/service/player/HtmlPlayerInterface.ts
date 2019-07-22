@@ -7,6 +7,7 @@ interface HtmlPlayerInterface extends PlayerInterface {
     getVideoElementWidth(): string;
     isFullScreenAvailable(): boolean;
     requestFullScreen(): Promise<void>|void;
+    toggleFullScreen(): Promise<void>|void;
 }
 
 export default HtmlPlayerInterface;

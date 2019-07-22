@@ -26,7 +26,12 @@ import {
     PLAYER_SET_LOWEST_QUALITY,
     SELECT_CHANNEL_ARCHIVE,
     PLAYER_UPDATE_NEXT_ITEM_DURATION,
-    THEME_SELECT_MODE, THEME_TOGGLE_MODE,
+    THEME_SELECT_MODE, THEME_TOGGLE_MODE, PLAYER_TOGGLE_PAUSE_PLAY_WITH_ANIMATION, PLAYER_TOGGLE_MUTE,
+    PLAYER_TOGGLE_MUTE_WITH_ANIMATION,
+    PLAYER_REWIND_WITH_ANIMATION,
+    PLAYER_FAST_FORWARD_WITH_ANIMATION,
+    PLAYER_VOLUME_UP_WITH_ANIMATION,
+    PLAYER_VOLUME_DOWN_WITH_ANIMATION,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 import Player from "../service/player/Player";
@@ -37,6 +42,13 @@ const initialState = {
     selectedTVSeriesArchive: null,
     channelArchives: {} as any,
     theme: getTheme('dark'),
+    animatePausePlay: false,
+    animateMute: false,
+    animateFastForward: false,
+    animateRewind: false,
+    animateVolumeUp: false,
+    animateVolumeDown: false,
+    animateVolumeLabel: false,
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -74,6 +86,40 @@ function rootReducer(state = initialState, action: any) {
             } else {
                 state.player.resume();
             }
+            return state;
+        case PLAYER_TOGGLE_MUTE:
+            state.player.isMuted() ? state.player.unMute() : state.player.mute();
+            return state;
+        case PLAYER_TOGGLE_MUTE_WITH_ANIMATION:
+            state.player.isMuted() ? state.player.unMute() : state.player.mute();
+            state.animateMute = !state.animateMute;
+            state.animateVolumeLabel = !state.animateVolumeLabel;
+            return state;
+        case PLAYER_TOGGLE_PAUSE_PLAY_WITH_ANIMATION:
+            if (state.player.isPlaying()) {
+                state.player.pause();
+            } else {
+                state.player.resume();
+            }
+            state.animatePausePlay = !state.animatePausePlay;
+            return state;
+        case PLAYER_FAST_FORWARD_WITH_ANIMATION:
+            state.player.fastForward(5);
+            state.animateFastForward = !state.animateFastForward;
+            return state;
+        case PLAYER_REWIND_WITH_ANIMATION:
+            state.player.rewind(5);
+            state.animateRewind = !state.animateRewind;
+            return state;
+        case PLAYER_VOLUME_UP_WITH_ANIMATION:
+            state.player.volumeUp();
+            state.animateVolumeUp = !state.animateVolumeUp;
+            state.animateVolumeLabel = !state.animateVolumeLabel;
+            return state;
+        case PLAYER_VOLUME_DOWN_WITH_ANIMATION:
+            state.player.volumeDown();
+            state.animateVolumeDown = !state.animateVolumeDown;
+            state.animateVolumeLabel = !state.animateVolumeLabel;
             return state;
         case PLAYER_LOAD_PLAYLIST_AND_START_PLAYING:
             state.player.load(action.payload);

@@ -8,16 +8,49 @@ import * as ACTIONS from "../../actions/player";
 import Hidden from '@material-ui/core/Hidden';
 import PlayerInterface from "../../service/player/PlayerInterface";
 import MediaControls from "./mediaControls";
-import PlayEffect from "./playEffect";
+import Ripple from "../ripple";
 import Pause from '@material-ui/icons/Pause';
 import PlayArrow from '@material-ui/icons/PlayArrow';
+import VolumeUp from '@material-ui/icons/VolumeUp';
+import VolumeDown from '@material-ui/icons/VolumeDown';
+import VolumeOff from '@material-ui/icons/VolumeOff';
+import Forward5 from '@material-ui/icons/Forward5';
+import Rewind5 from '@material-ui/icons/Replay5';
+import VolumeLabel from "./mediaControls/volumeLabel";
 
 function Player(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef<HTMLVideoElement>(null);
 
-    const {player} = useSelector<{player: PlayerInterface}, {player: PlayerInterface}>((state) => ({
+    type stateInterface = {
+        animateFastForward: boolean,
+        animateRewind: boolean,
+        animateMute: boolean,
+        animatePausePlay: boolean,
+        animateVolumeUp: boolean,
+        animateVolumeDown: boolean,
+        animateVolumeLabel: boolean,
+        player: PlayerInterface
+    };
+
+    const {
+        animateFastForward,
+        animateRewind,
+        animateMute,
+        animatePausePlay,
+        animateVolumeUp,
+        animateVolumeDown,
+        animateVolumeLabel,
+        player,
+    } = useSelector<stateInterface, stateInterface>((state) => ({
         player: state.player,
+        animatePausePlay: state.animatePausePlay,
+        animateMute: state.animateMute,
+        animateFastForward: state.animateFastForward,
+        animateRewind: state.animateRewind,
+        animateVolumeUp: state.animateVolumeUp,
+        animateVolumeDown: state.animateVolumeDown,
+        animateVolumeLabel: state.animateVolumeLabel,
     }));
 
     const [isHover, setIsHover] = useState<boolean>(false);
@@ -36,6 +69,30 @@ function Player(props: any, ref: any) {
         dispatch(ACTIONS.videoElementTimeUpdate());
     };
 
+    const togglePlay = (event: any) => {
+        dispatch(ACTIONS.togglePlayWithAnimation());
+    };
+
+    const toggleMute = (event: any) => {
+        dispatch(ACTIONS.toggleMuteWithAnimation());
+    };
+
+    const fastForward = (event: any) => {
+        dispatch(ACTIONS.fastForwardWithAnimation());
+    };
+
+    const rewind = (event: any) => {
+        dispatch(ACTIONS.rewindWithAnimation());
+    };
+
+    const volumeUp = (event: any) => {
+        dispatch(ACTIONS.volumeUpWithAnimation());
+    };
+
+    const volumeDown = (event: any) => {
+        dispatch(ACTIONS.volumeDownWithAnimation());
+    };
+
     useEffect(() => {
         if (player && player.current()) {
             document.title = player.current().subtitle;
@@ -48,15 +105,15 @@ function Player(props: any, ref: any) {
                 ended: playNextTrigger,
                 loadeddata: dataLoaded,
                 timeupdate: timeupdate,
+                togglePlay: togglePlay,
+                toggleMute: toggleMute,
+                fastForward: fastForward,
+                rewind: rewind,
+                volumeUp: volumeUp,
+                volumeDown: volumeDown,
             }));
         }
     }, [player]);
-
-    const [animate, setAnimate] = useState<boolean>(false);
-    const handleClick = (event: any) => {
-        setAnimate(!animate);
-        dispatch(ACTIONS.togglePlay());
-    };
 
     return (
         <React.Fragment>
@@ -67,14 +124,47 @@ function Player(props: any, ref: any) {
             >
                 {player.isLoaded() ? (
                     <div
-                        onClick={(event: any) => handleClick(event)}
+                        onClick={(event: any) => togglePlay(event)}
                         style={{width: '100%', height: 'calc(100% - 36px)', zIndex: 99, position: 'absolute'}}
                     >
-                        <PlayEffect
-                            animate={animate}
+                        <Ripple
+                            animate={animatePausePlay}
                         >
                             {player.isPlaying() ? (<PlayArrow/>) : (<Pause/>)}
-                        </PlayEffect>
+                        </Ripple>
+                        <Ripple
+                            animate={animateMute}
+                        >
+                            {player.isMuted() ? (<VolumeOff/>) : (<VolumeUp/>)}
+                        </Ripple>
+                        <Ripple
+                            animate={animateFastForward}
+                        >
+                            <Forward5/>
+                        </Ripple>
+                        <Ripple
+                            animate={animateRewind}
+                        >
+                            <Rewind5/>
+                        </Ripple>
+
+                        <Ripple
+                            animate={animateVolumeUp}
+                        >
+                            <VolumeUp/>
+                        </Ripple>
+
+                        <Ripple
+                            animate={animateVolumeDown}
+                        >
+                            <VolumeDown/>
+                        </Ripple>
+
+                        <VolumeLabel
+                            animate={animateVolumeLabel}
+                        >
+                            {player.getVolume() * 100}%
+                        </VolumeLabel>
                     </div>
                 ) : ''}
                 <video

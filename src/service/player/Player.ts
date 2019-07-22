@@ -32,10 +32,16 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
     }
 
     initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void {
+        if (this._adapter !== undefined) {
+            this._adapter.unmount();
+        }
+
         this._adapter = adapter;
         this.callbacks = callbacks;
         if (callbacks && callbacks.ended) {
-            this.adapter().addListener('ended', () => this._autoplay && callbacks.ended());
+            this.adapter().addListener('ended', () => {
+                this._autoplay && callbacks.ended();
+            });
         } else {
             this.adapter().addListener('ended', () => this._autoplay && this.next());
         }
@@ -55,9 +61,14 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
             this.currentTime = this.adapter().getCurrentVideoTime();
             callbacks.timeupdate && callbacks.timeupdate();
         });
+
+        this._adapter.addKeyDownListener((e: KeyboardEvent) => this.handleKeyDown(e));
     }
 
     initializeCastPlayer(adapter: CastSenderAdapter): void {
+        if (this.castSenderAdapter !== undefined) {
+            this.castSenderAdapter.unmount();
+        }
         this.castSenderAdapter = adapter;
         this.castSenderAdapter.addListener(
             adapter.cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
@@ -284,18 +295,16 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
     }
 
     getVideoElementHeight(): string {
-        const adapter = this.adapter();
-        if (adapter instanceof DomAdapter) {
-            return adapter.getVideoElementHeight();
+        if (this._adapter) {
+            return this._adapter.getVideoElementHeight();
         }
 
         return '';
     }
 
     getVideoElementWidth(): string {
-        const adapter = this.adapter();
-        if (adapter instanceof DomAdapter) {
-            return adapter.getVideoElementWidth();
+        if (this._adapter) {
+            return this._adapter.getVideoElementWidth();
         }
 
         return '';
@@ -310,7 +319,7 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
     }
 
     setVolume(volume: number): void {
-        this.adapter().setVideoVolume(volume);
+        this.adapter().setVideoVolume(parseFloat(volume.toFixed(2)));
     }
 
     isMuted(): boolean {
@@ -329,13 +338,46 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
         }
     }
 
+    volumeUp(): void {
+        let newVolume = this.getVolume() + 0.05;
+        if (newVolume > 1) {
+            newVolume = 1;
+        }
+        this.setVolume(newVolume);
+    }
+
+    volumeDown(): void {
+        let newVolume = this.getVolume() - 0.05;
+        if (newVolume <= 0) {
+            newVolume = 0;
+            this.adapter().muted = true;
+        }
+        this.setVolume(newVolume);
+
+    }
+
+    fastForward(seconds: number): void {
+        let newTime = this.currentTime + seconds;
+        if (newTime > this.current().duration) {
+            newTime =  this.current().duration;
+        }
+        this.adapter().setCurrentVideoTime(newTime);
+    }
+
+    rewind(seconds: number): void {
+        let newTime = this.currentTime - seconds;
+        if (newTime < 0) {
+            newTime =  0;
+        }
+        this.adapter().setCurrentVideoTime(newTime);
+    }
+
     setProgress(percentage: number): void {
         if (percentage < 0 || percentage > 100) {
             throw new Error(`Progress ${percentage} is out of range 0 - 100`);
         }
 
         const time = this.current().duration * (percentage/100);
-
         this.adapter().setCurrentVideoTime(time);
     }
 
@@ -352,6 +394,13 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
         const adapter = this.adapter();
         if (adapter instanceof DomAdapter) {
             return adapter.requestFullScreen();
+        }
+    }
+
+    toggleFullScreen(): Promise<void>|void {
+        const adapter = this.adapter();
+        if (adapter instanceof DomAdapter) {
+            return adapter.toggleFullScreen();
         }
     }
 
@@ -428,6 +477,93 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
                         this._adapter!.resume();
                     }, 500);
                 }
+            }
+        }
+    }
+
+    private handleKeyDown(e: KeyboardEvent): void {
+        if (e.code === 'Space' || e.code === 'KeyK') {
+            e.preventDefault();
+            if (this.callbacks.togglePlay) {
+                this.callbacks.togglePlay && this.callbacks.togglePlay();
+            } else {
+                this.isPlaying() ? this.pause() : this.resume();
+            }
+        }
+
+        if (e.code === 'KeyM') {
+            e.preventDefault();
+            if (this.callbacks.toggleMute) {
+                this.callbacks.toggleMute && this.callbacks.toggleMute();
+            } else {
+                this.isMuted() ? this.unMute() : this.mute();
+            }
+        }
+
+        if (e.code === 'KeyN') {
+            e.preventDefault();
+            if (this.callbacks.playNext) {
+                this.callbacks.playNext && this.callbacks.playNext();
+            } else {
+                this.next();
+            }
+        }
+
+        if (e.code === 'ArrowLeft') {
+            e.preventDefault();
+            if (this.callbacks.rewind) {
+                this.callbacks.rewind && this.callbacks.rewind();
+            } else {
+                this.rewind(5);
+            }
+        }
+
+        if (e.code === 'ArrowRight') {
+            e.preventDefault();
+            if (this.callbacks.fastForward) {
+                this.callbacks.fastForward && this.callbacks.fastForward();
+            } else {
+                this.fastForward(5);
+            }
+        }
+
+        if (e.code === 'ArrowUp') {
+            e.preventDefault();
+            if (this.callbacks.volumeUp) {
+                this.callbacks.volumeUp && this.callbacks.volumeUp();
+            } else {
+                this.volumeUp();
+            }
+        }
+
+        if (e.code === 'ArrowDown') {
+            e.preventDefault();
+            if (this.callbacks.volumeDown) {
+                this.callbacks.volumeDown && this.callbacks.volumeDown();
+            } else {
+                this.volumeDown();
+            }
+        }
+
+        if (e.code === 'KeyH') {
+            e.preventDefault();
+            if (this.callbacks.toggleQualityMinMax) {
+                this.callbacks.toggleQualityMinMax && this.callbacks.toggleQualityMinMax();
+            } else {
+                if (this.isHighQualitySelected()) {
+                    this.setLowestVideoQuality();
+                } else {
+                    this.setHighestQuality();
+                }
+            }
+        }
+
+        if (e.code === 'KeyF') {
+            e.preventDefault();
+            if (this.callbacks.toggleFullScreen) {
+                this.callbacks.toggleFullScreen && this.callbacks.toggleFullScreen();
+            } else {
+                this.toggleFullScreen();
             }
         }
     }

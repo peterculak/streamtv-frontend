@@ -65,6 +65,8 @@ interface AdapterInterface {
      * Should be number between 0 - 1
      */
     setVideoVolume(volume: number): void;
+
+    unmount(): void;
 }
 
 export default AdapterInterface;
