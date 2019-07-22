@@ -11,7 +11,6 @@ import Auth from "../../service/auth/index";
 import JavascriptTimeAgo from 'javascript-time-ago';
 import sk from 'javascript-time-ago/locale/sk';
 import en from 'javascript-time-ago/locale/en';
-import PlayerInterface from "../../service/player/PlayerInterface";
 import Player from "../../service/player/Player";
 import CastSenderAdapter from "../../service/player/adapter/CastSenderAdapter";
 JavascriptTimeAgo.locale(en);
@@ -32,14 +31,13 @@ container.bind<ProgramServiceInterface>(CONSTANTS.PROGRAMS).toDynamicValue( () =
     auth.password
 ));
 
-container.bind<PlayerInterface>(CONSTANTS.PLAYER).to(Player).inSingletonScope();
+container.bind<Player>(CONSTANTS.PLAYER).to(Player).inSingletonScope();
 (window as any)['__onGCastApiAvailable'] = function (isAvailable: boolean) {
-    // console.log('cast', isAvailable);
     if (isAvailable) {
         const cast = window.cast;
         const chrome = (window as any).chrome;
         if (cast !== undefined && chrome !== undefined) {
-            container.get<PlayerInterface>(CONSTANTS.PLAYER).initializeCastPlayer(
+            container.get<Player>(CONSTANTS.PLAYER).initializeCastPlayer(
                 new CastSenderAdapter(cast, chrome)
             );
         }

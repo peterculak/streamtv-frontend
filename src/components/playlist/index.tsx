@@ -8,7 +8,7 @@ import PlaylistItem from "./playlistItem";
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import PlayerInterface from "../../service/player/PlayerInterface";
+import Player from "../../service/player/Player";
 import PlaylistHeader from "./header";
 import Hidden from '@material-ui/core/Hidden';
 
@@ -37,7 +37,7 @@ function Playlist(props: any) {
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
     const dispatch = useDispatch();
 
-    const {player} = useSelector<{ player: PlayerInterface }, { player: PlayerInterface }>((state) => ({
+    const {player} = useSelector<{ player: Player }, { player: Player }>((state) => ({
         player: state.player,
     }));
 

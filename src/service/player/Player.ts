@@ -1,16 +1,18 @@
 import {injectable} from "inversify";
-import PlayerInterface from "./PlayerInterface";
 import PlaylistInterface from "./PlaylistInterface";
 import AdapterInterface from "./adapter/AdapterInterface";
 import Playlist from "./Playlist";
 import PlayableItem from "./PlayableItem";
 import DomAdapter from "./adapter/DomAdapter";
 import CastSenderAdapter from "./adapter/CastSenderAdapter";
+import CastablePlayerInterface from "./CastablePlayerInterface";
+import HtmlPlayerInterface from "./HtmlPlayerInterface";
+import HtmlAdapterInterface from "./adapter/HtmlAdapterInterface";
+import CastSenderAdapterInterface from "./adapter/CastSenderAdapterInterface";
 
 @injectable()
-class Player implements PlayerInterface {
+class Player implements HtmlPlayerInterface, CastablePlayerInterface {
     private _autoplay: boolean = true;
-    private _selectedQualityIndex: number = 0;
     private shuffleEnabled: boolean = false;
     private loopEnabled: boolean = false;
     private _isVideoDataLoaded: boolean = false;
@@ -20,8 +22,8 @@ class Player implements PlayerInterface {
 
     private callbacks: any;
 
-    private _adapter: AdapterInterface|undefined;
-    private castSenderAdapter: CastSenderAdapter|undefined;//todo
+    private _adapter: HtmlAdapterInterface|undefined;
+    private castSenderAdapter: CastSenderAdapterInterface|undefined;
 
     constructor(
         private playlist: PlaylistInterface = new Playlist([]),
@@ -30,7 +32,6 @@ class Player implements PlayerInterface {
     }
 
     initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void {
-        // console.log('initializeHtmlPlayer', adapter);
         this._adapter = adapter;
         this.callbacks = callbacks;
         if (callbacks && callbacks.ended) {
@@ -64,12 +65,9 @@ class Player implements PlayerInterface {
         );
 
         const handleMediaInfoChange = (e: any) => {
-            // console.log('mediaInfoChanged', e);
             if (e.value) {
                 const streamUrl = e.value.contentId;
                 if (streamUrl) {
-                    // console.log('media change', streamUrl);
-                    // console.log(this.current());
                     if (!this.current().duration) {
                         this.current().duration = Math.ceil(this.castSenderAdapter!.getVideoDuration());
                     }
@@ -141,9 +139,7 @@ class Player implements PlayerInterface {
     play(): Promise<any> {
         this.currentTime = 0;
         this._isVideoDataLoaded = false;
-        // this.setPoster();
 
-        // console.log('playing', this.selectStream(this.playlist.current()));
         return this.adapter().play(this.selectStream(this.playlist.current()));
     }
 
@@ -210,23 +206,11 @@ class Player implements PlayerInterface {
     }
 
     sortPlaylistAsc(): void {
-        const wasPlaying = this.isPlaying();
         this.playlist.sortAsc();
-        // this.setPoster();
-        this.adapter().setVideoSource(this.selectStream(this.playlist.current()));
-        if (wasPlaying) {
-            this.adapter().play();
-        }
     }
 
     sortPlaylistDesc(): void {
-        const wasPlaying = this.isPlaying();
         this.playlist.sortDesc();
-        // this.setPoster();
-        this.adapter().setVideoSource(this.selectStream(this.playlist.current()));
-        if (wasPlaying) {
-            this.adapter().play();
-        }
     }
 
     get currentlyPlayingItemOrder(): number {
@@ -291,42 +275,30 @@ class Player implements PlayerInterface {
 
     setHighestQuality(): void {
         this._isHighQualitySelected = true;
-        if (this.isCasting) {
-            this.castSenderAdapter!.loadQueueData(this.getCastQueueData());
-            const time = this.currentTime;
-            this.play().then(() => {
-                if (time) {
-                    this.castSenderAdapter!.setCurrentVideoTime(time)
-                }
-            });
-        } else {
-            this.adapter().setVideoSource(this.selectStream(this.playlist.current()));
-            this.adapter().setCurrentVideoTime(this.currentTime);
-        }
+        this.reloadStream();
     }
 
     setLowestVideoQuality(): void {
         this._isHighQualitySelected = false;
-        if (this.isCasting) {
-            this.castSenderAdapter!.loadQueueData(this.getCastQueueData());
-            const time = this.currentTime;
-            this.play().then(() => {
-                if (time) {
-                    this.castSenderAdapter!.setCurrentVideoTime(time)
-                }
-            });
-        } else {
-            this.adapter().setVideoSource(this.selectStream(this.playlist.current()));
-            this.adapter().setCurrentVideoTime(this.currentTime);
-        }
+        this.reloadStream();
     }
 
     getVideoElementHeight(): string {
-        return this.adapter().getVideoElementHeight();
+        const adapter = this.adapter();
+        if (adapter instanceof DomAdapter) {
+            return adapter.getVideoElementHeight();
+        }
+
+        return '';
     }
 
     getVideoElementWidth(): string {
-        return this.adapter().getVideoElementWidth();
+        const adapter = this.adapter();
+        if (adapter instanceof DomAdapter) {
+            return adapter.getVideoElementWidth();
+        }
+
+        return '';
     }
 
     getCurrentTime(): number {
@@ -368,18 +340,19 @@ class Player implements PlayerInterface {
     }
 
     isFullScreenAvailable(): boolean {
-        return this.adapter().isFullScreenAvailable();
-    }
-
-    requestFullScreen(): Promise<void> {
-        return this.adapter().requestFullScreen();
-    }
-
-    private selectStream(item: PlayableItem): string {
-        if (this._isHighQualitySelected) {
-            return item.mp4[item.mp4.length -1];
+        const adapter = this.adapter();
+        if (adapter instanceof DomAdapter) {
+            return adapter.isFullScreenAvailable();
         }
-        return item.mp4[0];
+
+        return false;
+    }
+
+    requestFullScreen(): Promise<void>|void {
+        const adapter = this.adapter();
+        if (adapter instanceof DomAdapter) {
+            return adapter.requestFullScreen();
+        }
     }
 
     private adapter(): AdapterInterface {
@@ -394,8 +367,29 @@ class Player implements PlayerInterface {
         }
     }
 
+    private selectStream(item: PlayableItem): string {
+        if (this._isHighQualitySelected) {
+            return item.mp4[item.mp4.length -1];
+        }
+        return item.mp4[0];
+    }
+
+    private reloadStream() {
+        if (this.isCasting) {
+            this.castSenderAdapter!.loadQueueData(this.getCastQueueData());
+            const time = this.currentTime;
+            this.play().then(() => {
+                if (time) {
+                    this.castSenderAdapter!.setCurrentVideoTime(time)
+                }
+            });
+        } else {
+            this.adapter().setVideoSource(this.selectStream(this.playlist.current()));
+            this.adapter().setCurrentVideoTime(this.currentTime);
+        }
+    }
+
     private switchAdapter(e: any): void {
-        // console.log('switchAdapter');
         const castRequested = e.value;
 
         if (castRequested && this.canCast && this.castSenderAdapter!.isConnected()) {
@@ -454,12 +448,6 @@ class Player implements PlayerInterface {
         const r = url.match(/-([^-]+[p]?)\.mp4/);
         return r && r[1] !== null ? r[1] : 'undefined';
     };
-
-    private setPoster(): void {
-        if (this.playlist.current().image) {
-            this.adapter().setPosterSource(this.playlist.current().image.replace(/[r]?[0-9]+x[0-9]+[n]?/, 'r800x'));
-        }
-    }
 }
 
 export default Player;

@@ -12,6 +12,7 @@ import VideoProgressBar from "./videoProgressBar";
 import VolumeControls from "./volumeControls";
 import GoogleCastButton from "./castButton";
 import {formatLength} from "../../../helpers/functions";
+import Player from "../../../service/player/Player";
 
 const styles = (theme: Theme) => createStyles({
         root: {
@@ -92,7 +93,7 @@ const styles = (theme: Theme) => createStyles({
 
 function MediaControls(props: any, ref: any) {
     const dispatch = useDispatch();
-    const {player} = useSelector((state: any) => ({
+    const {player} = useSelector((state: {player: Player}) => ({
         player: state.player,
     }));
 

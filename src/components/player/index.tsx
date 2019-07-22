@@ -16,9 +16,8 @@ function Player(props: any, ref: any) {
     const dispatch = useDispatch();
     let playerRef = useRef<HTMLVideoElement>(null);
 
-    const {player, lastClicked} = useSelector<{player: PlayerInterface, lastClicked: string}, {player: PlayerInterface, lastClicked: string}>((state) => ({
+    const {player} = useSelector<{player: PlayerInterface}, {player: PlayerInterface}>((state) => ({
         player: state.player,
-        lastClicked: state.lastClicked,
     }));
 
     const [isHover, setIsHover] = useState<boolean>(false);

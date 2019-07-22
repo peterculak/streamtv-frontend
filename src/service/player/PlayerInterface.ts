@@ -9,9 +9,7 @@ interface PlayerInterface {
     currentlyPlayingItemOrder: number;
     playlistItemsCount: number;
     playlistItems: Array<PlayableItem>;
-    isCasting: boolean;
 
-    initializeHtmlPlayer(adapter: DomAdapter, callbacks?: any): void;
     play(): Promise<any>;
     pause(): void;
     resume(): void;
@@ -66,8 +64,6 @@ interface PlayerInterface {
     setLowestVideoQuality(): void;
     setHighestQuality(): void;
 
-    getVideoElementHeight(): string;
-
     willPlayNext(): PlayableItem | null;
 
     getCurrentTime(): number;
@@ -83,12 +79,5 @@ interface PlayerInterface {
      * @param percentage
      */
     setProgress(percentage: number): void;
-
-    isFullScreenAvailable(): boolean;
-    requestFullScreen(): Promise<void>;
-
-    //////////////////cast related methods to be moved
-    initializeCastPlayer(adapter: any): void;//todo
-    canCast: boolean;
 }
 export default PlayerInterface;

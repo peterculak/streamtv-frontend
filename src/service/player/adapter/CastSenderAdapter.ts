@@ -1,9 +1,7 @@
-import AdapterException from "./AdapterException";
-import AdapterInterface from "./AdapterInterface";
-import PlaylistInterface from "../PlaylistInterface";
 import PlayableItem from "../PlayableItem";
+import CastSenderAdapterInterface from "./CastSenderAdapterInterface";
 
-class CastSenderAdapter implements AdapterInterface {
+class CastSenderAdapter implements CastSenderAdapterInterface {
     /**
      * Cast sender api (window.cast)
      * <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
@@ -55,7 +53,17 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     currentStream(): string {
-        return "";
+        const session = cast.framework.CastContext.getInstance().getCurrentSession();
+        if (!session) {
+            return '';
+        }
+
+        let mediaStatus = session.getMediaSession();
+        if (!mediaStatus) {
+            return '';
+        }
+
+        return mediaStatus.media.contentId;
     }
 
     getCurrentVideoTime(): number {
@@ -70,24 +78,8 @@ class CastSenderAdapter implements AdapterInterface {
         return this.remotePlayer.duration;
     }
 
-    getVideoElementHeight(): string {
-        return "";
-    }
-
-    getVideoElementWidth(): string {
-        return "";
-    }
-
     getVideoVolume(): number {
         return this.muted ? 0 : this.remotePlayer.volumeLevel;
-    }
-
-    hasVideoElement(): boolean {
-        return false;
-    }
-
-    isFullScreenAvailable(): boolean {
-        return false;
     }
 
     isPlaying(): boolean {
@@ -101,12 +93,8 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     play(item?: string): Promise<any> {
-        // console.log('play cast adapter', item);
-        // const items = [{mp4: ['https://e2-vod.tmo.livebox.cz/TA3_VOD/_definst_/VideotekaEncoder/smil:20190717-DC74140B-9FE1-4528-AFB0-1A06B3FADD55_d.smil/playlist.m3u8?auth=_any_|1563478666|ebf79585f42d175e7c93990cf063e601367f170e']}];
-        // console.log(this.castQueueData.length);
         const items = [];
         const queueSize = 50;
-
         let i = 0;
         let add = false;
         while (items.length < queueSize) {
@@ -138,11 +126,6 @@ class CastSenderAdapter implements AdapterInterface {
         return this.cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request);
     }
 
-    requestFullScreen(): Promise<void> {
-        return new Promise(() => {
-        });
-    }
-
     resume(): void {
         this.remotePlayerController.playOrPause();
     }
@@ -150,12 +133,6 @@ class CastSenderAdapter implements AdapterInterface {
     setCurrentVideoTime(time: number): void {
         this.remotePlayer.currentTime = time;
         this.remotePlayerController.seek();
-    }
-
-    setPosterSource(src: string): void {
-    }
-
-    setVideoElement(ref: any): void {
     }
 
     setVideoSource(src: string): void {

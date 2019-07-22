@@ -1,5 +1,4 @@
 import PlayableItem from '../PlayableItem';
-import PlaylistInterface from "../PlaylistInterface";
 
 interface AdapterInterface {
     muted: boolean;
@@ -8,12 +7,6 @@ interface AdapterInterface {
      * @param src
      */
     setVideoSource(src: string): void;
-
-    /**
-     * Poster source which will show before video starts playing
-     * @param src
-     */
-    setPosterSource(src: string): void;
 
     /**
      * Starts playing stream source
@@ -49,21 +42,8 @@ interface AdapterInterface {
      * Sets the current playback position, in seconds.
      */
     setCurrentVideoTime(time: number): void;
-
-    /**
-     * Video screen handle
-     * e.g. in Dom environment it's HTMLElement
-     * @param ref
-     */
-    setVideoElement(ref: any): void;
-
-    hasVideoElement(): boolean;
-
     addListener(eventName: string, callback: any): void;
     removeListener(eventName: string, callback: any): void;
-
-    getVideoElementHeight(): string;
-    getVideoElementWidth(): string;
 
     /**
      * Returns video duration from host environment
@@ -85,10 +65,6 @@ interface AdapterInterface {
      * Should be number between 0 - 1
      */
     setVideoVolume(volume: number): void;
-
-    isFullScreenAvailable(): boolean;
-    requestFullScreen(): Promise<void>;
-    loadQueueData(items: Array<PlayableItem>): void;
 }
 
 export default AdapterInterface;

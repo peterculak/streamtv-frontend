@@ -29,11 +29,11 @@ import {
     THEME_SELECT_MODE, THEME_TOGGLE_MODE,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
-import PlayerInterface from "../service/player/PlayerInterface";
+import Player from "../service/player/Player";
 import DomAdapter from "../service/player/adapter/DomAdapter";
 
 const initialState = {
-    player: container.get<PlayerInterface>(CONSTANTS.PLAYER),
+    player: container.get<Player>(CONSTANTS.PLAYER),
     selectedTVSeriesArchive: null,
     channelArchives: {} as any,
     theme: getTheme('dark'),
