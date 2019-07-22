@@ -12,7 +12,6 @@ import {
     PLAYER_TOGGLE_PAUSE_PLAY,
     PLAYER_LOAD_PLAYLIST,
     PLAYER_LOAD_PLAYLIST_AND_START_PLAYING,
-    PLAYER_CHANGE_STREAM_QUALITY_INDEX,
     PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING,
     PLAYER_PLAY_PLAYLIST_ITEM,
     PLAYER_SORT_PLAYLIST_REVERSE_SORT,
@@ -59,9 +58,6 @@ function rootReducer(state = initialState, action: any) {
             return state;
         case PLAYER_LOAD_PLAYLIST:
             state.player.load(action.payload);
-            return state;
-        case PLAYER_CHANGE_STREAM_QUALITY_INDEX:
-            state.player.selectedQualityIndex = action.payload;
             return state;
         case PLAYER_SET_HIGHEST_QUALITY:
             state.player.setHighestQuality();

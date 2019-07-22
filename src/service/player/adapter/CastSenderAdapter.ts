@@ -144,9 +144,7 @@ class CastSenderAdapter implements AdapterInterface {
     }
 
     resume(): void {
-        // if (!this.remotePlayer.isPaused) {
         this.remotePlayerController.playOrPause();
-        // }
     }
 
     setCurrentVideoTime(time: number): void {

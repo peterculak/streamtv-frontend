@@ -2,9 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import {useSelector, useDispatch} from 'react-redux';
 import * as ACTIONS from "../../actions/player";
@@ -56,10 +53,6 @@ function Player(props: any, ref: any) {
         }
     }, [player]);
 
-    const changeVideoIndex = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
-        dispatch(ACTIONS.setStreamQuality(event.target.value));
-    };
-
     const [animate, setAnimate] = useState<boolean>(false);
     const handleClick = (event: any) => {
         setAnimate(!animate);
@@ -87,7 +80,7 @@ function Player(props: any, ref: any) {
                 ) : ''}
                 <video
                     ref={playerRef} width="100%" height="100%"/>
-                <MediaControls isHover={isHover || player.isCasting}/>
+                <MediaControls isHover={isHover}/>
             </div>
             {player && player.current() && (
                 <Hidden smDown>
@@ -102,19 +95,6 @@ function Player(props: any, ref: any) {
                                 <Typography variant={'caption'} component="p">{player.current().subtitle}</Typography>
                             </Grid>
 
-                            <Grid item>
-                                <FormControl>
-                                    <Select
-                                        value={player ? player.selectedQualityIndex : 0}
-                                        onChange={changeVideoIndex}
-                                        name='selectedQualityIndex'
-                                    >
-                                        {player && player.current() && player.availableQuality().map((label: string, index: number) =>
-                                            <MenuItem
-                                                key={index + label} value={index}>{label}</MenuItem>)}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
                         </Grid>
                         <Box mt={1} mb={1}>
                             <Divider variant="fullWidth"/>

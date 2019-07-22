@@ -136,8 +136,7 @@ function PlaylistHeader(props: any) {
             }
             const episode = `E${episodeNumber}`;
             const ext = m[0];
-            const quality = player.availableQuality();
-            const filename = title + '_' + series + episode + '_' + quality[player.selectedQualityIndex] + ext;
+            const filename = title + '_' + series + episode + '_' + player.isHighQualitySelected() ? 'hd' : '' + ext;
 
             if (mdUp) {
                 fileDownload(
