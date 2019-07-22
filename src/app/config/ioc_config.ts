@@ -7,12 +7,12 @@ import ProgramService from "../../service/ProgramService";
 import CONSTANTS from "./constants/ioc";
 import AuthInterface from "../../service/auth/AuthInterface";
 import Auth from "../../service/auth/index";
+import Player from "../../service/player/Player";
+import CastSenderAdapter from "../../service/player/adapter/CastSenderAdapter";
 
 import JavascriptTimeAgo from 'javascript-time-ago';
 import sk from 'javascript-time-ago/locale/sk';
 import en from 'javascript-time-ago/locale/en';
-import Player from "../../service/player/Player";
-import CastSenderAdapter from "../../service/player/adapter/CastSenderAdapter";
 JavascriptTimeAgo.locale(en);
 JavascriptTimeAgo.locale(sk);
 

@@ -13,6 +13,7 @@ import VolumeControls from "./volumeControls";
 import GoogleCastButton from "./castButton";
 import {formatLength} from "../../../helpers/functions";
 import Player from "../../../service/player/Player";
+import Tooltip from '../../tooltip';
 
 const styles = (theme: Theme) => createStyles({
         root: {
@@ -93,7 +94,7 @@ const styles = (theme: Theme) => createStyles({
 
 function MediaControls(props: any, ref: any) {
     const dispatch = useDispatch();
-    const {player} = useSelector((state: {player: Player}) => ({
+    const {player} = useSelector((state: { player: Player }) => ({
         player: state.player,
     }));
 
@@ -118,35 +119,43 @@ function MediaControls(props: any, ref: any) {
                 >
                     <VideoProgressBar/>
 
-                    <Button
-                        size="small"
-                        className={classes.buttons}
-                        style={{backgroundColor: 'transparent'}}
-                        onClick={() => dispatch(ACTIONS.togglePlay())}
+                    <Tooltip
+                        title={player.isPlaying() ? 'Pause' : 'Play'}
                     >
-                        {player.isPlaying() ? (
-                            <Pause
-                                className={classes.buttons}
-
-                            />
-                        ) : (
-                            <PlayArrow
-                                className={classes.buttons}
-                            />
-                        )}
-                    </Button>
-                    <Button
-                        size="small"
-                        className={classes.buttons}
-                        style={{backgroundColor: 'transparent'}}
-                        onClick={() => dispatch(ACTIONS.next())}
-                    >
-                        <SkipNext
+                        <Button
+                            size="small"
                             className={classes.buttons}
-                        />
-                    </Button>
+                            style={{backgroundColor: 'transparent'}}
+                            onClick={() => dispatch(ACTIONS.togglePlay())}
+                        >
+                            {player.isPlaying() ? (
+                                <Pause
+                                    className={classes.buttons}
 
-                    <VolumeControls />
+                                />
+                            ) : (
+                                <PlayArrow
+                                    className={classes.buttons}
+                                />
+                            )}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip
+                        title="Next"
+                    >
+                        <Button
+                            size="small"
+                            className={classes.buttons}
+                            style={{backgroundColor: 'transparent'}}
+                            onClick={() => dispatch(ACTIONS.next())}
+                        >
+                            <SkipNext
+                                className={classes.buttons}
+                            />
+                        </Button>
+                    </Tooltip>
+
+                    <VolumeControls/>
 
                     <div className={classes.timeDisplay}>
                         <span className={classes.timeCurrent}>
@@ -159,23 +168,33 @@ function MediaControls(props: any, ref: any) {
                     </div>
 
                     <div className={classes.rightControls}>
-                        <Button
-                            size="small"
-                            className={player.isHighQualitySelected() ? `${classes.buttons} ${classes.hdBadge}` : `${classes.buttons}`}
-                            style={{backgroundColor: 'transparent'}}
-                            onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}
+                        <Tooltip
+                            title={player.isHighQualitySelected() ? "Low quality" : "Hight quality"}
                         >
-                            <Settings
-                                className={classes.buttons}
-                            />
-                        </Button>
-
+                            <Button
+                                size="small"
+                                className={player.isHighQualitySelected() ? `${classes.buttons} ${classes.hdBadge}` : `${classes.buttons}`}
+                                style={{backgroundColor: 'transparent'}}
+                                onClick={() => dispatch(player.isHighQualitySelected() ? ACTIONS.setVideoLowestQuality() : ACTIONS.setVideoHighestQuality())}
+                            >
+                                <Settings
+                                    className={classes.buttons}
+                                />
+                            </Button>
+                        </Tooltip>
                         {player.canCast ? (
+                          <Tooltip
+                            title="Cast"
+                          >
                             <GoogleCastButton
                                 disabled={!player.canCast}
                             />
+                          </Tooltip>
                         ) : ''}
 
+                        <Tooltip
+                            title="Full screen"
+                        >
                         <Button
                             disabled={!player.isFullScreenAvailable()}
                             onClick={() => requestFullScreenVideo()}
@@ -187,6 +206,7 @@ function MediaControls(props: any, ref: any) {
                                 className={classes.buttons}
                             />
                         </Button>
+                        </Tooltip>
                     </div>
                 </div>
             </React.Fragment>

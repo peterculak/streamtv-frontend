@@ -8,6 +8,7 @@ import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeOff from '@material-ui/icons/VolumeOff';
 import Button from '@material-ui/core/Button';
 import * as ACTIONS from "../../../actions/player";
+import Tooltip from '../../tooltip';
 
 const progressBarStyles = makeStyles({
     root: {
@@ -27,7 +28,7 @@ const progressBarStyles = makeStyles({
     focusVisible: (props: any) => ({
         boxShadow: 'none',
     }),
-    railHover:(props: any) => ({
+    railHover: (props: any) => ({
         display: 'none',
     }),
 });
@@ -67,6 +68,14 @@ const styles = (theme: Theme) => createStyles({
                 color: "#fff",
             },
         },
+        tooltip: {
+            padding: '5px 9px',
+            backgroundColor: 'rgba(28,28,28,0.9)',
+            borderRadius: '2px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            lineHeight: '15px',
+        }
     }
 );
 
@@ -111,19 +120,21 @@ function VolumeControls(props: any, ref: any) {
                 onMouseOver={(event: any) => volumeMouseOver(event, true)}
                 onMouseOut={(event: any) => volumeMouseOver(event, false)}
                 className={classes.volumeControlBar}>
-                <Button
-                    size="small"
-                    className={classes.buttons}
-                    style={{backgroundColor: 'transparent'}}
-                    onClick={toggleMute}
-                >
-                    {player.isMuted() ? (
-                        <VolumeOff/>
-                    ) : (player.getVolume() > 0.5 ? (<VolumeUp
-                        className={classes.buttons}/>) : (<VolumeDown
-                        className={classes.buttons}/>))}
+                <Tooltip title={player.isMuted() ? 'Unmute' : 'Mute'}>
+                    <Button
+                        size="small"
+                        className={classes.buttons}
+                        style={{backgroundColor: 'transparent'}}
+                        onClick={toggleMute}
+                    >
+                        {player.isMuted() ? (
+                            <VolumeOff/>
+                        ) : (player.getVolume() > 0.5 ? (<VolumeUp
+                            className={classes.buttons}/>) : (<VolumeDown
+                            className={classes.buttons}/>))}
 
-                </Button>
+                    </Button>
+                </Tooltip>
                 <StyledSlider
                     onMouseDown={(event: any) => volumeMouseDown(event, true)}
                     onMouseUp={(event: any) => volumeMouseDown(event, false)}
