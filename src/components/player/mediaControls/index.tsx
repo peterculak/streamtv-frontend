@@ -1,5 +1,5 @@
 import React from 'react';
-import {withStyles, Theme, createStyles} from '@material-ui/core/styles';
+import {withStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import Pause from '@material-ui/icons/Pause';
 import SkipNext from '@material-ui/icons/SkipNext';
@@ -14,6 +14,9 @@ import GoogleCastButton from "./castButton";
 import {formatLength} from "../../../helpers/functions";
 import Player from "../../../service/player/Player";
 import Tooltip from '../../tooltip';
+import GetApp from '@material-ui/icons/GetApp';
+const fileDownload = require('js-file-download');
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const styles = (theme: Theme) => createStyles({
         root: {
@@ -85,6 +88,7 @@ const styles = (theme: Theme) => createStyles({
         rightControls: {
             height: '100%',
             float: 'right',
+            marginTop: '-1px',
         },
         timeCurrent: {},
         timeSeparator: {},
@@ -94,8 +98,11 @@ const styles = (theme: Theme) => createStyles({
 
 function MediaControls(props: any, ref: any) {
     const dispatch = useDispatch();
-    const {player} = useSelector((state: { player: Player }) => ({
+    const theme = useTheme();
+
+    const {player, archive} = useSelector<{ player: Player, selectedTVSeriesArchive: any }, { player: Player, archive: any }>((state) => ({
         player: state.player,
+        archive: state.selectedTVSeriesArchive,
     }));
 
     const {classes} = props;
@@ -107,6 +114,37 @@ function MediaControls(props: any, ref: any) {
     const requestFullScreenVideo = () => {
         player.requestFullScreen();
     };
+
+    const mdUp = useMediaQuery(theme.breakpoints.up('md'));
+    //todo fix this whole thing
+    function download(url: string): void {
+        const m = url.match(/\.[0-9a-z]+$/i);
+        if (m && m[0]) {
+            const title = archive.name;
+            let seriesNumber = String(props.selectedSeasonIndex + 1);
+            if (props.selectedSeasonIndex + 1) {
+                seriesNumber = '0' + seriesNumber;
+            }
+            const series = `S${seriesNumber}`;
+            const meta = player.current().meta as any;
+            let episodeNumber = String(meta.episodeNumber);
+            if (meta.episodeNumber < 9) {
+                episodeNumber = '0' + episodeNumber;
+            }
+            const episode = `E${episodeNumber}`;
+            const ext = m[0];
+            const filename = title + '_' + series + episode + '_' + player.isHighQualitySelected() ? 'hd' : '' + ext;
+
+            if (mdUp) {
+                fileDownload(
+                    url,
+                    filename
+                );
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+    }
 
     if (player && player.isLoaded()) {
         return (
@@ -169,7 +207,7 @@ function MediaControls(props: any, ref: any) {
 
                     <div className={classes.rightControls}>
                         <Tooltip
-                            title={player.isHighQualitySelected() ? "Low quality (h)" : "Hight quality(h)"}
+                            title={player.isHighQualitySelected() ? "Low quality (h)" : "High quality(h)"}
                         >
                             <Button
                                 size="small"
@@ -182,6 +220,22 @@ function MediaControls(props: any, ref: any) {
                                 />
                             </Button>
                         </Tooltip>
+
+                        <Tooltip
+                            title="Download (d)"
+                        >
+                            <Button
+                                className={classes.buttons}
+                                style={{backgroundColor: 'transparent'}}
+                                size="small"
+                                onClick={() => download(player.currentStream())}
+                            >
+                                <GetApp
+                                    className={classes.buttons}
+                                />
+                            </Button>
+                        </Tooltip>
+
                         {player.canCast ? (
                           <Tooltip
                             title="Cast (c)"

@@ -93,6 +93,10 @@ function Player(props: any, ref: any) {
         dispatch(ACTIONS.volumeDownWithAnimation());
     };
 
+    const reversePlaylistSort = (event: any) => {
+        dispatch(ACTIONS.reversePlaylistSort());
+    };
+
     useEffect(() => {
         if (player && player.current()) {
             document.title = player.current().subtitle;
@@ -111,6 +115,7 @@ function Player(props: any, ref: any) {
                 rewind: rewind,
                 volumeUp: volumeUp,
                 volumeDown: volumeDown,
+                reversePlaylistSort: reversePlaylistSort,
             }));
         }
     }, [player]);

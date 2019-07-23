@@ -31,7 +31,7 @@ import {
     PLAYER_REWIND_WITH_ANIMATION,
     PLAYER_FAST_FORWARD_WITH_ANIMATION,
     PLAYER_VOLUME_UP_WITH_ANIMATION,
-    PLAYER_VOLUME_DOWN_WITH_ANIMATION,
+    PLAYER_VOLUME_DOWN_WITH_ANIMATION, OPEN_PLAYLIST_MENU, CLOSE_PLAYLIST_MENU,
 } from "../app/config/constants/action_types";
 import PlaylistFactory from "../service/player/PlaylistFactory";
 import Player from "../service/player/Player";
@@ -49,6 +49,7 @@ const initialState = {
     animateVolumeUp: false,
     animateVolumeDown: false,
     animateVolumeLabel: false,
+    menuAnchorElement: null,
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -96,12 +97,14 @@ function rootReducer(state = initialState, action: any) {
             state.animateVolumeLabel = !state.animateVolumeLabel;
             return state;
         case PLAYER_TOGGLE_PAUSE_PLAY_WITH_ANIMATION:
-            if (state.player.isPlaying()) {
-                state.player.pause();
-            } else {
-                state.player.resume();
+            if (!state.menuAnchorElement) {
+                if (state.player.isPlaying()) {
+                    state.player.pause();
+                } else {
+                    state.player.resume();
+                }
+                state.animatePausePlay = !state.animatePausePlay;
             }
-            state.animatePausePlay = !state.animatePausePlay;
             return state;
         case PLAYER_FAST_FORWARD_WITH_ANIMATION:
             state.player.fastForward(5);
@@ -112,14 +115,18 @@ function rootReducer(state = initialState, action: any) {
             state.animateRewind = !state.animateRewind;
             return state;
         case PLAYER_VOLUME_UP_WITH_ANIMATION:
-            state.player.volumeUp();
-            state.animateVolumeUp = !state.animateVolumeUp;
-            state.animateVolumeLabel = !state.animateVolumeLabel;
+            if (!state.menuAnchorElement) {
+                state.player.volumeUp();
+                state.animateVolumeUp = !state.animateVolumeUp;
+                state.animateVolumeLabel = !state.animateVolumeLabel;
+            }
             return state;
         case PLAYER_VOLUME_DOWN_WITH_ANIMATION:
-            state.player.volumeDown();
-            state.animateVolumeDown = !state.animateVolumeDown;
-            state.animateVolumeLabel = !state.animateVolumeLabel;
+            if (!state.menuAnchorElement) {
+                state.player.volumeDown();
+                state.animateVolumeDown = !state.animateVolumeDown;
+                state.animateVolumeLabel = !state.animateVolumeLabel;
+            }
             return state;
         case PLAYER_LOAD_PLAYLIST_AND_START_PLAYING:
             state.player.load(action.payload);
@@ -176,6 +183,12 @@ function rootReducer(state = initialState, action: any) {
             return state;
         case THEME_TOGGLE_MODE:
             state.theme = getTheme(state.theme.palette.type === 'light' ? 'dark' : 'light');
+            return state;
+        case OPEN_PLAYLIST_MENU:
+            state.menuAnchorElement = action.payload;
+            return state;
+        case CLOSE_PLAYLIST_MENU:
+            state.menuAnchorElement = null;
             return state;
         default:
             return state;

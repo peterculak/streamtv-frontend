@@ -26,7 +26,7 @@ import {
     PLAYER_VIDEO_TIME_UPDATE,
     PLAYER_FAST_FORWARD_WITH_ANIMATION,
     PLAYER_REWIND_WITH_ANIMATION,
-    PLAYER_VOLUME_UP_WITH_ANIMATION, PLAYER_VOLUME_DOWN_WITH_ANIMATION,
+    PLAYER_VOLUME_UP_WITH_ANIMATION, PLAYER_VOLUME_DOWN_WITH_ANIMATION, OPEN_PLAYLIST_MENU, CLOSE_PLAYLIST_MENU,
 } from "../app/config/constants/action_types";
 import PlaylistInterface from "../service/player/PlaylistInterface";
 import PlayableItem from "../service/player/PlayableItem";
@@ -99,6 +99,7 @@ export function setVideoElementAndStartPlaying(
         rewind?: any,
         volumeUp?: any,
         volumeDown?: any,
+        reversePlaylistSort?: any,
     }
 ) {
     return {type: PLAYER_SET_VIDEO_ELEMENT_AND_START_PLAYING, payload: videoElement, callbacks: callbacks};
@@ -118,6 +119,14 @@ export function sortPlaylistAsc() {
 
 export function sortPlaylistDesc() {
     return {type: PLAYER_SORT_PLAYLIST_DESC};
+}
+
+export function openPlaylistMenu(anchorEl: HTMLElement) {
+    return {type: OPEN_PLAYLIST_MENU, payload: anchorEl};
+}
+
+export function closePlaylistMenu() {
+    return {type: CLOSE_PLAYLIST_MENU};
 }
 
 export function enableShuffle() {

@@ -566,6 +566,15 @@ class Player implements HtmlPlayerInterface, CastablePlayerInterface {
                 this.toggleFullScreen();
             }
         }
+
+        if (e.code === 'KeyS') {
+            e.preventDefault();
+            if (this.callbacks.reversePlaylistSort) {
+                this.callbacks.reversePlaylistSort && this.callbacks.reversePlaylistSort();
+            } else {
+                this.reversePlaylistSort();
+            }
+        }
     }
 
     private getCastQueueData(): Array<PlayableItem> {
