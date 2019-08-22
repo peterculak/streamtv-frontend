@@ -50,7 +50,7 @@ class PlaylistFactory {
             item.mp4,
             item.timeRequired ? parseInt(item.timeRequired.replace(/PT|S/g, '')) : 0,
             '',
-            {episodeNumber: item.episodeNumber, dateAdded: dateAdded}
+            {episodeNumber: item.episodeNumber, dateAdded: dateAdded, type: item['@type']}
         )
     }
 

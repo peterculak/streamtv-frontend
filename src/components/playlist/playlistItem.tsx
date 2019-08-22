@@ -12,7 +12,7 @@ import PlayArrow from '@material-ui/icons/PlayArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ReactTimeAgo from 'react-time-ago';
 import PlayerInterface from "../../service/player/PlayerInterface";
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {formatLength} from '../../helpers/functions';
 
 const styles = (theme: Theme) => createStyles({
@@ -177,7 +177,7 @@ function PlaylistItem(props: any) {
                                             </Typography>
                                         </Grid>
 
-                                        {episode['@type'] === 'TVSeries' ? (
+                                        {episode.meta.type === 'TVEpisode' ? (
                                             <Grid item>
                                                 <Typography className={classes.subhead} variant={'subtitle2'} component="p">
                                                     Epizóda: {episode.meta.episodeNumber}
@@ -187,7 +187,7 @@ function PlaylistItem(props: any) {
 
                                         {episode.meta.dateAdded && (
                                             <Grid item>
-                                                <Box mt={episode['@type'] === 'TVSeries' ? '-4px' : '0'}>
+                                                <Box mt={episode.meta.type === 'TVEpisode' ? '-4px' : '0'}>
                                                     <Typography className={classes.dateAdded} variant={'subtitle2'} component="p">
                                                         <ReactTimeAgo locale={props.locale.lang()} date={episode.meta.dateAdded}/>
                                                     </Typography>
