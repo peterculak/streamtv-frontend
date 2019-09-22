@@ -59,8 +59,8 @@
     "clean": "rm -rf ./public/data/*",
     "refresh-data": "npm run clean && npm run copy-data",
     "copy-data": "npm run copy-channels-index && npm run copy-program-data",
-    "copy-channels-index": "cp ../streamtv/var/cache/channels.json ./public/data/",
-    "copy-program-data": "find ../streamtv/var/cache/ -type f ! -name \"*.*\" -exec cp {} ./public/data/ \\;"
+    "copy-channels-index": "cp ./streamtv/var/cache/channels.json ./public/data/",
+    "copy-program-data": "find ./streamtv/var/cache/ -type f ! -name \"*.*\" -exec cp {} ./public/data/ \\;"
   },
   "eslintConfig": {
     "extends": "react-app"

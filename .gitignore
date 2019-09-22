@@ -30,3 +30,5 @@ yarn-error.log*
 # dev
 .env
 .idea/
+.docker/
+streamtv
