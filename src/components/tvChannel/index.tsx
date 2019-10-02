@@ -15,13 +15,14 @@ const styles = {
 
 function TvChannel(props: {classes: any, channel: Channel, itemClick: any}) {
     const {classes, channel, itemClick} = props;
+    const image = channel.image ? channel.image : `https://picsum.photos/380?random=${channel.name}`;
 
     return (
         <Card onClick={itemClick} square elevation={0}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={channel.image}
+                        image={image}
                         title={channel.name}
                     />
                 </CardActionArea>
