@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: streamtv-frontend
+spec:
+  rules:
+    - host: streamtv.local
+      http:
+        paths:
+          - backend:
+              serviceName: streamtv-frontend
+              servicePort: web
+            path: /

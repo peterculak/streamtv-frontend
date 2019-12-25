@@ -1,0 +1,7 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: streamtv-frontend
+spec:
+  maxReplicas: 10
+  minReplicas: 3

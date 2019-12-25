@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamtv-frontend
+  namespace: streamtv
+  labels:
+    app: streamtv-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamtv-frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    metadata:
+      labels:
+        app: streamtv-frontend
+    spec:
+      containers:
+        - name: streamtv-frontend
+          image: fr0z3nk0/streamtv-frontend:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: streamtv-frontend-config

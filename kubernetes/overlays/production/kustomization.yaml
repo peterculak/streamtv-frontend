@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Adds namespace to all resources.
+namespace: streamtv
+
+bases:
+  - ../../base
+
+resources:
+
+patchesStrategicMerge:
+  - streamtv-frontend/hpa_replicas.yaml
+  - streamtv-frontend/ingress.yaml
+  - streamtv-frontend/deployment_resources.yaml
+
+configMapGenerator:
+  - name: streamtv-frontend-config
+    env: streamtv-frontend/config.env
+
+images:
+  - name: streamtv-frontend
+    newName: fr0z3nk0/streamtv-frontend
+    newTag: latest
