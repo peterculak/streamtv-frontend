@@ -18,7 +18,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: docker build
-        run: docker build -t fr0z3nk0/streamtv-frontend:latest
+        run: docker build -t fr0z3nk0/streamtv-frontend:latest .
       - name: docker login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: docker push
