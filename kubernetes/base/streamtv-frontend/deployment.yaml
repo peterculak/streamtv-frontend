@@ -28,3 +28,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: streamtv-frontend-config
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/data"
+              name: streamtv-data
+      volumes:
+        - name: streamtv-data
+          persistentVolumeClaim:
+            claimName: streamtv-data
