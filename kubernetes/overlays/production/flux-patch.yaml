@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamtv-frontend
+  namespace: streamtv
+spec:
+  template:
+    spec:
+      $setElementOrder/containers:
+      - name: streamtv-frontend
+      containers:
+      - image: fr0z3nk0/streamtv-frontend:43b129bc6bcceb2e0797044305d2853bb43ea02a
+        name: streamtv-frontend

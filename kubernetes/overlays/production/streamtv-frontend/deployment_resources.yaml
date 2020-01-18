@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: streamtv-frontend
+  namespace: streamtv
 spec:
   template:
     spec:
