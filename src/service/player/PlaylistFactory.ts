@@ -7,7 +7,7 @@ class PlaylistFactory {
         let sort = 'asc';
         selectedSeason.episodes.forEach((item: any) => {
             const playlistItem = this.createPlaylistItem(item);
-            if (item['@type'] === 'article') {
+            if (item['type'] === 'article' || item['type'] === 'NewsArticle') {
                 sort = 'desc';
                 playlistItem.sortPosition = Date.parse(item.dateAdded);
             } else {
@@ -50,7 +50,7 @@ class PlaylistFactory {
             item.mp4,
             item.timeRequired ? parseInt(item.timeRequired.replace(/PT|S/g, '')) : 0,
             '',
-            {episodeNumber: item.episodeNumber, dateAdded: dateAdded, type: item['@type']}
+            {episodeNumber: item.episodeNumber, dateAdded: dateAdded, type: item['type']}
         )
     }
 
