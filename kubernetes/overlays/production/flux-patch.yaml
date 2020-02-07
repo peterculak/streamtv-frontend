@@ -10,5 +10,5 @@ spec:
       $setElementOrder/containers:
       - name: streamtv-frontend
       containers:
-      - image: fr0z3nk0/streamtv-frontend:43b129bc6bcceb2e0797044305d2853bb43ea02a
+      - image: fr0z3nk0/streamtv-frontend:0d3007daae2e61c3ddb37d05d82ce0e1764f1ed1
         name: streamtv-frontend
