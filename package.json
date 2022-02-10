@@ -76,7 +76,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "jest-fetch-mock": "^2.0.1",
-    "node-sass": "^4.10.0",
+    "node-sass": "^7.0.0",
     "react-test-renderer": "^16.6.3",
     "redux-devtools": "^3.5.0"
   }
