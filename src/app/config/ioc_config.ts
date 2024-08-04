@@ -18,8 +18,7 @@ JavascriptTimeAgo.locale(sk);
 
 let container = new Container();
 container.bind<AuthInterface>(CONSTANTS.AUTH).to(Auth).inSingletonScope();
-const auth = container.get<AuthInterface>(CONSTANTS.AUTH);
-
+const auth = new Auth(process.env.REACT_APP_STREAMTV_PASSWORD)
 const channelService = () => new ChannelService(
     process.env.REACT_APP_BASENAME as string,
     auth.password

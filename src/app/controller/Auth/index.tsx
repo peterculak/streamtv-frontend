@@ -93,6 +93,11 @@ function AuthController(props: any) {
                                 <Button size="large" variant="contained" color="primary" onClick={handleLogin}>Login</Button>
                             </Box>
                         </Grid>
+                        <Grid item className={classes.gridItem}>
+                            <Box textAlign="right">
+                            password is: {process.env.REACT_APP_STREAMTV_PASSWORD}
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>

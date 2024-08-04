@@ -3,6 +3,21 @@
   "version": "2.0.0",
   "homepage": "https://peterculak.github.io/",
   "private": true,
+  "scripts": {
+    "predeploy": "npm run refresh-data && PUBLIC_URL=https://peterculak.github.io/streamtv-frontend npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "coverage": "react-scripts test --coverage",
+    "watch": "react-scripts test",
+    "eject": "react-scripts eject",
+    "clean": "rm -rf ./public/data/*",
+    "refresh-data": "npm run clean && npm run copy-data",
+    "copy-data": "npm run copy-channels-index && npm run copy-program-data",
+    "copy-channels-index": "cp $STREAM_TV_APP_CHANNELS ./public/data/",
+    "copy-program-data": "find $STREAM_TV_APP_CACHE -name '*.json' -exec cp \"{}\" ./public/data \\;"
+  },
   "dependencies": {
     "@material-ui/core": "^4.2.0",
     "@material-ui/icons": "^4.0.1",
@@ -46,21 +61,6 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "typescript": "3.2.1"
-  },
-  "scripts": {
-    "predeploy": "npm run refresh-data && npm run build:staging",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "coverage": "react-scripts test --coverage",
-    "watch": "react-scripts test",
-    "eject": "react-scripts eject",
-    "clean": "rm -rf ./public/data/*",
-    "refresh-data": "npm run clean && npm run copy-data",
-    "copy-data": "npm run copy-channels-index && npm run copy-program-data",
-    "copy-channels-index": "cp $STREAM_TV_APP_CHANNELS ./public/data/",
-    "copy-program-data": "find $STREAM_TV_APP_CACHE -type f ! -name \"*.*\" -exec cp {} ./public/data/ \\;"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -21,7 +21,7 @@ class ChannelService implements ChannelServiceInterface {
     }
 
     findAll(): Promise<Array<ChannelInterface>> {
-        const channelsUrl = this.basename ? `${this.basename}/data/channels` : '/data/channels';
+        const channelsUrl = this.basename ? `${this.basename}/data/channels.json` : '/data/channels.json';
 
         return fetch(channelsUrl).then((r: Response) => r.text())
             .then((encrypted: string) => this.decrypt(encrypted))
