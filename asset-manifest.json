@@ -7,7 +7,7 @@
   "runtime~main.js": "/streamtv-frontend/static/js/runtime~main.229c360f.js",
   "runtime~main.js.map": "/streamtv-frontend/static/js/runtime~main.229c360f.js.map",
   "static/css/main.5810a0d4.chunk.css.map": "/streamtv-frontend/static/css/main.5810a0d4.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.da657b9b02d98140ea1a267527520870.js": "/precache-manifest.da657b9b02d98140ea1a267527520870.js",
-  "service-worker.js": "/service-worker.js"
+  "index.html": "/streamtv-frontend/index.html",
+  "precache-manifest.da657b9b02d98140ea1a267527520870.js": "/streamtv-frontend/precache-manifest.da657b9b02d98140ea1a267527520870.js",
+  "service-worker.js": "/streamtv-frontend/service-worker.js"
 }
