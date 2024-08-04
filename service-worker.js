@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/streamtv-frontend/precache-manifest.916a3ab61e2a6a979af305b82da5764e.js"
+  "/precache-manifest.1cb2336e561427663593eceb47f11ed5.js"
 );
 
 workbox.clientsClaim();
