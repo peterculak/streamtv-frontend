@@ -1,13 +1,13 @@
 {
-  "main.css": "/streamtv-frontend/static/css/main.5810a0d4.chunk.css",
-  "main.js": "/streamtv-frontend/static/js/main.284b3457.chunk.js",
-  "main.js.map": "/streamtv-frontend/static/js/main.284b3457.chunk.js.map",
-  "static/js/1.5ece3898.chunk.js": "/streamtv-frontend/static/js/1.5ece3898.chunk.js",
-  "static/js/1.5ece3898.chunk.js.map": "/streamtv-frontend/static/js/1.5ece3898.chunk.js.map",
-  "runtime~main.js": "/streamtv-frontend/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/streamtv-frontend/static/js/runtime~main.229c360f.js.map",
-  "static/css/main.5810a0d4.chunk.css.map": "/streamtv-frontend/static/css/main.5810a0d4.chunk.css.map",
-  "index.html": "/streamtv-frontend/index.html",
-  "precache-manifest.da657b9b02d98140ea1a267527520870.js": "/streamtv-frontend/precache-manifest.da657b9b02d98140ea1a267527520870.js",
-  "service-worker.js": "/streamtv-frontend/service-worker.js"
+  "main.css": "https://peterculak.github.io/streamtv-frontend/static/css/main.5810a0d4.chunk.css",
+  "main.js": "https://peterculak.github.io/streamtv-frontend/static/js/main.284b3457.chunk.js",
+  "main.js.map": "https://peterculak.github.io/streamtv-frontend/static/js/main.284b3457.chunk.js.map",
+  "static/js/1.66631866.chunk.js": "https://peterculak.github.io/streamtv-frontend/static/js/1.66631866.chunk.js",
+  "static/js/1.66631866.chunk.js.map": "https://peterculak.github.io/streamtv-frontend/static/js/1.66631866.chunk.js.map",
+  "runtime~main.js": "https://peterculak.github.io/streamtv-frontend/static/js/runtime~main.d299c886.js",
+  "runtime~main.js.map": "https://peterculak.github.io/streamtv-frontend/static/js/runtime~main.d299c886.js.map",
+  "static/css/main.5810a0d4.chunk.css.map": "https://peterculak.github.io/streamtv-frontend/static/css/main.5810a0d4.chunk.css.map",
+  "index.html": "https://peterculak.github.io/streamtv-frontend/index.html",
+  "precache-manifest.a8b355ed7a25a1ecb8264bdf0292f0f5.js": "https://peterculak.github.io/streamtv-frontend/precache-manifest.a8b355ed7a25a1ecb8264bdf0292f0f5.js",
+  "service-worker.js": "https://peterculak.github.io/streamtv-frontend/service-worker.js"
 }
